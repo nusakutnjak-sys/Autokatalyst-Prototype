@@ -364,9 +364,11 @@
    Navigation
    -------------------------------------------------------------------------- */
 
+/* The bar occupies a 72px band: a 44px row with 14px clear above and below,
+   so the mark sits at its full height without the band growing. */
 .nav_wrap {
   position: absolute;
-  top: 1.125rem;
+  top: 0.875rem;
   right: 0;
   left: 0;
   z-index: 20;
@@ -385,20 +387,21 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  height: 2.25rem;
+  height: 2.75rem;
 }
 
+/* The bar holds its 72px band; the mark is set to the wordmark height the
+   navigation is drawn at, centred in the row. */
 .nav_logo_link {
   display: block;
-  width: 14.5rem;
-  height: 2rem;
+  height: 1.5rem;
   flex-shrink: 0;
 }
 
 .nav_logo_img {
   display: block;
-  width: 13.25rem;
-  height: 2rem;
+  width: auto;
+  height: 1.5rem;
   object-fit: contain;
 }
 
@@ -1159,7 +1162,7 @@
 
 .footer_logo {
   display: block;
-  width: 6.4rem;
+  width: 6.75rem;
   height: 5.3125rem;
   fill: var(--color-cream-base);
 }
@@ -1252,6 +1255,15 @@
     --space-4xl: 5rem;
     --space-5xl: 5rem;
     --hero-bar-height: 16rem;
+  }
+
+  /* Below the desktop frame the mark steps down with the rest of the type. */
+  .nav_logo_link {
+    height: 1.375rem;
+  }
+
+  .nav_logo_img {
+    height: 1.375rem;
   }
 
   /* The band is anchored to the foot of the hero, so the hero has to
@@ -1436,11 +1448,11 @@
   }
 
   .nav_logo_link {
-    width: 10.5rem;
+    height: 1.25rem;
   }
 
   .nav_logo_img {
-    width: 10.5rem;
+    height: 1.25rem;
   }
 
   .work_row {
