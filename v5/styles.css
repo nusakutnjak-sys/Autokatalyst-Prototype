@@ -642,6 +642,7 @@
 }
 
 .specialize_item {
+  align-self: stretch;
   padding: var(--space-xs) 0;
 }
 
