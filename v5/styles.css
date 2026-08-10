@@ -1,0 +1,1486 @@
+/* ==========================================================================
+   Autokatalyst V5 — global styles
+   Rebuilt against the Homepage V5 Figma frame (1512px, 12 columns,
+   24px page margin, 24px gutter, 100px columns).
+
+   Single-class selectors only. rem units. Tokens as CSS variables.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Fonts (self-hosted)
+   -------------------------------------------------------------------------- */
+
+@font-face {
+  font-family: "HW Cigars";
+  src: url("../assets/fonts/HWCigarsTRIAL-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HW Cigars";
+  src: url("../assets/fonts/HWCigarsTRIAL-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HW Cigars";
+  src: url("../assets/fonts/HWCigarsTRIAL-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HW Cigars";
+  src: url("../assets/fonts/HWCigarsTRIAL-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HW Cigars";
+  src: url("../assets/fonts/HWCigarsTRIAL-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --------------------------------------------------------------------------
+   Design system variables
+   -------------------------------------------------------------------------- */
+
+:root {
+  /* Typefaces */
+  --font-body: "Geist", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: "HW Cigars", "Tiempos Text", Georgia, serif;
+
+  /* Primitives — taken from the V5 frame */
+  --color-cream-base: #FEFFF1;
+  --color-cream-pale: #F7F9E3;
+  --color-cream-soft: #F8F7E7;
+  --color-cream-panel: #F1F3D6;
+  --color-khaki-base: #DDD99B;
+  --color-olive-base: #A6A766;
+  --color-ink-base: #0B0B0B;
+  --color-ink-panel: #1B1B1C;
+  --color-white: #FFFFFF;
+
+  /* Semantic — surfaces */
+  --color-bg-canvas: var(--color-cream-base);
+  --color-bg-inverse: var(--color-ink-base);
+  --color-bg-panel: var(--color-ink-panel);
+  --color-bar-hero: var(--color-cream-panel);
+
+  /* Semantic — text */
+  --color-text-primary: var(--color-ink-base);
+  --color-text-muted: rgba(11, 11, 11, 0.6);
+  --color-text-faint: rgba(11, 11, 11, 0.4);
+  --color-text-inverse: var(--color-cream-base);
+  --color-text-inverse-soft: var(--color-cream-pale);
+  --color-text-inverse-muted: rgba(254, 255, 241, 0.6);
+
+  /* Semantic — brand */
+  --color-brand-support: var(--color-olive-base);
+
+  /* Semantic — lines */
+  --color-border: rgba(11, 11, 11, 0.2);
+  --color-border-inverse: rgba(247, 249, 227, 0.2);
+
+  /* Spacing scale */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 3rem;
+  --space-3xl: 5rem;
+  --space-4xl: 7.5rem;
+  --space-5xl: 8.75rem;
+
+  /* Sizing */
+  --size-button-height: 3rem;
+  --size-icon-arrow-w: 0.9375rem;
+  --size-icon-arrow-h: 0.75rem;
+  --radius-none: 0;
+
+  /* Grid */
+  --page-margin: 1.5rem;
+  --grid-gutter: 1.5rem;
+  --container-max: 108rem;
+  --grid-content: calc(min(100vw, var(--container-max)) - (var(--page-margin) * 2));
+  --grid-column: calc((var(--grid-content) - (var(--grid-gutter) * 11)) / 12);
+  --grid-step: calc(var(--grid-column) + var(--grid-gutter));
+
+  /* Type scale — every size read off the V5 frame at 1512px */
+  --type-display-xl: min(6.25rem, 5.8201vw);   /* 88px */
+  --type-display-l: min(5.125rem, 4.7619vw);   /* 72px */
+  --type-display-number: min(9rem, 8.4656vw);  /* 128px */
+  --type-heading-l: 3rem;                      /* 48px */
+  --type-heading-m: 1.625rem;                  /* 26px */
+  --type-body-lg: 1.625rem;                    /* 26px */
+  --type-body: 1rem;
+  --type-label: 0.875rem;
+  --type-caption: 0.75rem;
+
+  /* Hero grid: the viewport height less a 72px margin top and bottom,
+     divided into twelve rows. The domino band stands four rows tall and
+     runs out through the bottom margin. */
+  --hero-margin: 4.5rem;
+  --hero-row: calc((100vh - (var(--hero-margin) * 2)) / 12);
+
+  /* Hero domino band, proportional to the 1512px reference frame */
+  --hero-bar-width: min(3.62269rem, 3.83353vw);
+  --hero-bar-gap: min(2.52844rem, 2.67560vw);
+  --hero-bar-height: calc((var(--hero-row) * 3) + var(--hero-margin));
+
+  /* CTA band — the fallen-domino graphic, drawn at the 1512px frame */
+  --cta-motif-width: 119.33%;
+
+  /* Motion — aliases onto the shared motion system (motion.css) */
+  --ease-standard: var(--ease-primary);
+  --duration-fast: var(--dur-hover);
+  --duration-base: var(--dur-fast);
+}
+
+/* --------------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.page_body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-bg-canvas);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page_wrap {
+  position: relative;
+  width: 100%;
+  overflow-x: clip;
+}
+
+.page_main {
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   Page transition layer
+   -------------------------------------------------------------------------- */
+
+.transition_wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: clip;
+  pointer-events: none;
+}
+
+.transition_dark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-ink-base);
+  opacity: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Shared component — Button
+   Solid controls are 48px tall, 16px medium, sentence-cased.
+   -------------------------------------------------------------------------- */
+
+.button {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: var(--size-button-height);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-none);
+  background-color: var(--color-ink-base);
+  color: var(--color-text-inverse);
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 500;
+  line-height: 1.4;
+  text-transform: capitalize;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: background-color var(--dur-hover) var(--ease-primary),
+    color var(--dur-hover) var(--ease-primary);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--color-brand-support);
+  outline-offset: 3px;
+}
+
+.button_inner {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  height: 100%;
+  padding: 0 var(--space-md);
+  overflow: clip;
+  pointer-events: none;
+}
+
+.button_text {
+  flex: none;
+  transition: translate var(--dur-standard) var(--ease-primary);
+}
+
+.button.is-olive {
+  background-color: var(--color-brand-support);
+  color: var(--color-text-primary);
+}
+
+.button.is-olive .button_inner {
+  gap: var(--space-sm);
+  padding: 0 var(--space-lg);
+}
+
+.button.is-light {
+  background-color: var(--color-cream-base);
+  color: var(--color-text-primary);
+}
+
+/* The plain arrow link: same hover mechanics, no ground under it. */
+.button.is-ghost {
+  height: auto;
+  background-color: transparent;
+  color: var(--color-text-primary);
+}
+
+.button.is-ghost .button_inner {
+  padding: 0;
+}
+
+.button.is-ghost .button_icon.is-lead {
+  left: 0;
+}
+
+.button.is-ghost.is-inverse {
+  color: var(--color-text-inverse-soft);
+}
+
+.button_icon {
+  display: block;
+  width: var(--size-icon-arrow-w);
+  height: var(--size-icon-arrow-h);
+  flex: none;
+  fill: currentColor;
+  transition: translate var(--dur-standard) var(--ease-primary),
+    opacity var(--dur-hover) var(--ease-primary);
+}
+
+.button_icon.is-lead {
+  position: absolute;
+  left: var(--space-md);
+  opacity: 0;
+  translate: -1.5em 0;
+}
+
+/* Parent-state descendant selectors — a sanctioned custom-CSS case. The
+   trailing arrow leaves to the right, the text slides into the space it
+   vacated, and the leading arrow takes the text's place. Total width never
+   changes, so the control never reflows. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .button:is(:hover, :focus-visible) .button_text,
+  [data-hover]:is(:hover, :focus-within) .button_text {
+    translate: 1.6875rem 0;
+  }
+
+  .button:is(:hover, :focus-visible) .button_icon.is-lead,
+  [data-hover]:is(:hover, :focus-within) .button_icon.is-lead {
+    translate: 0 0;
+    opacity: 1;
+  }
+
+  .button:is(:hover, :focus-visible) .button_icon.is-trail,
+  [data-hover]:is(:hover, :focus-within) .button_icon.is-trail {
+    translate: 1.5em 0;
+    opacity: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Shared component — Section rule
+   A hairline box holding a section label and its control.
+   -------------------------------------------------------------------------- */
+
+.rule_row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.rule_row.is-inverse {
+  border-bottom-color: var(--color-border-inverse);
+}
+
+.rule_label {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body-lg);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: var(--color-text-primary);
+}
+
+.rule_label.is-inverse {
+  color: var(--color-text-inverse-soft);
+}
+
+/* --------------------------------------------------------------------------
+   Navigation
+   -------------------------------------------------------------------------- */
+
+.nav_wrap {
+  position: absolute;
+  top: 1.125rem;
+  right: 0;
+  left: 0;
+  z-index: 20;
+  width: 100%;
+}
+
+.nav_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.nav_layout {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 2.25rem;
+}
+
+.nav_logo_link {
+  display: block;
+  width: 14.5rem;
+  height: 2rem;
+  flex-shrink: 0;
+}
+
+.nav_logo_img {
+  display: block;
+  width: 13.25rem;
+  height: 2rem;
+  object-fit: contain;
+}
+
+.nav_menu {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.nav_link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs) 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 500;
+  line-height: 1.4;
+  text-transform: capitalize;
+  text-decoration: none;
+  color: var(--color-text-primary);
+  transition: color var(--dur-hover) var(--ease-primary);
+}
+
+.nav_link:hover {
+  color: var(--color-text-primary);
+}
+
+.nav_link:focus-visible {
+  outline: 2px solid var(--color-brand-support);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Hero
+   Headline on the left, its first line one grid step in; supporting block
+   on column nine; the domino band along the foot.
+   -------------------------------------------------------------------------- */
+
+/* The hero travels at half the scroll rate while the section below rises
+   over it, so it reads as the far plane rather than a pinned panel. */
+.hero_wrap {
+  position: relative;
+  z-index: 0;
+  height: 100vh;
+  min-height: 100vh;
+  padding: 0;
+  background-color: var(--color-white);
+  overflow: clip;
+}
+
+.hero_contain {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+/* The composition rests two rows clear of the band below it. */
+.hero_layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  align-content: end;
+  align-items: end;
+  min-height: 100vh;
+  padding-bottom: calc(var(--hero-bar-height) + (var(--hero-row) * 2));
+}
+
+.hero_title {
+  grid-column: 1 / span 8;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-display-xl);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.034em;
+  color: var(--color-text-primary);
+}
+
+.hero_title_line {
+  display: block;
+  white-space: nowrap;
+}
+
+.hero_title_line.is-lead {
+  margin-left: var(--grid-step);
+}
+
+.hero_content {
+  grid-column: 9 / span 4;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-xl);
+}
+
+.hero_text {
+  margin: 0;
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: var(--type-body-lg);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--color-text-primary);
+  text-wrap: pretty;
+}
+
+.hero_domino_stage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero_domino_wrap {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-end;
+  gap: var(--hero-bar-gap);
+  width: calc((var(--hero-bar-width) * 18) + (var(--hero-bar-gap) * 17));
+  height: var(--hero-bar-height);
+  pointer-events: none;
+}
+
+.hero_domino_bar {
+  width: var(--hero-bar-width);
+  height: 100%;
+  flex: none;
+  background-color: var(--color-bar-hero);
+  transform-origin: bottom right;
+}
+
+/* --------------------------------------------------------------------------
+   Specialize
+   A preview panel on the left, the audience list on the right. Static for
+   now: the first row is the resting selection.
+   -------------------------------------------------------------------------- */
+
+.specialize_wrap {
+  position: relative;
+  z-index: 1;
+  padding: var(--space-3xl) 0 6.25rem;
+  background-color: var(--color-white);
+}
+
+.specialize_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.specialize_layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.specialize_body {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  align-items: start;
+}
+
+.specialize_preview {
+  grid-column: 1 / span 3;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1.0625rem;
+}
+
+.specialize_figure {
+  position: relative;
+  height: 10.875rem;
+  overflow: clip;
+  background-color: var(--color-bg-panel);
+}
+
+.specialize_img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+}
+
+.specialize_img.is-current {
+  opacity: 1;
+}
+
+/* The captions are stacked on one grid cell, so the block is always as tall
+   as its tallest line count — no height to keep in sync by hand. */
+.specialize_captions {
+  display: grid;
+  grid-template-areas: "caption";
+}
+
+.specialize_caption {
+  grid-area: caption;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  opacity: 0;
+  text-wrap: pretty;
+}
+
+.specialize_caption.is-current {
+  opacity: 1;
+}
+
+.specialize_list_wrap {
+  position: relative;
+  grid-column: 7 / span 6;
+}
+
+.specialize_list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.specialize_item {
+  padding: var(--space-xs) 0;
+}
+
+.specialize_link {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--type-heading-l);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+  white-space: nowrap;
+  color: var(--color-text-faint);
+}
+
+.specialize_link:focus-visible {
+  outline: 2px solid var(--color-brand-support);
+  outline-offset: 4px;
+}
+
+.specialize_link.is-current {
+  color: var(--color-text-primary);
+}
+
+.specialize_more {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Work — flexible ways to work together
+   -------------------------------------------------------------------------- */
+
+/* Deep foot: the section below rides up over this one, so the composition
+   needs room to have travelled clear of the fold before it is covered. */
+.work_wrap {
+  position: relative;
+  z-index: 1;
+  padding: var(--space-5xl) 0 15rem;
+  background-color: var(--color-white);
+  overflow: clip;
+}
+
+.work_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.work_layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xl);
+}
+
+.work_title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-display-l);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.0417em;
+  color: var(--color-text-primary);
+  text-wrap: pretty;
+}
+
+.work_title_line {
+  display: block;
+}
+
+.work_title_line.is-lead {
+  margin-left: var(--grid-step);
+}
+
+.work_table {
+  width: calc((var(--grid-step) * 6) + var(--grid-column));
+  max-width: 100%;
+  margin-left: calc(var(--grid-step) * 3);
+}
+
+.work_row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  align-items: start;
+  min-height: 9.5rem;
+  padding: var(--space-md) 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.work_row.is-last {
+  min-height: 14.25rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.work_row_title {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-heading-m);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: var(--color-text-primary);
+}
+
+.work_row_label {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+}
+
+.work_row_text {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+.work_row_stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-sm);
+}
+
+.work_row_pair {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+
+.work_action {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: calc((var(--grid-step) * 6) + var(--grid-column));
+  max-width: 100%;
+  margin-top: calc(var(--space-lg) - var(--space-3xl));
+  margin-left: calc(var(--grid-step) * 3);
+}
+
+/* --------------------------------------------------------------------------
+   Cases
+   A dark header band, then one full-bleed slide per case. The frame is
+   pinned while its content tilts back and away, so the next slide arrives
+   over the top of it.
+   -------------------------------------------------------------------------- */
+
+.cases_wrap {
+  position: relative;
+  z-index: 1;
+  background-color: var(--color-bg-inverse);
+}
+
+.cases_head {
+  position: relative;
+  z-index: 2;
+  padding: var(--space-3xl) 0;
+  background-color: var(--color-bg-inverse);
+}
+
+.cases_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.cases_slide {
+  height: 100vh;
+  min-height: 48.75rem;
+}
+
+.cases_slide_frame {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  perspective: 250vw;
+}
+
+.cases_slide_content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--color-border-inverse);
+  background-color: var(--color-bg-inverse);
+  transform-style: preserve-3d;
+  transform-origin: 50% 10%;
+}
+
+.cases_slide_content.is-first {
+  border-top: 0;
+}
+
+.cases_layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  align-items: stretch;
+}
+
+.cases_col {
+  grid-column: 1 / span 6;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-3xl);
+  height: 38.75rem;
+}
+
+.cases_number {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-display-number);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.031em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-brand-support);
+}
+
+.cases_detail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-md);
+  width: 37.25rem;
+  max-width: 100%;
+}
+
+.cases_category {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 500;
+  line-height: 1.4;
+  text-transform: capitalize;
+  color: var(--color-brand-support);
+}
+
+.cases_title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-heading-l);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: var(--color-text-inverse);
+  text-wrap: pretty;
+}
+
+.cases_text {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  line-height: 1.6;
+  color: var(--color-text-inverse-muted);
+  text-wrap: pretty;
+}
+
+.cases_stat {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 500;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-inverse);
+}
+
+.cases_visual {
+  position: relative;
+  grid-column: 7 / span 6;
+  height: 38.75rem;
+  overflow: clip;
+  background-color: var(--color-bg-inverse);
+}
+
+.cases_img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-standard) var(--ease-primary);
+}
+
+.cases_visual:hover .cases_img {
+  transform: scale(1.04);
+}
+
+.cases_link {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.cases_link:focus-visible {
+  outline: 2px solid var(--color-brand-support);
+  outline-offset: -0.5rem;
+}
+
+.cases_link_label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: clip;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.cases_action {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  translate: -50% -50%;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   CTA
+   -------------------------------------------------------------------------- */
+
+.cta_wrap {
+  position: relative;
+  z-index: 2;
+  min-height: 59.25rem;
+  padding: var(--space-4xl) 0 10rem;
+  background-color: var(--color-white);
+  overflow: clip;
+}
+
+.cta_contain {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.cta_layout {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-3xl);
+}
+
+.cta_title {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+}
+
+.cta_title_line {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--type-display-xl);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+  color: var(--color-text-primary);
+}
+
+.cta_title_line.is-lead {
+  margin-left: var(--grid-step);
+}
+
+/* The trail line sits one column back from where the line above ends, so
+   the overlap between them reads as a measured step rather than a guess.
+   The offset is the width of the line above in ems, so it holds at every
+   type size. */
+.cta_title_line.is-trail {
+  margin-left: calc(5.515em - (var(--grid-step) - var(--grid-gutter)));
+}
+
+.cta_note {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2xl);
+  padding: var(--space-xl) 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.cta_text {
+  margin: 0;
+  width: calc((var(--grid-step) * 5) + var(--grid-column));
+  max-width: 100%;
+  font-family: var(--font-body);
+  font-size: var(--type-body-lg);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  color: var(--color-text-primary);
+  text-wrap: pretty;
+}
+
+/* The graphic starts level with the third line of the headline and runs on
+   past the right edge into the section clip. The two bands are separate
+   assets, laid over each other on the proportions of the original drawing,
+   so each can travel at its own rate. */
+.cta_motif {
+  position: relative;
+  z-index: 0;
+  margin-top: calc((var(--space-3xl) + (var(--type-display-xl) * 0.9)) * -1);
+  margin-left: calc(var(--grid-step) * 5);
+  width: var(--cta-motif-width);
+  pointer-events: none;
+}
+
+.cta_motif_img {
+  display: block;
+  height: auto;
+  overflow: visible;
+}
+
+.cta_motif_img.is-large {
+  width: 100%;
+}
+
+.cta_motif_img.is-small {
+  position: absolute;
+  bottom: 0;
+  left: 14.31%;
+  width: 51.8%;
+}
+
+/* --------------------------------------------------------------------------
+   Placeholder page
+   -------------------------------------------------------------------------- */
+
+.soon_wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--space-5xl) 0;
+  background-color: var(--color-white);
+}
+
+.soon_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.soon_layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+  text-align: center;
+}
+
+.soon_title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-display-xl);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.036em;
+  color: var(--color-text-primary);
+}
+
+.soon_text {
+  margin: 0;
+  width: 100%;
+  max-width: 33rem;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+/* --------------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------------- */
+
+.footer_wrap {
+  padding: 2.625rem 0 1.5rem;
+  background-color: var(--color-bg-inverse);
+}
+
+.footer_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.footer_layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  align-items: start;
+}
+
+.footer_brand_col {
+  grid-column: 1 / span 6;
+}
+
+.footer_logo {
+  display: block;
+  width: 6.4rem;
+  height: 5.3125rem;
+  fill: var(--color-cream-base);
+}
+
+.footer_nav_col {
+  grid-column: 7 / span 6;
+}
+
+.footer_nav {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  border-top: 1px solid var(--color-border-inverse);
+}
+
+.footer_nav_link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: var(--space-xs) 0;
+  border-bottom: 1px solid var(--color-border-inverse);
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 500;
+  line-height: 1.4;
+  text-transform: capitalize;
+  text-decoration: none;
+  color: var(--color-text-inverse);
+  transition: color var(--dur-hover) var(--ease-primary);
+}
+
+/* The dimming rides the label alone, so the rule under each link holds
+   steady while the text answers the pointer. */
+.footer_nav_label {
+  display: block;
+}
+
+.footer_nav_link:hover {
+  color: var(--color-text-inverse);
+}
+
+.footer_nav_link:focus-visible {
+  outline: 2px solid var(--color-brand-support);
+  outline-offset: -2px;
+}
+
+.footer_tagline {
+  grid-column: 7 / span 4;
+  margin: 0;
+  margin-top: 10rem;
+  width: 25.125rem;
+  max-width: 100%;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.0187em;
+  color: var(--color-text-inverse-soft);
+  text-wrap: pretty;
+}
+
+.footer_divider {
+  width: 100%;
+  height: 1px;
+  margin-top: 3.5rem;
+  background-color: var(--color-border-inverse);
+}
+
+.footer_legal {
+  margin: 0;
+  margin-top: var(--space-md);
+  font-family: var(--font-body);
+  font-size: var(--type-caption);
+  line-height: 1.35;
+  color: var(--color-text-inverse-soft);
+}
+
+/* --------------------------------------------------------------------------
+   Tablet — 991px
+   -------------------------------------------------------------------------- */
+
+@media screen and (max-width: 991px) {
+  :root {
+    --type-display-xl: 4rem;
+    --type-display-l: 3.25rem;
+    --type-display-number: 5rem;
+    --type-heading-l: 2.25rem;
+    --type-heading-m: 1.375rem;
+    --type-body-lg: 1.25rem;
+    --space-4xl: 5rem;
+    --space-5xl: 5rem;
+    --hero-bar-height: 16rem;
+  }
+
+  /* The band is anchored to the foot of the hero, so the hero has to
+     reserve its full height plus clearance or the control lands on it. */
+  .hero_wrap {
+    height: auto;
+    min-height: auto;
+    padding-bottom: calc(var(--hero-bar-height) + var(--space-3xl));
+  }
+
+  .hero_layout {
+    display: block;
+    min-height: 0;
+    padding-top: 9rem;
+    padding-bottom: 0;
+  }
+
+  .hero_title_line {
+    white-space: normal;
+  }
+
+  .hero_title_line.is-lead {
+    margin-left: 0;
+  }
+
+  .hero_content {
+    width: 25.125rem;
+    max-width: 100%;
+    margin-top: var(--space-3xl);
+  }
+
+  .hero_domino_wrap {
+    bottom: 0;
+  }
+
+  .specialize_body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xl);
+  }
+
+  .specialize_preview {
+    width: 21.75rem;
+    max-width: 100%;
+  }
+
+  .specialize_more {
+    position: relative;
+    top: auto;
+    right: auto;
+    margin-top: var(--space-md);
+  }
+
+  .work_title_line.is-lead {
+    text-indent: 0;
+    margin-left: 0;
+  }
+
+  .work_wrap {
+    padding-bottom: var(--space-5xl);
+  }
+
+  .work_table {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .work_action {
+    width: 100%;
+    margin-top: calc(var(--space-lg) - var(--space-3xl));
+    margin-left: 0;
+  }
+
+  .cases_col {
+    grid-column: span 12;
+    height: auto;
+  }
+
+  /* Stacked slides need a full viewport to sit in. Below the desktop
+     breakpoint the grid stacks and is intrinsically taller than the frame,
+     so the slides return to normal flow and the pin is skipped. */
+  .cases_slide {
+    height: auto;
+    min-height: 0;
+  }
+
+  .cases_slide_frame {
+    height: auto;
+    perspective: none;
+  }
+
+  .cases_slide_content {
+    position: relative;
+    inset: auto;
+    display: block;
+    padding: var(--space-4xl) 0;
+    border-top: 1px solid var(--color-border-inverse);
+    transform-style: flat;
+  }
+
+  .cases_visual {
+    grid-column: span 12;
+    height: 24rem;
+  }
+
+  .cta_wrap {
+    min-height: 0;
+    padding-bottom: var(--space-4xl);
+  }
+
+  .cta_layout {
+    gap: var(--space-2xl);
+  }
+
+  .cta_title_line {
+    white-space: normal;
+  }
+
+  .cta_title_line.is-lead {
+    margin-left: 0;
+  }
+
+  .cta_title_line.is-trail {
+    margin-left: 0;
+  }
+
+  .cta_note {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-lg);
+  }
+
+  .cta_motif {
+    margin-top: 0;
+    margin-left: 0;
+    width: 130%;
+  }
+
+  .specialize_more {
+    opacity: 1;
+  }
+
+  .cta_text {
+    width: 100%;
+  }
+
+  .footer_brand_col {
+    grid-column: span 12;
+  }
+
+  .footer_nav_col {
+    grid-column: span 12;
+    margin-top: var(--space-2xl);
+  }
+
+  .footer_tagline {
+    grid-column: span 12;
+    margin-top: var(--space-2xl);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile landscape — 767px
+   -------------------------------------------------------------------------- */
+
+@media screen and (max-width: 767px) {
+  :root {
+    --type-display-xl: 2.75rem;
+    --type-display-l: 2.25rem;
+    --type-display-number: 3.5rem;
+    --type-heading-l: 1.75rem;
+  }
+
+  .nav_layout {
+    gap: var(--space-sm);
+  }
+
+  .nav_menu {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.75rem;
+  }
+
+  .nav_logo_link {
+    width: 10.5rem;
+  }
+
+  .nav_logo_img {
+    width: 10.5rem;
+  }
+
+  .work_row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-sm);
+    min-height: 0;
+  }
+
+  .work_row.is-last {
+    min-height: 0;
+  }
+
+  .cases_visual {
+    height: 15rem;
+  }
+
+  .specialize_link {
+    white-space: normal;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile portrait — 479px
+   -------------------------------------------------------------------------- */
+
+@media screen and (max-width: 479px) {
+  :root {
+    --type-display-xl: 2.25rem;
+    --space-4xl: 3.5rem;
+    --space-5xl: 3.5rem;
+  }
+
+  .work_action {
+    justify-content: flex-start;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+}
