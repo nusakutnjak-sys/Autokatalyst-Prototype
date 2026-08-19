@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Autokatalyst — Page coming soon</title>
+<title>Autokatalyst — Talk to us</title>
 <link rel="stylesheet" href="v2/motion.css">
 <link rel="stylesheet" href="v5/styles.css">
 </head>
@@ -35,11 +35,60 @@
 
   <main class="page_main" data-barba="container">
 
-    <section class="soon_wrap">
-      <div class="soon_contain">
-        <div class="soon_layout">
-          <h1 class="soon_title">Page Coming Soon</h1>
-          <p class="soon_text">This is a temporary placeholder page used to demonstrate page transitions. The final content will be added in a future iteration.</p>
+    <section class="masthead_wrap" data-motion-hero>
+      <div class="masthead_contain">
+        <div class="masthead_layout">
+          <h1 class="masthead_title" data-motion-heading data-motion-compress="off"><span class="masthead_title_line is-motion-ready" data-motion-line>Talk to Us</span></h1>
+          <p class="masthead_standfirst is-motion-ready" data-motion-copy>Tell us what’s on your mind and we’ll help determine the right starting point.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact_wrap is-motion-ready" data-v5-band>
+      <div class="contact_contain">
+        <div class="contact_layout">
+
+          <div class="contact_details">
+            <div class="contact_detail">
+              <p class="contact_detail_label">Email</p>
+              <a class="contact_value" href="mailto:contact@autokatalyst.com">contact@autokatalyst.com</a>
+            </div>
+            <div class="contact_detail">
+              <p class="contact_detail_label">Phone</p>
+              <a class="contact_value" href="tel:+15169868439">516-986-8439</a>
+            </div>
+            <div class="contact_detail">
+              <p class="contact_detail_label">Location</p>
+              <p class="contact_value">Manhattan, New York</p>
+            </div>
+          </div>
+
+          <div class="contact_form_col">
+            <h2 class="contact_title">Tell us what’s on your mind.</h2>
+            <form class="contact_form" method="post" action="#">
+              <div class="contact_field">
+                <label class="contact_label" for="contact-name">Name</label>
+                <input class="contact_input" id="contact-name" name="name" type="text" placeholder="Your name" autocomplete="name">
+              </div>
+              <div class="contact_field">
+                <label class="contact_label" for="contact-email">Email</label>
+                <input class="contact_input" id="contact-email" name="email" type="email" placeholder="you@company.com" autocomplete="email">
+              </div>
+              <div class="contact_field">
+                <label class="contact_label" for="contact-message">Message</label>
+                <textarea class="contact_input is-area" id="contact-message" name="message" rows="7" placeholder="What would you like to discuss?"></textarea>
+              </div>
+              <div class="contact_submit">
+                <button class="button" type="submit"><span class="button_inner"><svg class="button_icon is-lead" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg><span class="button_text">Send message</span><svg class="button_icon is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg></span></button>
+              </div>
+            </form>
+          </div>
+
+          <div class="contact_call">
+            <h2 class="contact_title">Prefer to talk? Book a free 30-minute consultation with us.</h2>
+            <a class="button" href="placeholder.html?p=book-a-call"><span class="button_inner"><svg class="button_icon is-lead" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg><span class="button_text">Book a call</span><svg class="button_icon is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg></span></a>
+          </div>
+
         </div>
       </div>
     </section>
@@ -67,8 +116,6 @@
       <p class="footer_legal">© 2026 Autokatalyst</p>
     </div>
   </footer>
-
-</div>
 
 </div>
 

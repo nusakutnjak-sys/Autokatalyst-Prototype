@@ -68,12 +68,14 @@
   --color-olive-base: #A6A766;
   --color-ink-base: #0B0B0B;
   --color-ink-panel: #1B1B1C;
+  --color-field-base: #F8F8F9;
   --color-white: #FFFFFF;
 
   /* Semantic — surfaces */
-  --color-bg-canvas: var(--color-cream-base);
+  --color-bg-canvas: var(--color-white);
   --color-bg-inverse: var(--color-ink-base);
   --color-bg-panel: var(--color-ink-panel);
+  --color-bg-field: var(--color-field-base);
   --color-bar-hero: var(--color-cream-panel);
 
   /* Semantic — text */
@@ -89,6 +91,9 @@
 
   /* Semantic — lines */
   --color-border: rgba(11, 11, 11, 0.2);
+  /* Rows set closer together than the homepage's, so the hairlines are
+     lightened to keep the group from reading heavier. */
+  --color-border-light: rgba(11, 11, 11, 0.14);
   --color-border-inverse: rgba(247, 249, 227, 0.2);
 
   /* Spacing scale */
@@ -138,6 +143,9 @@
   --hero-bar-gap: min(2.52844rem, 2.67560vw);
   --hero-bar-height: calc((var(--hero-row) * 3) + var(--hero-margin));
 
+  /* Collaboration models — the height the sticky rail and titles hold at */
+  --collab-sticky-top: 4.5rem;
+
   /* CTA band — the fallen-domino graphic, drawn at the 1512px frame */
   --cta-motif-width: 119.33%;
 
@@ -175,8 +183,12 @@
   overflow-x: clip;
 }
 
+/* The container carries the page's own ground, so an armed section that has
+   not yet arrived shows white rather than whatever sits behind it during a
+   page transition. */
 .page_main {
   display: block;
+  background-color: var(--color-white);
 }
 
 /* --------------------------------------------------------------------------
@@ -263,6 +275,10 @@
   padding: 0 var(--space-lg);
 }
 
+.button.is-olive .button_icon.is-lead {
+  left: var(--space-lg);
+}
+
 .button.is-light {
   background-color: var(--color-cream-base);
   color: var(--color-text-primary);
@@ -324,6 +340,44 @@
   [data-hover]:is(:hover, :focus-within) .button_icon.is-trail {
     translate: 1.5em 0;
     opacity: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Shared component — Text link
+   The button's arrow behaviour without the button: for a link set in running
+   copy rather than presented as a control.
+   -------------------------------------------------------------------------- */
+
+.link {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-body);
+  font-size: var(--type-label);
+  line-height: 1;
+  text-decoration: none;
+  color: var(--color-text-primary);
+}
+
+.link_text {
+  flex: none;
+}
+
+.link_icon {
+  display: block;
+  width: var(--size-icon-arrow-w);
+  height: var(--size-icon-arrow-h);
+  flex: none;
+  fill: currentColor;
+  transition: translate var(--dur-standard) var(--ease-primary);
+}
+
+/* Parent-state descendant selector — a sanctioned custom-CSS case. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .link:is(:hover, :focus-visible) .link_icon {
+    translate: var(--space-sm) 0;
   }
 }
 
@@ -491,6 +545,8 @@
   white-space: nowrap;
 }
 
+/* The title runs three lines, so the first is set in one column and the rest
+   return to the left boundary. A single-line title keeps its normal alignment. */
 .hero_title_line.is-lead {
   margin-left: var(--grid-step);
 }
@@ -678,12 +734,189 @@
    Work — flexible ways to work together
    -------------------------------------------------------------------------- */
 
+/* --------------------------------------------------------------------------
+   Galaxy
+   A spacious editorial canvas: a headline and control at the centre, with a
+   sparse stream of pictures moving up past them.
+
+   The pictures are one slow continuous stream, never a set of positions. The
+   canvas clips, so a tile that has travelled off the top is fully hidden at
+   that boundary — which is where it is returned to the foot of the canvas,
+   invisibly, so the stream has no end.
+
+   The media inside a tile never moves. The tile is what travels.
+   -------------------------------------------------------------------------- */
+
+.galaxy_wrap {
+  position: relative;
+  z-index: 1;
+  padding: 0;
+  background-color: var(--color-white);
+  overflow: clip;
+}
+
+.galaxy_contain {
+  position: relative;
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.galaxy_layout {
+  position: relative;
+  min-height: 46.25rem;
+}
+
+/* The anchor: the one part of the section that holds still. */
+.galaxy_content {
+  position: absolute;
+  top: 42%;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--grid-gutter);
+  transform: translateY(-50%);
+}
+
+.galaxy_statement {
+  width: calc((var(--grid-step) * 4) + var(--grid-column));
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.125rem;
+  text-wrap: pretty;
+  color: var(--color-text-primary);
+}
+
+.galaxy_aside {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: calc((var(--grid-step) * 3) + var(--grid-column));
+}
+
+.galaxy_note {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body-lg);
+  font-weight: 400;
+  line-height: 1.2;
+  text-wrap: pretty;
+  color: var(--color-text-primary);
+}
+
+/* A hairline above the link, running the note's full measure. */
+.galaxy_action {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+/* Position is owned by the stream, so the tile declares only its place in
+   the scatter and its size. */
+.galaxy_tile {
+  position: absolute;
+  overflow: clip;
+  will-change: transform;
+}
+
+/* Placeholder ground. Drop an <img class="galaxy_img"> into each tile.
+   Two grounds, dealt out unevenly across the field so no reading of the
+   scatter produces a pattern. Declared per tile rather than drawn at runtime,
+   so the field is the same on every load. */
+.galaxy_tile_media {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-cream-panel);
+}
+
+.galaxy_tile_media.is-khaki {
+  background-color: var(--color-khaki-base);
+}
+
+.galaxy_img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.galaxy_tile_01 {
+  left: 3.5%;
+  top: 10%;
+  width: 4.75rem;
+  height: 9.5rem;
+}
+
+.galaxy_tile_02 {
+  left: 64%;
+  top: 14%;
+  width: 6rem;
+  height: 6rem;
+}
+
+.galaxy_tile_04 {
+  left: 85.5%;
+  top: 42%;
+  width: 3.75rem;
+  height: 7.5rem;
+}
+
+.galaxy_tile_05 {
+  left: 9%;
+  top: 62%;
+  width: 7.5rem;
+  height: 3.75rem;
+}
+
+.galaxy_tile_06 {
+  left: 72%;
+  top: 70%;
+  width: 5.25rem;
+  height: 5.25rem;
+}
+
+.galaxy_tile_07 {
+  left: 41%;
+  top: 87%;
+  width: 5.75rem;
+  height: 2.875rem;
+}
+
+.galaxy_tile_09 {
+  left: 18%;
+  top: 76%;
+  width: 3.75rem;
+  height: 7.5rem;
+}
+
+.galaxy_tile_11 {
+  left: 78%;
+  top: 88%;
+  width: 6.0rem;
+  height: 3.0rem;
+}
+
+/* --------------------------------------------------------------------------
+   Work (How we work)
+   -------------------------------------------------------------------------- */
+
 /* Deep foot: the section below rides up over this one, so the composition
    needs room to have travelled clear of the fold before it is covered. */
 .work_wrap {
   position: relative;
   z-index: 1;
-  padding: var(--space-5xl) 0 15rem;
+  padding: var(--space-5xl) 0 6.5rem;
   background-color: var(--color-white);
   overflow: clip;
 }
@@ -720,15 +953,18 @@
   margin-left: var(--grid-step);
 }
 
+/* Eight columns, starting on the fourth and running to the right edge. */
 .work_table {
-  width: calc((var(--grid-step) * 6) + var(--grid-column));
+  width: calc((var(--grid-step) * 7) + var(--grid-column));
   max-width: 100%;
   margin-left: calc(var(--grid-step) * 3);
 }
 
+/* The row reads name, then the audience it serves, then what it involves —
+   three columns, two and three of the table's eight. */
 .work_row {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(8, minmax(0, 1fr));
   gap: var(--grid-gutter);
   align-items: start;
   min-height: 9.5rem;
@@ -737,11 +973,11 @@
 }
 
 .work_row.is-last {
-  min-height: 14.25rem;
   border-bottom: 1px solid var(--color-border);
 }
 
 .work_row_title {
+  grid-column: 1 / span 3;
   margin: 0;
   font-family: var(--font-body);
   font-size: var(--type-heading-m);
@@ -752,6 +988,7 @@
 }
 
 .work_row_label {
+  grid-column: 4 / span 2;
   margin: 0;
   font-family: var(--font-body);
   font-size: var(--type-body);
@@ -761,6 +998,7 @@
 }
 
 .work_row_text {
+  grid-column: 6 / span 3;
   margin: 0;
   font-family: var(--font-body);
   font-size: var(--type-body);
@@ -784,6 +1022,7 @@
 }
 
 .work_action {
+  margin-left: calc(var(--grid-step) * 3);
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -1084,6 +1323,646 @@
   left: 14.31%;
   width: 51.8%;
 }
+
+/* --------------------------------------------------------------------------
+   About — statement and principles
+   A full-measure statement across the top, then three four-column principles
+   walking down and across the grid: columns 1–4, 5–8, 9–12, each stepping a
+   fixed distance below the one before it, so the block reads as a diagonal
+   rather than a row.
+   -------------------------------------------------------------------------- */
+
+.about_wrap {
+  position: relative;
+  z-index: 0;
+  /* The statement carries equal clear space above and below: 8rem measured
+     from the bottom of the 4.5rem nav band down to the cap line, and the same
+     8rem from its baseline to the principles. The extra room at the foot is
+     for the credo section's parallax lift, so it never crowds the principles. */
+  padding: 12.5rem 0 14rem;
+  background-color: var(--color-white);
+  overflow: clip;
+}
+
+.about_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.about_layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  align-items: start;
+}
+
+.about_statement {
+  grid-column: 1 / span 12;
+  margin: 0 0 8rem;
+  /* The opening line is set in from the second column; the rest run the full
+     measure. The indent rides on the line itself, so the two lines can enter
+     from opposite sides without it travelling with them. */
+  text-indent: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-display-xl);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.034em;
+  color: var(--color-text-primary);
+  text-wrap: pretty;
+}
+
+.about_principle {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* The stagger: a fixed 137px step, taken from the design rather than derived,
+   so the diagonal holds whatever the type does. */
+.about_principle_1 {
+  grid-column: 1 / span 4;
+}
+
+.about_principle_2 {
+  grid-column: 5 / span 4;
+  margin-top: 8.5625rem;
+}
+
+.about_principle_3 {
+  grid-column: 9 / span 4;
+  margin-top: 17.125rem;
+}
+
+.about_principle_title {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body-lg);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+.about_principle_text {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+/* --------------------------------------------------------------------------
+   About — credo
+   A dark band with the statement set across the middle eight columns, and a
+   perforated olive panel entering at column nine and running off the right
+   edge of the page.
+   -------------------------------------------------------------------------- */
+
+.credo_wrap {
+  position: relative;
+  z-index: 1;
+  min-height: 42.5rem;
+  padding: 14.625rem 0 0;
+  background-color: var(--color-bg-inverse);
+  overflow: clip;
+}
+
+.credo_contain {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.credo_layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+}
+
+.credo_text {
+  grid-column: 3 / span 8;
+  margin: 0;
+  /* The first line is set in one column from the block. */
+  text-indent: var(--grid-step);
+  font-family: var(--font-display);
+  font-size: var(--type-heading-l);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.0417em;
+  color: var(--color-text-inverse);
+  text-wrap: pretty;
+}
+
+/* A copy of the container, laid over the band and carrying the same grid, so
+   the panel can be placed on a column rather than at a computed offset. It
+   sits above the statement: the overlay crosses over the type. */
+.credo_bleed {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1fr);
+  gap: var(--grid-gutter);
+  pointer-events: none;
+}
+
+/* Placed on the column the design starts it on, then left to bleed off the
+   right edge of the page; the band clips it. */
+.credo_panel {
+  grid-column: 8 / span 5;
+  justify-self: start;
+  height: 100%;
+  width: auto;
+  max-width: none;
+}
+
+/* --------------------------------------------------------------------------
+   About — figures
+   The lede on the left four columns, the counted record on the right five as
+   a table of hairline rows: the number set large on the left of each row, its
+   description ranged right against it.
+   -------------------------------------------------------------------------- */
+
+.figures_wrap {
+  position: relative;
+  z-index: 1;
+  padding: 8rem 0 5.625rem;
+  background-color: var(--color-white);
+}
+
+.figures_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.figures_layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  align-items: start;
+}
+
+.figures_lede {
+  grid-column: 1 / span 4;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body-lg);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  text-wrap: pretty;
+}
+
+.figures_table {
+  grid-column: 8 / span 5;
+  display: flex;
+  flex-direction: column;
+}
+
+.figures_row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-xl);
+  padding: var(--space-md) 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.figures_row.is-last {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.figures_value {
+  flex: 1 1 auto;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-display-xl);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.034em;
+  color: var(--color-text-primary);
+}
+
+.figures_label {
+  flex: 0 0 auto;
+  width: 21.75rem;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.6;
+  text-align: right;
+  color: var(--color-text-primary);
+  text-wrap: pretty;
+}
+
+/* --------------------------------------------------------------------------
+   Contact
+   Three blocks on the twelve-column grid: the details on the left six columns,
+   the form on the right six, and the invitation to call below it in the same
+   right-hand measure.
+
+   The form's fields carry the site's own vocabulary rather than the library
+   input's: square corners, a hairline, and Geist at reading size. Every field
+   is labelled above, and the label is a real <label> bound to its control.
+   -------------------------------------------------------------------------- */
+
+.contact_wrap {
+  position: relative;
+  z-index: 1;
+  padding: var(--space-sm) 0 8rem;
+  background-color: var(--color-white);
+}
+
+.contact_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.contact_layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter) var(--grid-gutter);
+  align-items: start;
+}
+
+/* --- Details ------------------------------------------------------------- */
+
+/* The details hold at 80px from the top of the viewport while the form beside
+   them scrolls, releasing at the foot of the section. */
+.contact_details {
+  grid-column: 1 / span 6;
+  position: sticky;
+  top: 5rem;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-xs) 0;
+}
+
+/* Label on the first column, value from the second, so the pairs align down
+   the block without a table. */
+.contact_detail {
+  display: grid;
+  grid-template-columns: var(--grid-step) minmax(0, 1fr);
+  align-items: baseline;
+}
+
+.contact_detail_label {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--color-text-muted);
+}
+
+.contact_value {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  color: var(--color-text-primary);
+  transition: opacity var(--dur-standard) var(--ease-primary);
+}
+
+.contact_value:hover {
+  opacity: 0.5;
+}
+
+/* --- Form --------------------------------------------------------------- */
+
+.contact_form_col {
+  grid-column: 7 / span 6;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+}
+
+.contact_title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-heading-l);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.0417em;
+  color: var(--color-text-primary);
+  text-wrap: pretty;
+}
+
+.contact_form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.contact_field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.contact_label {
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--color-text-primary);
+}
+
+.contact_input {
+  width: 100%;
+  height: 3rem;
+  padding: 0.75rem 1rem;
+  border: 0;
+  border-radius: var(--radius-none);
+  background-color: var(--color-bg-field);
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-text-primary);
+  transition: background-color var(--dur-standard) var(--ease-primary);
+}
+
+.contact_input.is-area {
+  height: auto;
+  min-height: 14.3125rem;
+  padding: 0.75rem 1rem;
+  resize: vertical;
+}
+
+.contact_input::placeholder {
+  color: var(--color-text-faint);
+}
+
+/* No outline and no change of fill; the caret alone marks the active field. */
+.contact_input:focus {
+  outline: none;
+}
+
+.contact_input:focus-visible {
+  outline: none;
+}
+
+.contact_submit {
+  display: flex;
+  flex-direction: row;
+  margin-top: var(--space-xs);
+}
+
+/* --- Invitation to call -------------------------------------------------- */
+
+.contact_call {
+  grid-column: 7 / span 6;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-lg);
+  margin-top: 6rem;
+}
+
+/* --------------------------------------------------------------------------
+   Placeholder page
+   -------------------------------------------------------------------------- */
+
+/* --------------------------------------------------------------------------
+   Masthead — shared by the subpages
+   The title and the standfirst share one band near the foot of a 456px
+   opening: the title on the left seven columns, the standfirst on the last
+   five. The navigation overlays the top, so the clearance above is expressed
+   as padding rather than a margin.
+   -------------------------------------------------------------------------- */
+
+/* 128px of clear space above and below the title, plus the 72px the navigation
+   band occupies at the top of the page. */
+.masthead_wrap {
+  position: relative;
+  z-index: 0;
+  padding: 12.5rem 0 8rem;
+  background-color: var(--color-white);
+  overflow: clip;
+}
+
+.masthead_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.masthead_layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  align-items: end;
+}
+
+.masthead_title {
+  grid-column: 1 / span 7;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-display-xl);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.034em;
+  white-space: nowrap;
+  color: var(--color-text-primary);
+}
+
+.masthead_standfirst {
+  grid-column: 9 / span 4;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body-lg);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--color-text-primary);
+  text-wrap: pretty;
+}
+
+/* --------------------------------------------------------------------------
+   Our work — project list
+   A typographic table: eight rows on the same twelve-column grid, divided by
+   hairlines. Each row is four columns of title, three of client, three held
+   clear for the preview the hover state will occupy, and two for the control.
+   At rest the first row carries full strength and the others recede — the
+   same reading the homepage's audience list uses.
+   -------------------------------------------------------------------------- */
+
+.projects_wrap {
+  position: relative;
+  z-index: 1;
+  padding: var(--space-xl) 0 10rem;
+  background-color: var(--color-white);
+}
+
+.projects_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.projects_layout {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.projects_row {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  align-items: center;
+  padding: var(--space-lg) 0;
+  border-top: 1px solid var(--color-border-light);
+  text-decoration: none;
+}
+
+.projects_row.is-last {
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.projects_row_title {
+  grid-column: 1 / span 4;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-heading-m);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+.projects_row_client {
+  grid-column: 5 / span 3;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+}
+
+/* Held clear for the preview the hover state occupies. */
+.projects_row_preview {
+  grid-column: 8 / span 3;
+}
+
+.projects_row_action {
+  grid-column: 11 / span 2;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  opacity: 0;
+  transition: opacity var(--dur-standard) var(--ease-primary);
+}
+
+/* Only the row in focus carries its control. */
+.projects_row_action.is-shown {
+  opacity: 1;
+}
+
+/* Text recedes rather than the focal row brightening: nothing is dimmed until
+   the reader is actually in the list, and the recession is deep enough to
+   shift the hierarchy while leaving every row plainly readable.
+
+   The dimming sits on the text, never on the row: the row carries the
+   divider, and the divider is not part of the interaction. */
+.projects_row_title,
+.projects_row_client {
+  transition: opacity var(--dur-standard) var(--ease-primary);
+}
+
+.projects_row_title.is-recessed,
+.projects_row_client.is-recessed {
+  opacity: 0.4;
+}
+
+/* --------------------------------------------------------------------------
+   Our work — floating preview
+   A gallery window of one fixed size, standing in the three columns the table
+   holds clear for it. Its width and height are literal and never animate, and
+   its horizontal position never changes; only its vertical position answers
+   the pointer.
+
+   The window and its contents are two separate systems. The window moves. The
+   pictures inside it only change: each is a full-size layer holding the same
+   frame, and a change of row crosses one into the next in place — both are
+   opaque during the crossing, so the window is never empty and nothing is ever
+   seen resizing or travelling.
+   -------------------------------------------------------------------------- */
+
+.projects_preview {
+  position: absolute;
+  top: 0;
+  left: calc(var(--grid-step) * 7);
+  z-index: 2;
+  width: 25rem;
+  height: 17.8125rem;
+  overflow: clip;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-standard) var(--ease-primary);
+  will-change: transform;
+}
+
+.projects_preview.is-open {
+  opacity: 1;
+}
+
+/* Every layer fills the window exactly; only its opacity ever changes. */
+.projects_preview_frame {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  opacity: 0;
+  transition: opacity var(--dur-standard) var(--ease-primary);
+}
+
+.projects_preview_frame.is-current {
+  opacity: 1;
+}
+
+/* The picture is cropped to the window rather than fitted to it, so a source
+   of any proportion leaves the window's dimensions alone. */
+.projects_preview_img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --------------------------------------------------------------------------
+   Placeholder page
+   -------------------------------------------------------------------------- */
 
 /* --------------------------------------------------------------------------
    Placeholder page
@@ -1424,6 +2303,166 @@
     grid-column: span 12;
     margin-top: var(--space-2xl);
   }
+  /* Five pictures, scaled back. Two are withheld rather than the whole
+     scatter shrunk, so the spacing stays open. */
+  .galaxy_layout {
+    min-height: 36rem;
+  }
+
+  .galaxy_content {
+    flex-direction: column;
+    gap: var(--space-2xl);
+  }
+
+  .galaxy_statement,
+  .galaxy_aside {
+    width: 100%;
+  }
+
+  .galaxy_aside {
+    max-width: 25rem;
+    margin-top: 0;
+  }
+
+  .galaxy_tile_06,
+  .galaxy_tile_09,
+  .galaxy_tile_11 {
+    display: none;
+  }
+
+  .galaxy_tile_01 { width: 4rem; height: 8rem; }
+  .galaxy_tile_02 { width: 4.75rem; height: 4.75rem; }
+  .galaxy_tile_04 { width: 3rem; height: 6rem; }
+  .galaxy_tile_05 { width: 6rem; height: 3rem; }
+  .galaxy_tile_07 { width: 4.75rem; height: 2.375rem; }
+
+  .about_wrap {
+    padding: 9rem 0 var(--space-3xl);
+  }
+
+  .about_statement {
+    text-indent: 0;
+  }
+
+  .about_principle_1,
+  .about_principle_2,
+  .about_principle_3 {
+    grid-column: span 12;
+    margin-top: 0;
+  }
+
+  .about_principle_2,
+  .about_principle_3 {
+    margin-top: var(--space-xl);
+  }
+
+  .credo_wrap {
+    min-height: 0;
+    padding: var(--space-3xl) 0;
+  }
+
+  .credo_text {
+    grid-column: span 12;
+    text-indent: 0;
+  }
+
+  .credo_bleed {
+    display: none;
+  }
+
+  .figures_wrap {
+    padding: var(--space-3xl) 0;
+  }
+
+  .figures_lede,
+  .figures_table {
+    grid-column: span 12;
+  }
+
+  .figures_table {
+    margin-top: var(--space-xl);
+  }
+
+  .figures_label {
+    width: 12rem;
+  }
+
+  .contact_wrap {
+    padding: var(--space-sm) 0 var(--space-3xl);
+  }
+
+  .contact_details,
+  .contact_form_col,
+  .contact_call {
+    grid-column: span 12;
+  }
+
+  .contact_details {
+    position: static;
+    margin-bottom: var(--space-xl);
+  }
+
+  .contact_call {
+    margin-top: var(--space-3xl);
+  }
+
+  .masthead_wrap {
+    min-height: 0;
+    padding: 9rem 0 var(--space-3xl);
+  }
+
+  .masthead_title,
+  .masthead_standfirst {
+    grid-column: span 12;
+  }
+
+  .masthead_layout {
+    align-items: start;
+  }
+
+  .masthead_title {
+    white-space: normal;
+    font-size: var(--type-display-l);
+  }
+
+  .masthead_standfirst {
+    margin-top: var(--space-lg);
+  }
+
+  .projects_wrap {
+    padding: var(--space-2xl) 0 var(--space-3xl);
+  }
+
+  .projects_row {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    align-items: start;
+    padding: var(--space-md) 0;
+  }
+
+  .projects_row_title {
+    grid-column: span 4;
+  }
+
+  .projects_row_client {
+    grid-column: span 2;
+  }
+
+  .projects_row_preview,
+  .projects_preview {
+    display: none;
+  }
+
+  .projects_row_title.is-recessed,
+  .projects_row_client.is-recessed {
+    opacity: 1;
+  }
+
+  .projects_row_action {
+    grid-column: span 6;
+    justify-content: flex-start;
+    opacity: 1;
+    margin-top: var(--space-sm);
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -1456,6 +2495,12 @@
     height: 1.25rem;
   }
 
+  .work_row_title,
+  .work_row_label,
+  .work_row_text {
+    grid-column: 1 / span 1;
+  }
+
   .work_row {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--space-sm);
@@ -1472,6 +2517,36 @@
 
   .specialize_link {
     white-space: normal;
+  }
+  /* Three pictures, held clear of the typography. */
+  .galaxy_layout {
+    min-height: 32rem;
+  }
+
+  .galaxy_tile_02,
+  .galaxy_tile_04 {
+    display: none;
+  }
+
+  /* Hidden by the 991px block above; the mobile field wants them back. */
+  .galaxy_tile_09,
+  .galaxy_tile_11 {
+    display: block;
+  }
+
+  .galaxy_tile_01 { left: 2%; top: 6%; width: 3.5rem; height: 7rem; }
+  .galaxy_tile_05 { left: 8%; top: 64%; width: 5.75rem; height: 2.875rem; }
+  .galaxy_tile_07 { left: 58%; top: 28%; width: 4.5rem; height: 4.5rem; }
+  .galaxy_tile_09 { left: 66%; top: 84%; width: 3rem; height: 6rem; }
+  .galaxy_tile_11 { left: 68%; top: 40%; width: 5rem; height: 2.5rem; }
+
+  .projects_row_title,
+  .projects_row_client {
+    grid-column: span 6;
+  }
+
+  .projects_row_client {
+    margin-top: var(--space-xs);
   }
 }
 
@@ -1496,4 +2571,1569 @@
    -------------------------------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
+}
+
+/* --------------------------------------------------------------------------
+   Case study — article page
+   The Figma frame's 1512px measures read onto the site grid: a 4-column
+   label rail on the left, a 7-column measure from column 5 for everything
+   that reads, and a 5-column indented prose block inside it. Blocks are
+   separated by a single hairline at the top rather than boxed on all four
+   sides, so stacked blocks never double their lines.
+   -------------------------------------------------------------------------- */
+
+/* 128px of clear space above and below the title, plus the 72px the navigation
+   band occupies at the top of the page. */
+.studyhero_wrap {
+  position: relative;
+  padding: 12.5rem 0 8rem;
+  background-color: var(--color-white);
+}
+
+.studyhero_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.studyhero_layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  align-items: start;
+}
+
+.studyhero_title {
+  grid-column: 1 / span 12;
+  margin: 0 0 5.5rem;
+  /* First line set in one column; the rest run the full measure. */
+  text-indent: var(--grid-step);
+  font-family: var(--font-display);
+  font-size: var(--type-display-xl);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.034em;
+  color: var(--color-text-primary);
+  text-wrap: pretty;
+}
+
+.studyhero_meta {
+  grid-column: 1 / span 4;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.studyhero_meta_row {
+  display: grid;
+  grid-template-columns: 6.25rem minmax(0, 1fr);
+  gap: var(--grid-gutter);
+  align-items: baseline;
+}
+
+.studyhero_meta_label {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text-faint);
+}
+
+.studyhero_meta_value {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+}
+
+.studyhero_standfirst {
+  grid-column: 5 / span 7;
+  margin: 0;
+  text-indent: var(--grid-step);
+  font-family: var(--font-body);
+  font-size: var(--type-body-lg);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  text-wrap: pretty;
+}
+
+/* The banner runs the full frame width, 1512×380 in the source. */
+.studybanner_wrap {
+  position: relative;
+  z-index: 0;
+  background-color: var(--color-white);
+}
+
+.studybanner_contain {
+  width: 100%;
+}
+
+/* The frame holds the crop and stays put; the picture inside it is taller
+   than the frame by the parallax travel, split above and below, so the
+   scroll-bound drift never uncovers an edge. */
+.studybanner_layout {
+  position: relative;
+  display: block;
+  aspect-ratio: 1512 / 380;
+  overflow: clip;
+}
+
+.studybanner_img {
+  position: absolute;
+  left: 0;
+  top: -3.5rem;
+  display: block;
+  width: 100%;
+  height: calc(100% + 7rem);
+  object-fit: cover;
+}
+
+.studybody_wrap {
+  position: relative;
+  z-index: 1;
+  padding: 5rem 0 0;
+  background-color: var(--color-white);
+}
+
+.studybody_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.studybody_layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.studybody_block {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  align-items: start;
+  padding: 2rem 0 5rem;
+  border-top: 1px solid rgba(11, 11, 11, 0.1);
+}
+
+/* The final block closes on the section below it, not on a rule of its own. */
+.studybody_block.is-last {
+  border-bottom: 0;
+}
+
+.studybody_label {
+  grid-column: 1 / span 4;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--color-text-primary);
+}
+
+.studybody_body {
+  grid-column: 5 / span 7;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* Set in one column from the measure, five columns wide — the reading
+   width from the source frame. */
+.studybody_prose {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-left: var(--grid-step);
+  width: calc((var(--grid-step) * 4) + var(--grid-column));
+  max-width: 100%;
+}
+
+.studybody_text {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--color-text-primary);
+  text-wrap: pretty;
+}
+
+/* Figures are read as a table rather than as display numbers: the label sits
+   on the left, the figure closes the line on the right, and a hairline rules
+   each row off from the next. */
+.studybody_table {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--space-md);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.studybody_metric {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--grid-gutter);
+  align-items: baseline;
+  padding: var(--space-md) 0;
+  border-top: 1px solid var(--color-border-light);
+}
+
+.studybody_metric_label {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--color-text-primary);
+}
+
+.studybody_metric_value {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-heading-m);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* The result the study closes on, set as display type. */
+.studybody_outcome {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  text-wrap: pretty;
+}
+
+.studybody_quote {
+  margin: 0;
+  padding: 3rem 0;
+}
+
+.studybody_quote_text {
+  margin: 0;
+  text-indent: var(--grid-step);
+  font-family: var(--font-body);
+  font-size: var(--type-body-lg);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  text-wrap: pretty;
+}
+
+.studybody_quote_source {
+  display: block;
+  margin-top: var(--space-md);
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+/* Set in one column with the prose on the left, but run out to the page
+   margin on the right: width is the full measure, offset by the indent. */
+.studybody_figure {
+  margin: 0;
+  margin-left: var(--grid-step);
+  padding: var(--space-md) 0;
+  width: 100%;
+}
+
+.studybody_figure_img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 844 / 474;
+  object-fit: cover;
+}
+
+
+
+.studynext_wrap {
+  position: relative;
+  z-index: 2;
+  padding: 4rem 0 6.25rem;
+  background-color: var(--color-white);
+}
+
+.studynext_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.studynext_layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.studynext_head {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.studynext_head_title {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body-lg);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+.studynext_link {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--color-text-primary);
+  text-decoration: none;
+  transition: opacity var(--dur-standard) var(--ease-primary);
+}
+
+.studynext_link:hover {
+  opacity: 0.55;
+}
+
+.studynext_link_icon {
+  display: block;
+  width: var(--size-icon-arrow-w);
+  height: var(--size-icon-arrow-h);
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+.studynext_row {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  align-items: center;
+  padding: 2.5rem var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+  text-decoration: none;
+}
+
+.studynext_row_title {
+  grid-column: 1 / span 4;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-heading-m);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+.studynext_row_client {
+  grid-column: 5 / span 3;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+}
+
+.studynext_row_media {
+  grid-column: 8 / span 3;
+}
+
+.studynext_row_img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 348 / 232;
+  object-fit: cover;
+}
+
+.studynext_row_action {
+  grid-column: 11 / span 2;
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 991px) {
+  .studyhero_wrap {
+    padding: 7rem 0 var(--space-3xl);
+  }
+
+  .studyhero_title,
+  .studyhero_standfirst,
+  .studybody_quote_text {
+    text-indent: 0;
+  }
+
+  .studyhero_title {
+    margin-bottom: var(--space-3xl);
+  }
+
+  .studyhero_meta {
+    grid-column: span 12;
+  }
+
+  .studyhero_standfirst {
+    grid-column: span 12;
+    margin-top: var(--space-lg);
+  }
+
+  .studybody_wrap {
+    padding-top: var(--space-3xl);
+  }
+
+  .studybody_block {
+    padding-bottom: var(--space-3xl);
+  }
+
+  .studybody_label {
+    grid-column: span 12;
+    margin-bottom: var(--space-md);
+  }
+
+  .studybody_body {
+    grid-column: span 12;
+  }
+
+  .studybody_prose {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .studybody_figure {
+    margin-left: 0;
+  }
+
+  .studynext_row {
+    padding: var(--space-lg) 0;
+  }
+
+  .studynext_row_title {
+    grid-column: span 6;
+  }
+
+  .studynext_row_client {
+    grid-column: span 6;
+  }
+
+  .studynext_row_media {
+    grid-column: span 8;
+    margin-top: var(--space-md);
+  }
+
+  .studynext_row_action {
+    grid-column: span 4;
+    align-items: flex-end;
+    margin-top: var(--space-md);
+  }
+}
+
+@media (max-width: 767px) {
+  .studybanner_layout {
+    aspect-ratio: 3 / 2;
+  }
+
+  .studybody_quote {
+    padding: var(--space-lg) 0;
+  }
+
+  .studynext_head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-md);
+  }
+
+  .studynext_row_title,
+  .studynext_row_client,
+  .studynext_row_media,
+  .studynext_row_action {
+    grid-column: span 12;
+  }
+
+  .studynext_row_action {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 479px) {
+  .studyhero_meta_row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .studybody_outcome {
+    font-size: 2rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Collaboration — how we work
+   The Figma frame's 1512px measures read onto the site grid: the models run
+   in the last nine columns, each one opening with its number and title on the
+   left four and its motif tile on the right four, with the detail rows
+   spanning the whole nine beneath. Blocks are separated by a single hairline
+   at the top so stacked rows never double their lines.
+   -------------------------------------------------------------------------- */
+
+/* 128px of clear space above and below the title, plus the 72px the navigation
+   band occupies at the top of the page. */
+.collabhero_wrap {
+  position: relative;
+  padding: 12.5rem 0 8rem;
+  background-color: var(--color-white);
+}
+
+.collabhero_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.collabhero_layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  align-items: start;
+}
+
+.collabhero_title {
+  grid-column: 1 / span 12;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-display-xl);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.0341em;
+  color: var(--color-text-primary);
+}
+
+/* The opening line is set in from the left; the line beneath it returns to
+   the margin, as in the source frame. */
+.collabhero_title_line {
+  display: block;
+}
+
+.collabhero_title_line.is-lead {
+  padding-left: var(--grid-step);
+}
+
+.collabhero_standfirst {
+  grid-column: 8 / span 5;
+  margin: 2.5rem 0 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body-lg);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--color-text-primary);
+  text-wrap: pretty;
+}
+
+.models_wrap {
+  position: relative;
+  padding: 0 0 7.5rem;
+  background-color: var(--color-white);
+}
+
+.models_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.models_layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.models_head {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.models_head_title {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-heading-m);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+.models_list {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  row-gap: 7.4375rem;
+  padding-top: 5rem;
+}
+
+.model_item {
+  grid-column: 1 / span 12;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  align-items: start;
+}
+
+.model_item.is-first {
+  grid-row: 1;
+}
+
+.model_item.is-second {
+  grid-row: 2;
+}
+
+.model_item.is-third {
+  grid-row: 3;
+}
+
+/* One rail behind all three blocks: the labels are ordinary flow children of
+   it, so each one sticks from its own section down to the end of the group and
+   the set collects into a stack as the reader passes each model. */
+.models_rail {
+  grid-column: 1 / span 3;
+  grid-row: 1 / span 3;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+/* The rail label names the approach beside the block it belongs to. */
+.model_label {
+  position: sticky;
+  top: var(--collab-sticky-top);
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  text-decoration: none;
+  pointer-events: auto;
+}
+
+/* Number and title stay tight together at the top of the block; the tile
+   beside them sets the block's height without stretching them apart. */
+/* The track is the sticky boundary: it stands exactly as tall as the row the
+   tile sets, so the number and title release where the tile ends and can never
+   travel down into the rows beneath. */
+.model_headtrack {
+  grid-column: 4 / span 4;
+  grid-row: 1;
+  align-self: stretch;
+}
+
+.model_head {
+  position: sticky;
+  top: var(--collab-sticky-top);
+  display: flex;
+  flex-direction: column;
+}
+
+.model_number {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-display-number);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.03125em;
+  color: var(--color-text-primary);
+}
+
+.model_title {
+  margin: 2rem 0 0;
+  font-family: var(--font-display);
+  font-size: var(--type-heading-l);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.0417em;
+  color: var(--color-text-primary);
+  text-wrap: pretty;
+}
+
+.model_media {
+  grid-column: 9 / span 4;
+  grid-row: 1;
+  background-color: var(--color-cream-panel);
+}
+
+.model_tile {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.model_rows {
+  grid-column: 4 / span 9;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--space-md);
+}
+
+.model_row {
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.model_row.is-last {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.model_row_head {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.model_row_label {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+}
+
+/* Points up while the row is open and down when it is shut. */
+.model_row_icon.is-collapsed {
+  transform: rotate(90deg);
+}
+
+.model_row_icon {
+  display: block;
+  width: var(--size-icon-arrow-w);
+  height: var(--size-icon-arrow-h);
+  fill: currentColor;
+  flex-shrink: 0;
+  transform: rotate(-90deg);
+  transition: transform var(--dur-standard) var(--ease-primary);
+}
+
+.model_row_body.is-collapsed {
+  display: none;
+}
+
+.model_row_body {
+  overflow: hidden;
+  padding-top: var(--space-md);
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  align-items: start;
+}
+
+.model_row_text {
+  grid-column: 1 / span 4;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(11, 11, 11, 0.75);
+  text-wrap: pretty;
+}
+
+.model_row_list {
+  grid-column: 6 / span 4;
+  margin: 0;
+  padding: 0 0 0 1.125rem;
+  list-style: disc outside;
+}
+
+.model_row_list_item {
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(11, 11, 11, 0.75);
+}
+
+@media (max-width: 991px) {
+  .collabhero_wrap {
+    padding: 7rem 0 var(--space-3xl);
+  }
+
+  .collabhero_title_line.is-lead {
+    padding-left: 0;
+  }
+
+  .collabhero_standfirst {
+    grid-column: 1 / span 12;
+    margin-top: var(--space-lg);
+  }
+
+  .model_item {
+    grid-column: 1 / span 12;
+  }
+
+  .models_rail {
+    display: none;
+  }
+
+  .model_item.is-first,
+  .model_item.is-second,
+  .model_item.is-third {
+    grid-row: auto;
+  }
+
+  .model_headtrack {
+    grid-column: 1 / span 6;
+    grid-row: auto;
+  }
+
+  .model_head {
+    position: static;
+  }
+
+  .model_media {
+    grid-column: 7 / span 6;
+    grid-row: auto;
+  }
+
+  .model_rows {
+    grid-column: 1 / span 12;
+    grid-row: auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .models_head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-md);
+  }
+
+  .model_headtrack,
+  .model_media {
+    grid-column: 1 / span 12;
+    grid-row: auto;
+  }
+
+  .model_title {
+    margin-top: var(--space-sm);
+  }
+
+  .model_media {
+    margin-top: var(--space-lg);
+  }
+
+  .model_row_text,
+  .model_row_list {
+    grid-column: 1 / span 9;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Insights — index
+   The featured piece runs the full frame width inside a single hairline, its
+   text on the left half and its picture on the right; the pieces below it sit
+   three to a row on the page grid, each one a picture with its date and title
+   beneath. Measures read off the 1512px source frame.
+   -------------------------------------------------------------------------- */
+
+/* 128px of clear space above and below the title, plus the 72px the navigation
+   band occupies at the top of the page. */
+.insightshero_wrap {
+  position: relative;
+  padding: 12.5rem 0 8rem;
+  background-color: var(--color-white);
+}
+
+.insightshero_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.insightshero_layout {
+  display: block;
+}
+
+.insightshero_title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-display-xl);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.034em;
+  color: var(--color-text-primary);
+}
+
+.articles_wrap {
+  position: relative;
+  padding: 0 0 7.5rem;
+  background-color: var(--color-white);
+}
+
+.articles_contain {
+  width: 100%;
+}
+
+.articles_layout {
+  display: flex;
+  flex-direction: column;
+  gap: 8.875rem;
+}
+
+/* The featured piece is bounded by one hairline on all four sides and runs the
+   full width of the frame, so it is the one block that ignores the page
+   margin. */
+.featured_row {
+  display: flex;
+  flex-direction: row;
+  gap: var(--grid-gutter);
+  align-items: center;
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  text-decoration: none;
+}
+
+.featured_text_col {
+  display: flex;
+  flex-direction: column;
+  width: 37.125rem;
+  height: 46.5rem;
+  flex-shrink: 0;
+}
+
+.featured_meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  width: 25rem;
+}
+
+.featured_kicker {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--color-text-primary);
+  text-transform: capitalize;
+}
+
+.featured_date {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(11, 11, 11, 0.5);
+}
+
+.featured_body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  width: 34.125rem;
+  margin-top: 14.0625rem;
+}
+
+.featured_title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-heading-l);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.0417em;
+  color: var(--color-text-primary);
+  text-wrap: pretty;
+}
+
+.featured_standfirst {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(11, 11, 11, 0.5);
+  text-wrap: pretty;
+}
+
+.featured_media {
+  position: relative;
+  height: 46.5rem;
+  flex: 1 1 auto;
+  overflow: clip;
+}
+
+.featured_img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-standard) var(--ease-primary);
+}
+
+/* The same close-in as the homepage case cards: the picture grows inside its
+   window, nothing else moves. */
+.featured_row:hover .featured_img {
+  transform: scale(1.04);
+}
+
+.featured_action {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+}
+
+.articles_grid {
+  display: grid;
+  align-items: start;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 3rem var(--grid-gutter);
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.article_card {
+  grid-column: span 4;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1875rem;
+  text-decoration: none;
+}
+
+.article_media {
+  position: relative;
+  overflow: clip;
+}
+
+/* The chip is held at the centre of the picture and only stated on hover; the
+   arrow inside it runs on the shared [data-hover] mechanics. */
+.article_action {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -1.5rem 0 0 -5.5rem;
+  opacity: 0;
+  transition: opacity var(--dur-standard) var(--ease-primary);
+}
+
+.article_card:hover .article_action,
+.article_card:focus-within .article_action {
+  opacity: 1;
+}
+
+/* Three picture heights alternate across the rows — the middle of each row
+   tallest, its neighbours cut shorter — so the grid reads as a rhythm rather
+   than a table. Widths never change. */
+.article_img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 472 / 514;
+  object-fit: cover;
+  transition: transform var(--dur-standard) var(--ease-primary);
+}
+
+.article_card:hover .article_img {
+  transform: scale(1.04);
+}
+
+.article_img.is-mid {
+  aspect-ratio: 472 / 385;
+}
+
+.article_img.is-short {
+  aspect-ratio: 472 / 270;
+}
+
+.article_meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.article_date {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(11, 11, 11, 0.5);
+}
+
+.article_title {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-heading-m);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  text-wrap: pretty;
+}
+
+@media (max-width: 991px) {
+  .insightshero_wrap {
+    padding: 9rem 0 var(--space-3xl);
+  }
+
+  .articles_layout {
+    gap: var(--space-4xl);
+  }
+
+  .featured_row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .featured_text_col {
+    width: 100%;
+    height: auto;
+  }
+
+  .featured_meta {
+    width: 100%;
+  }
+
+  .featured_body {
+    width: 100%;
+    margin-top: var(--space-lg);
+  }
+
+  .featured_media {
+    height: auto;
+    aspect-ratio: 845 / 744;
+  }
+
+  .articles_grid {
+    gap: var(--space-2xl) var(--grid-gutter);
+  }
+
+  .article_card {
+    grid-column: span 6;
+  }
+}
+
+@media (max-width: 767px) {
+  .article_card {
+    grid-column: span 12;
+  }
+
+  .featured_media {
+    aspect-ratio: 3 / 2;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Page-head entrance
+   Each page head arrives as the homepage hero does: the title's lines and the
+   subtitle begin together, on one curve and one duration. The lines are set in
+   their own boxes so the entrance has something to move.
+   -------------------------------------------------------------------------- */
+
+.masthead_title_line,
+.insightshero_title_line,
+.studyhero_title_line,
+.about_statement_line {
+  display: block;
+}
+
+.about_statement_line.is-lead {
+  padding-left: var(--grid-step);
+}
+
+@media (max-width: 991px) {
+  .about_statement_line.is-lead {
+    padding-left: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Private equity — target audience page
+   Measures read off the 1512px source frame: the hero sets its title across the
+   full grid with the motif on the first six columns and the standfirst on the
+   last four; the help list runs two columns from the fifth; the models sit three
+   to a row in bounded cards.
+   -------------------------------------------------------------------------- */
+
+/* Holds its plane while the help section rises over it. */
+.pehero_wrap {
+  position: relative;
+  z-index: 0;
+  padding: 12.5rem 0 7rem;
+  background-color: var(--color-white);
+}
+
+.pehero_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.pehero_layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 8rem var(--grid-gutter);
+  align-items: start;
+}
+
+.pehero_title {
+  grid-column: 1 / span 12;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-display-xl);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.034em;
+  color: var(--color-text-primary);
+}
+
+.pehero_title_line {
+  display: block;
+}
+
+.pehero_title_line.is-lead {
+  padding-left: var(--grid-step);
+}
+
+.pehero_media {
+  grid-column: 1 / span 6;
+  overflow: clip;
+}
+
+.pehero_img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 720 / 359;
+  object-fit: cover;
+}
+
+.pehero_standfirst {
+  grid-column: 9 / span 4;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body-lg);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--color-text-primary);
+  text-wrap: pretty;
+}
+
+/* --- What we help with --------------------------------------------------- */
+
+.pehelp_wrap {
+  position: relative;
+  z-index: 1;
+  padding: 5rem 0 8rem;
+  background-color: var(--color-white);
+}
+
+.pehelp_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.pehelp_head {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--grid-gutter);
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.pehelp_head_title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-heading-l);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.0417em;
+  color: var(--color-text-primary);
+}
+
+/* Two columns of four, starting on the fifth column of the page grid. */
+.pehelp_grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 3rem var(--grid-gutter);
+  width: calc((var(--grid-step) * 7) + var(--grid-column));
+  max-width: 100%;
+  margin-left: calc(var(--grid-step) * 4);
+  padding-top: 3rem;
+}
+
+.pehelp_item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.pehelp_item_title {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-heading-m);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+.pehelp_item_text {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(11, 11, 11, 0.6);
+  text-wrap: pretty;
+}
+
+/* --- Relevant work ------------------------------------------------------- */
+
+.pecases_wrap {
+  position: relative;
+  z-index: 2;
+  padding: 5rem 0 8rem;
+  background-color: var(--color-white);
+}
+
+.pecases_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.pecases_head {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--grid-gutter);
+  padding: var(--space-md) 0 6rem;
+}
+
+.pecases_head_title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-heading-l);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.0417em;
+  color: var(--color-text-primary);
+}
+
+/* --- How we can work together ------------------------------------------- */
+
+.pemodels_wrap {
+  position: relative;
+  z-index: 3;
+  padding: 5rem 0 8rem;
+  background-color: var(--color-white);
+}
+
+.pemodels_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.pemodels_head {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--grid-gutter);
+  padding: var(--space-md) 0;
+}
+
+.pemodels_head_title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-heading-l);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.0417em;
+  color: var(--color-text-primary);
+}
+
+.pemodels_grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  align-items: start;
+  padding-top: 3rem;
+}
+
+/* The card is bounded on all four sides; its content runs flush to the top and
+   bottom edges, set in two columns' worth of side padding. */
+.pemodel_card {
+  grid-column: span 4;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  padding: 0 2rem;
+  border-left: 1px solid var(--color-border);
+  text-decoration: none;
+}
+
+.pemodel_media {
+  width: 12rem;
+  height: 12rem;
+  overflow: clip;
+  background-color: var(--color-cream-panel);
+  flex-shrink: 0;
+}
+
+.pemodel_tile {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pemodel_head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.pemodel_title {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-heading-m);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+.pemodel_label {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+}
+
+/* The three cards step down the page, each starting where the one before it
+   has already been read. */
+.pemodel_card.is-second {
+  margin-top: 7.5rem;
+}
+
+.pemodel_card.is-third {
+  margin-top: 15rem;
+}
+
+.pemodel_text {
+  margin: 0;
+  padding-bottom: 2rem;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(11, 11, 11, 0.6);
+  text-wrap: pretty;
+}
+
+@media (max-width: 991px) {
+  .pehero_wrap {
+    padding: 9rem 0 var(--space-3xl);
+  }
+
+  .pehero_layout {
+    gap: var(--space-3xl) var(--grid-gutter);
+  }
+
+  .pehero_title_line.is-lead {
+    padding-left: 0;
+  }
+
+  .pehero_media {
+    grid-column: 1 / span 12;
+  }
+
+  .pehero_standfirst {
+    grid-column: 1 / span 12;
+  }
+
+  .pehelp_grid {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .pemodel_card {
+    grid-column: span 6;
+  }
+
+  .pemodel_card.is-second,
+  .pemodel_card.is-third {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .pehelp_head,
+  .pecases_head,
+  .pemodels_head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-md);
+  }
+
+  .pehelp_grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pemodel_card {
+    grid-column: span 12;
+  }
 }

@@ -299,7 +299,7 @@ window.ATK.motion = window.ATK.motion || {};
      ------------------------------------------------------------------ */
 
   var BAND_DELAY = 0;
-  var BAND_DURATION = tokens.duration.editorial;
+  var BAND_DURATION = tokens.duration.standard;
   var BAND_ROWS = 2;
   var BAND_OPACITY = 0.12;
 
@@ -322,13 +322,18 @@ window.ATK.motion = window.ATK.motion || {};
         return;
       }
 
+      /* A band may ask for the editorial duration instead of the standard one,
+         and may decline the fade so it only rises. */
+      var slow = band.dataset.v5Band === "slow";
+      var fades = band.dataset.v5BandFade !== "off";
+
       window.gsap.fromTo(band, {
         y: core.resolveDistance(bandRise()),
-        opacity: BAND_OPACITY
+        opacity: fades ? BAND_OPACITY : 1
       }, {
         y: 0,
         opacity: 1,
-        duration: core.resolveDuration(BAND_DURATION),
+        duration: core.resolveDuration(slow ? tokens.duration.editorial : BAND_DURATION),
         delay: BAND_DELAY,
         ease: core.ease.reveal,
         onStart: function () { core.promote(band); },

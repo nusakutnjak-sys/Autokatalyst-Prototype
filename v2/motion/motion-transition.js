@@ -195,6 +195,13 @@ window.ATK.motion = window.ATK.motion || {};
         right: 0
       });
       if (lenis && typeof lenis.stop === "function") lenis.stop();
+
+      /* The arriving page's entrance starts with the transition rather than
+         after it: both are opacity and transform only, so they can overlap and
+         the new page reads as already alive as it slides in. The scroll-bound
+         work still waits for afterEnter, where the container is measurable. */
+      if (namespace.hero && namespace.hero.enter) namespace.hero.enter(data.next.container);
+      if (namespace.band && namespace.band.init) namespace.band.init();
     });
 
     window.barba.hooks.afterLeave(function () {

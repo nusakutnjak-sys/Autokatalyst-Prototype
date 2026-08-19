@@ -25,23 +25,57 @@ window.ATK.motion = window.ATK.motion || {};
   var tokens = namespace.tokens;
   var modules = namespace.modules;
 
-  var FONT_TIMEOUT = 600;
+  var FONT_TIMEOUT = 120;
+  var DISPLAY_FACE = '1em "HW Cigars"';
 
-  /* Masked type must not reveal a fallback face and then swap. Wait for the
-     display font, but never hold the page hostage to it. */
+  /* Masked type must not reveal a fallback face and then swap, but the wait is
+     for the display face alone and never for the whole document's fonts: when
+     that face is already available — a warm cache, a repeat visit, a page
+     transition — the entrance starts in the same frame, with nothing between
+     the page appearing and the composition beginning to move. */
   function whenTypeIsReady(callback) {
-    if (!document.fonts || !document.fonts.ready) {
+    if (!document.fonts || !document.fonts.load) {
       callback();
       return;
     }
+
+    if (document.fonts.check && document.fonts.check(DISPLAY_FACE)) {
+      callback();
+      return;
+    }
+
     var done = false;
     function run() {
       if (done) return;
       done = true;
       callback();
     }
-    document.fonts.ready.then(run);
+    document.fonts.load(DISPLAY_FACE).then(run, run);
     window.setTimeout(run, FONT_TIMEOUT);
+  }
+
+  /* The lines travel three quarters of a grid column, so the distance is read
+     off the grid the titles are set on rather than counted in pixels. Re-read on
+     every entrance, so it holds at any width. */
+  var TRAVEL_COLUMNS = 0.5;
+
+  function gridColumnWidth() {
+    var root = window.getComputedStyle(document.documentElement);
+    var base = parseFloat(root.fontSize) || 16;
+
+    function toPx(value, fallback) {
+      var text = String(value).trim();
+      var number = parseFloat(text);
+      if (!number) return fallback;
+      return text.indexOf("rem") > -1 ? number * base : number;
+    }
+
+    var margin = toPx(root.getPropertyValue("--page-margin"), 24);
+    var gutter = toPx(root.getPropertyValue("--grid-gutter"), 24);
+    var max = toPx(root.getPropertyValue("--container-max"), 1728);
+    var content = Math.min(window.innerWidth, max) - (margin * 2);
+
+    return ((content - (gutter * 11)) / 12) * TRAVEL_COLUMNS;
   }
 
   /* ------------------------------------------------------------------
@@ -87,10 +121,14 @@ window.ATK.motion = window.ATK.motion || {};
     if (heading) {
       var lines = core.scoped(heading, "[data-motion-line]");
       var mid = (lines.length - 1) / 2;
-      var direction = heading.dataset.motionLines === "reverse" ? -1 : 1;
-      var travel = core.resolveDistance(tokens.distance.sm);
+      /* The opening row always comes in from the left; the rows after it lean
+         in from the other side. data-motion-lines="reverse" flips the pair. */
+      var direction = heading.dataset.motionLines === "reverse" ? 1 : -1;
+      var travel = core.resolveDistance(gridColumnWidth());
       lines.forEach(function (line, index) {
-        var factor = mid ? (((mid - index) / mid) * direction) : 0;
+        /* A title set on a single line has no pair to lean against, so it
+           comes in from the right on its own. */
+        var factor = lines.length === 1 ? 1 : (mid ? (((mid - index) / mid) * direction) : 0);
         var width = line.getBoundingClientRect().width || 1;
         together(window.gsap.fromTo(line, {
           xPercent: (travel / width) * 100 * factor,
@@ -244,17 +282,19 @@ window.ATK.motion = window.ATK.motion || {};
      Init
      ------------------------------------------------------------------ */
 
-  function initHeroMotion() {
+  /* The entrance alone — opacity and transform, nothing measured against the
+     scroll. It can therefore run the moment a page transition begins, while
+     the incoming container is still held fixed, rather than waiting for the
+     transition to finish. Guarded, so the later full init leaves it alone. */
+  function runEntrance(scope) {
     if (!core.hasGsap()) return;
 
-    var hero = document.querySelector("[data-motion-hero]");
+    /* During a transition both containers are in the DOM and the outgoing one
+       comes first, so the arriving container is passed in and the hero is
+       resolved inside it. The navigation lives outside the swapped container,
+       so it is always resolved from the document. */
+    var hero = (scope || document).querySelector("[data-motion-hero]");
     var nav = document.querySelector("[data-motion-nav]");
-    var headings = core.toArray("[data-motion-heading]");
-
-    headings.forEach(function (heading) {
-      if (!core.guard(heading, "Heading")) return;
-      bindHeading(heading);
-    });
 
     whenTypeIsReady(function () {
       if (hero && core.guard(hero, "HeroEntrance")) {
@@ -269,10 +309,26 @@ window.ATK.motion = window.ATK.motion || {};
           scroll: false
         });
       }
+    });
+  }
+
+  function initHeroMotion() {
+    if (!core.hasGsap()) return;
+
+    var headings = core.toArray("[data-motion-heading]");
+
+    headings.forEach(function (heading) {
+      if (!core.guard(heading, "Heading")) return;
+      bindHeading(heading);
+    });
+
+    runEntrance();
+
+    whenTypeIsReady(function () {
       bindAlign();
       core.refresh();
     });
   }
 
-  namespace.hero = { init: initHeroMotion };
+  namespace.hero = { init: initHeroMotion, enter: runEntrance };
 })(window.ATK.motion);
