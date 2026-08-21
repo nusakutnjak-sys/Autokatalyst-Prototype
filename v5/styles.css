@@ -94,6 +94,7 @@
   /* Rows set closer together than the homepage's, so the hairlines are
      lightened to keep the group from reading heavier. */
   --color-border-light: rgba(11, 11, 11, 0.14);
+  --color-border-card: #CECECE;
   --color-border-inverse: rgba(247, 249, 227, 0.2);
 
   /* Spacing scale */
@@ -165,6 +166,18 @@
   box-sizing: border-box;
 }
 
+/* The viewport's scrollbar belongs to the root element, so it is hidden there:
+   the page then measures the same width whether or not it scrolls, and the bar
+   never shifts between pages. */
+.page_root {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.page_root::-webkit-scrollbar {
+  display: none;
+}
+
 .page_body {
   margin: 0;
   padding: 0;
@@ -189,6 +202,17 @@
 .page_main {
   display: block;
   background-color: var(--color-white);
+}
+
+/* A page whose own ground is dark declares it, so the arriving container and
+   everything behind it are that colour from the first frame of the transition
+   rather than after its content paints. */
+.page_main.is-dark-ground {
+  background-color: var(--color-bg-inverse);
+}
+
+.page_wrap.is-dark-ground {
+  background-color: var(--color-bg-inverse);
 }
 
 /* --------------------------------------------------------------------------
@@ -457,6 +481,13 @@
   width: auto;
   height: 1.5rem;
   object-fit: contain;
+  transition: opacity var(--dur-hover) var(--ease-primary);
+}
+
+/* Held clear for the instant the mark is exchanged, so the two versions
+   cross rather than cut. */
+.nav_logo_img.is-swapping {
+  opacity: 0;
 }
 
 .nav_menu {
@@ -479,7 +510,7 @@
   text-transform: capitalize;
   text-decoration: none;
   color: var(--color-text-primary);
-  transition: color var(--dur-hover) var(--ease-primary);
+  transition: color var(--dur-fast) var(--ease-primary);
 }
 
 .nav_link:hover {
@@ -916,7 +947,7 @@
 .work_wrap {
   position: relative;
   z-index: 1;
-  padding: var(--space-5xl) 0 6.5rem;
+  padding: var(--space-5xl) 0 8rem;
   background-color: var(--color-white);
   overflow: clip;
 }
@@ -931,7 +962,7 @@
 .work_layout {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3xl);
+  gap: 6rem;
 }
 
 .work_title {
@@ -1021,16 +1052,111 @@
   gap: 0.25rem;
 }
 
-.work_action {
-  margin-left: calc(var(--grid-step) * 3);
+/* How we work — three cards on the hairline grid. Each opens with its icon,
+   carries the question a client arrives with, and closes on the offer that
+   answers it, so the three read across as a set of choices. */
+.work_grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--color-border-card);
+  border-bottom: 1px solid var(--color-border-card);
+  border-left: 1px solid var(--color-border-card);
+}
+
+/* The whole card is the link, so the control inside it is presentational and
+   the card's own hover drives the arrow. */
+.work_card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+  min-height: 27.5rem;
+  padding: var(--space-xl);
+  border-right: 1px solid var(--color-border-card);
+  text-decoration: none;
+}
+
+.work_card:focus-visible {
+  outline: 2px solid var(--color-brand-support);
+  outline-offset: -0.25rem;
+}
+
+.work_card_icon {
+  display: block;
+  width: 4rem;
+  height: 4rem;
+  flex: none;
+}
+
+.work_card_head {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-heading-m);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  text-wrap: pretty;
+}
+
+.work_card_body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.work_card_label {
+  margin: 0;
+  width: 15rem;
+  max-width: 100%;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+}
+
+.work_card_text {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+/* The control sits on the foot of the card, so the three line up however
+   long the copy above them runs. */
+.work_card_action {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  margin-top: auto;
+}
+
+@media (max-width: 767px) {
+
+  .work_grid {
+    grid-template-columns: minmax(0, 1fr);
+    border-right: 1px solid var(--color-border-card);
+  }
+
+  .work_card {
+    gap: var(--space-lg);
+    min-height: 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--color-border-card);
+  }
+}
+
+.work_action {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
   width: calc((var(--grid-step) * 6) + var(--grid-column));
   max-width: 100%;
-  margin-top: calc(var(--space-lg) - var(--space-3xl));
-  margin-left: calc(var(--grid-step) * 3);
+  margin-top: calc(var(--space-lg) * -1);
 }
 
 /* --------------------------------------------------------------------------
@@ -3649,7 +3775,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  margin: -1.5rem 0 0 -5.5rem;
+  transform: translate(-50%, -50%);
   opacity: 0;
   transition: opacity var(--dur-standard) var(--ease-primary);
 }
@@ -4135,5 +4261,572 @@
 
   .pemodel_card {
     grid-column: span 12;
+  }
+}
+
+
+/* The project track spends scroll input on itself, so the document behind it
+   neither moves nor carries a scrollbar. */
+.page_body.is-locked {
+  height: 100vh;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+.footer_wrap.is-hidden {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   Our work — project track
+
+   Three columns reading one vertical track: client names left, pictures
+   centre, the project's use case and result right. Without the live state
+   class this is a plain document-flow list, which is what a small screen and
+   a reduced-motion reader get; the track module adds .is-live and takes over
+   position, scale and opacity.
+   -------------------------------------------------------------------------- */
+
+.worktrack_wrap {
+  position: relative;
+  background-color: var(--color-bg-canvas);
+}
+
+.worktrack_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.worktrack_layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  align-items: start;
+  padding: var(--space-3xl) 0;
+}
+
+/* One viewport tall, centred in what the navigation leaves. */
+.worktrack_layout.is-live {
+  align-items: center;
+  height: calc(100vh - var(--worktrack-nav, 0px));
+  margin-top: var(--worktrack-nav, 0px);
+  padding: 0;
+  overflow: hidden;
+}
+
+.worktrack_names {
+  grid-column: 1 / span 4;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.worktrack_names.is-live {
+  display: block;
+  position: relative;
+  z-index: 2;
+  grid-row: 1;
+  height: 100%;
+}
+
+/* 26px at the design width, easing down with the viewport so the longest
+   client name always sets on one line inside its four columns. The stack is
+   painted on a fixed pitch, so a wrapped name would break the alignment
+   between the focal name and the focal picture. */
+.worktrack_name {
+  font-family: var(--font-body);
+  font-size: min(var(--type-heading-m), 1.72vw);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  text-decoration: none;
+  color: var(--color-text-primary);
+}
+
+/* Only as wide as its own text, so a name never holds a hit area out over
+   the picture beside it. */
+.worktrack_name.is-live {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: max-content;
+  max-width: 100%;
+  margin-top: -0.6em;
+  transform-origin: left center;
+  will-change: transform, opacity;
+}
+
+.worktrack_stage {
+  grid-column: 5 / span 5;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* Live, the stage takes the full content width so its centre is the page's
+   centre: the focal picture is centred on the page, not between the two text
+   columns, which is what the design shows. */
+.worktrack_stage.is-live {
+  display: block;
+  position: relative;
+  z-index: 0;
+  grid-column: 1 / -1;
+  grid-row: 1;
+  height: 100%;
+}
+
+.worktrack_frame {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Five columns wide, centred on the page: the focal picture of the design. */
+.worktrack_frame.is-live {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc((var(--grid-step) * 4) + var(--grid-column));
+  transform: translate3d(-50%, -50%, 0);
+  will-change: transform, opacity;
+}
+
+/* The focal picture is the link. The chip is held at its centre and only
+   stated on hover, and the arrow inside runs on the shared [data-hover]
+   mechanics — the same treatment as a case-study card. */
+.worktrack_link {
+  position: relative;
+  display: block;
+  overflow: clip;
+  text-decoration: none;
+}
+
+.worktrack_action {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity var(--dur-standard) var(--ease-primary);
+}
+
+.worktrack_link:hover .worktrack_action,
+.worktrack_link:focus-within .worktrack_action {
+  opacity: 1;
+}
+
+.worktrack_img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 620 / 337;
+  object-fit: cover;
+  transition: transform var(--dur-standard) var(--ease-primary);
+}
+
+.worktrack_link:hover .worktrack_img {
+  transform: scale(1.04);
+}
+
+.worktrack_info {
+  grid-column: 10 / span 3;
+}
+
+.worktrack_info.is-live {
+  position: relative;
+  z-index: 2;
+  grid-row: 1;
+  height: 100%;
+}
+
+.worktrack_window {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+}
+
+/* A fixed window the notes travel through, so the text is cut by the same
+   vertical movement as the pictures rather than simply fading. */
+.worktrack_window.is-live {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 11rem;
+  margin-top: -3.5rem;
+  overflow: hidden;
+}
+
+.worktrack_card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.worktrack_card.is-live {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  will-change: transform, opacity;
+}
+
+.worktrack_card_meta {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--color-text-muted);
+}
+
+.worktrack_card_text {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  text-wrap: pretty;
+}
+
+@media (max-width: 991px) {
+
+  .worktrack_names {
+    grid-column: 1 / -1;
+  }
+
+  .worktrack_stage {
+    grid-column: 1 / -1;
+    gap: var(--space-md);
+  }
+
+  .worktrack_info {
+    grid-column: 1 / -1;
+  }
+
+  .worktrack_name {
+    font-size: min(var(--type-body-lg), 3.4vw);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Our work — dark variant
+
+   Two parts rather than three: the active project's information on the left,
+   the pictures on the right, and nothing else. The pictures are the only
+   indication that other projects exist, so they run the full height of the
+   viewport and are cut off by its edges. Without the live state class this is
+   a plain document-flow list, which is what a small screen and a
+   reduced-motion reader get.
+   -------------------------------------------------------------------------- */
+
+.page_body.is-dark {
+  background-color: var(--color-bg-inverse);
+}
+
+.nav_link.is-inverse {
+  color: var(--color-text-inverse);
+}
+
+.nav_link.is-inverse:hover {
+  color: var(--color-text-inverse);
+}
+
+.workdark_wrap {
+  position: relative;
+  background-color: var(--color-bg-inverse);
+}
+
+/* Held back until the track has painted, so the fallback list is never seen
+   on the way in. Only where the track actually binds. */
+@media (min-width: 992px) {
+
+  .workdark_wrap {
+    opacity: 0;
+  }
+
+  .workdark_wrap.is-ready {
+    opacity: 1;
+    transition: opacity var(--dur-standard) var(--ease-primary);
+  }
+}
+
+.workdark_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.workdark_layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  align-items: start;
+  padding: var(--space-3xl) 0;
+}
+
+/* One viewport tall. The pictures pass under the navigation and off both
+   edges, so the clip is the viewport itself rather than the space the bar
+   leaves. */
+.workdark_layout.is-live {
+  height: 100vh;
+  padding: 0;
+  overflow: hidden;
+}
+
+.workdark_lede {
+  grid-column: 1 / span 6;
+}
+
+.workdark_lede.is-live {
+  position: relative;
+  z-index: 2;
+  grid-row: 1;
+  height: 100%;
+}
+
+/* The one instruction on the page: the track answers the wheel rather than the
+   document, so it says so, and leaves as soon as it has been obeyed. */
+.workdark_hint {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
+  height: var(--size-button-height);
+  padding: 0 var(--space-sm);
+  margin: 0 0 var(--space-lg);
+  background-color: var(--color-bg-inverse);
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--color-text-inverse);
+}
+
+/* Live, the label rides the cursor: the track answers the wheel, so the
+   instruction sits where the reader is already looking. It leaves for good on
+   the first scroll. */
+.workdark_hint.is-live {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: auto;
+  right: auto;
+  z-index: 6;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform;
+  transition: opacity var(--dur-standard) var(--ease-primary);
+}
+
+.workdark_hint.is-shown {
+  opacity: 1;
+}
+
+.workdark_hint.is-gone {
+  opacity: 0;
+}
+
+/* Out of the way while the pointer is in the navigation band, so the label
+   never sits over the bar. */
+.workdark_hint.is-away {
+  opacity: 0;
+  transition-duration: var(--dur-hover);
+}
+
+.workdark_hint_arrow {
+  display: block;
+  width: var(--size-icon-arrow-h);
+  height: var(--size-icon-arrow-w);
+  flex: none;
+  fill: currentColor;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .workdark_hint_arrow.is-live {
+    animation: workdark-hint-drift 1.8s var(--ease-primary) infinite;
+  }
+}
+
+@keyframes workdark-hint-drift {
+  0%,
+  100% { transform: translateY(0); }
+  45% { transform: translateY(0.25rem); }
+}
+
+.workdark_window {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xl);
+}
+
+/* The block centres on the viewport, level with the focal picture. */
+.workdark_window.is-live {
+  display: block;
+  position: absolute;
+  inset: 0;
+}
+
+.workdark_card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  width: calc((var(--grid-step) * 5) + var(--grid-column));
+  max-width: 100%;
+}
+
+.workdark_card.is-live {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  will-change: opacity;
+}
+
+.workdark_title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-display-l);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--color-text-inverse);
+  text-wrap: pretty;
+}
+
+.workdark_note {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  width: calc((var(--grid-step) * 3) + var(--grid-column));
+  max-width: 100%;
+}
+
+/* The one piece of brand colour on the page, set small and wide. */
+.workdark_meta {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-label);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-brand-support);
+}
+
+.workdark_text {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-text-inverse-soft);
+  text-wrap: pretty;
+}
+
+.workdark_action {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.workdark_stage {
+  grid-column: 7 / span 6;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* Live, the stage takes the full content width so the pictures can hold the
+   right margin while the title runs under them. It can also be dragged, so it
+   says so. */
+.workdark_stage.is-live {
+  display: block;
+  position: relative;
+  z-index: 0;
+  grid-column: 1 / -1;
+  grid-row: 1;
+  height: 100%;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.workdark_stage.is-dragging {
+  cursor: grabbing;
+}
+
+.workdark_frame {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Five columns held against the right margin. The stack scales from that
+   edge, so every picture — focal or not — lines up on the right. */
+.workdark_frame.is-live {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: auto;
+  width: calc((var(--grid-step) * 4) + var(--grid-column));
+  transform: translateY(-50%);
+  transform-origin: right center;
+  will-change: transform, opacity;
+}
+
+/* The focal picture is the link; the hover state is the picture itself. */
+.workdark_link {
+  position: relative;
+  display: block;
+  overflow: clip;
+  text-decoration: none;
+}
+
+.workdark_img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  transition: transform var(--dur-standard) var(--ease-primary);
+}
+
+.workdark_link:hover .workdark_img {
+  transform: scale(1.04);
+}
+
+/* Only the live track answers the wheel, so only there is the instruction
+   true; in document flow the page scrolls as any page does. */
+@media (max-width: 991px) {
+
+  .workdark_hint {
+    display: none;
+  }
+
+  .workdark_lede {
+    grid-column: 1 / -1;
+  }
+
+  .workdark_stage {
+    grid-column: 1 / -1;
+  }
+
+  /* The column-derived measures are a desktop geometry; in flow the text
+     takes the width it is given. */
+  .workdark_card {
+    width: 100%;
+  }
+
+  .workdark_note {
+    width: 100%;
+  }
+
+  .workdark_title {
+    font-size: min(var(--type-heading-l), 8vw);
   }
 }

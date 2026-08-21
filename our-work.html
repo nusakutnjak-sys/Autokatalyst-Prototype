@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="page_root" lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="v2/motion.css">
 <link rel="stylesheet" href="v5/styles.css">
 </head>
-<body class="page_body">
+<body class="page_body is-dark">
 
 <div class="page_wrap" data-barba="wrapper">
 
@@ -18,109 +18,159 @@
   <nav class="nav_wrap is-motion-ready" aria-label="Primary" data-motion-nav>
     <div class="nav_contain">
       <div class="nav_layout">
-        <a class="nav_logo_link" href="index.html">
-          <img class="nav_logo_img" src="assets/logo-atk.svg" alt="Autokatalyst">
+        <a class="nav_logo_link" href="homepage.html" data-route="home">
+          <img class="nav_logo_img" src="assets/logo-atk-light.svg" alt="Autokatalyst">
         </a>
         <div class="nav_menu" data-dim-group>
-          <a class="nav_link" data-dim-item href="private-equity.html" data-route="who-we-help">Expertise</a>
-          <a class="nav_link" data-dim-item href="collaboration.html" data-route="collaboration">Collaboration</a>
-          <a class="nav_link" data-dim-item href="our-work.html" data-route="our-work">Our work</a>
-          <a class="nav_link" data-dim-item href="insights.html" data-route="insights">Insights</a>
-          <a class="nav_link" data-dim-item href="about.html" data-route="about">About</a>
-          <a class="nav_link" data-dim-item href="contact.html" data-route="contact">Contact</a>
+          <a class="nav_link is-inverse" data-dim-item href="private-equity.html" data-route="who-we-help">Expertise</a>
+          <a class="nav_link is-inverse" data-dim-item href="collaboration.html" data-route="collaboration">Collaboration</a>
+          <a class="nav_link is-inverse" data-dim-item href="our-work.html" data-route="our-work">Our work</a>
+          <a class="nav_link is-inverse" data-dim-item href="insights.html" data-route="insights">Insights</a>
+          <a class="nav_link is-inverse" data-dim-item href="about.html" data-route="about">About</a>
+          <a class="nav_link is-inverse" data-dim-item href="contact.html" data-route="contact">Contact</a>
         </div>
       </div>
     </div>
   </nav>
 
-  <main class="page_main" data-barba="container">
+  <main class="page_main is-dark-ground" data-page-ground="dark" data-barba="container">
 
-    <section class="masthead_wrap" data-motion-hero>
-      <div class="masthead_contain">
-        <div class="masthead_layout">
-          <h1 class="masthead_title" data-motion-heading data-motion-compress="off"><span class="masthead_title_line is-motion-ready" data-motion-line>Our Work</span></h1>
-          <p class="masthead_standfirst is-motion-ready" data-motion-copy>Real business problems solved with the right mix of data, AI and execution.</p>
-        </div>
-      </div>
-    </section>
+    <section class="workdark_wrap" data-workdark>
+      <div class="workdark_contain">
+        <div class="workdark_layout" data-workdark-layout>
 
-    <section class="projects_wrap is-motion-ready" data-v5-band>
-      <div class="projects_contain">
-        <div class="projects_layout" data-projects-list>
-          <div class="projects_preview" data-projects-preview aria-hidden="true">
-          <div class="projects_preview_frame" data-projects-frame>
-            <img class="projects_preview_img" src="assets/project-01.png" alt="Data-Driven Lead Generation — Metal Fabricator">
+          <div class="workdark_lede">
+            <p class="workdark_hint" data-workdark-hint>
+              <span class="workdark_hint_label">Scroll to explore</span>
+              <svg class="workdark_hint_arrow" viewBox="0 0 12 16" aria-hidden="true" focusable="false"><path d="M5.25 0h1.5v12.19l3.72-3.72 1.06 1.06L6 15.06.47 9.53l1.06-1.06 3.72 3.72z"/></svg>
+            </p>
+            <div class="workdark_window" data-workdark-window>
+              <article class="workdark_card" data-workdark-card>
+                <p class="workdark_meta">Lead Generation · Revenue Growth</p>
+                <h2 class="workdark_title">Metal Fabricator</h2>
+                <div class="workdark_note">
+                  <p class="workdark_text">Turning fragmented market data into a clearer view of where the best opportunities were hiding.</p>
+                </div>
+                <div class="workdark_action">
+                  <a class="button is-olive" href="case-study.html" data-route="case-study"><span class="button_inner"><svg class="button_icon is-lead" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg><span class="button_text">Read more</span><svg class="button_icon is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg></span></a>
+                </div>
+              </article>
+              <article class="workdark_card" data-workdark-card>
+                <p class="workdark_meta">Deal Sourcing · Revenue Growth</p>
+                <h2 class="workdark_title">Private Equity Firm</h2>
+                <div class="workdark_note">
+                  <p class="workdark_text">A structured read of the market, so promising targets surface before they reach a banker.</p>
+                </div>
+                <div class="workdark_action">
+                  <a class="button is-olive" href="placeholder.html?p=case-study-2" data-route="case-study"><span class="button_inner"><svg class="button_icon is-lead" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg><span class="button_text">Read more</span><svg class="button_icon is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg></span></a>
+                </div>
+              </article>
+              <article class="workdark_card" data-workdark-card>
+                <p class="workdark_meta">Reporting · Operating Efficiency</p>
+                <h2 class="workdark_title">Community Services Nonprofit</h2>
+                <div class="workdark_note">
+                  <p class="workdark_text">One reporting layer in place of a month of manual assembly, with the numbers agreeing across teams.</p>
+                </div>
+                <div class="workdark_action">
+                  <a class="button is-olive" href="placeholder.html?p=case-study-3" data-route="case-study"><span class="button_inner"><svg class="button_icon is-lead" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg><span class="button_text">Read more</span><svg class="button_icon is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg></span></a>
+                </div>
+              </article>
+              <article class="workdark_card" data-workdark-card>
+                <p class="workdark_meta">Marketing Automation · Revenue Growth</p>
+                <h2 class="workdark_title">Multi-Family Real Estate Firm</h2>
+                <div class="workdark_note">
+                  <p class="workdark_text">Campaigns that follow each prospect’s own timeline rather than a single monthly send.</p>
+                </div>
+                <div class="workdark_action">
+                  <a class="button is-olive" href="placeholder.html?p=case-study-4" data-route="case-study"><span class="button_inner"><svg class="button_icon is-lead" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg><span class="button_text">Read more</span><svg class="button_icon is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg></span></a>
+                </div>
+              </article>
+              <article class="workdark_card" data-workdark-card>
+                <p class="workdark_meta">Pricing · Margin Expansion</p>
+                <h2 class="workdark_title">Waste Management Company</h2>
+                <div class="workdark_note">
+                  <p class="workdark_text">Quotes priced on what each job actually costs to serve, produced in minutes rather than days.</p>
+                </div>
+                <div class="workdark_action">
+                  <a class="button is-olive" href="placeholder.html?p=case-study-5" data-route="case-study"><span class="button_inner"><svg class="button_icon is-lead" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg><span class="button_text">Read more</span><svg class="button_icon is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg></span></a>
+                </div>
+              </article>
+              <article class="workdark_card" data-workdark-card>
+                <p class="workdark_meta">Forecasting · Working Capital</p>
+                <h2 class="workdark_title">Industrial Equipment Company</h2>
+                <div class="workdark_note">
+                  <p class="workdark_text">Demand read far enough ahead that stock sits where the orders are, not where they were.</p>
+                </div>
+                <div class="workdark_action">
+                  <a class="button is-olive" href="placeholder.html?p=case-study-6" data-route="case-study"><span class="button_inner"><svg class="button_icon is-lead" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg><span class="button_text">Read more</span><svg class="button_icon is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg></span></a>
+                </div>
+              </article>
+              <article class="workdark_card" data-workdark-card>
+                <p class="workdark_meta">Cash Forecasting · Working Capital</p>
+                <h2 class="workdark_title">Hardwood Lumber Manufacturer</h2>
+                <div class="workdark_note">
+                  <p class="workdark_text">A weekly view of what will actually be collected, and which accounts need attention first.</p>
+                </div>
+                <div class="workdark_action">
+                  <a class="button is-olive" href="placeholder.html?p=case-study-7" data-route="case-study"><span class="button_inner"><svg class="button_icon is-lead" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg><span class="button_text">Read more</span><svg class="button_icon is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg></span></a>
+                </div>
+              </article>
+              <article class="workdark_card" data-workdark-card>
+                <p class="workdark_meta">Operations · Operating Efficiency</p>
+                <h2 class="workdark_title">Masonry Supplier</h2>
+                <div class="workdark_note">
+                  <p class="workdark_text">Order, dispatch and delivery working from one set of numbers instead of three.</p>
+                </div>
+                <div class="workdark_action">
+                  <a class="button is-olive" href="placeholder.html?p=case-study-8" data-route="case-study"><span class="button_inner"><svg class="button_icon is-lead" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg><span class="button_text">Read more</span><svg class="button_icon is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg></span></a>
+                </div>
+              </article>
+            </div>
           </div>
-          <div class="projects_preview_frame" data-projects-frame>
-            <img class="projects_preview_img" src="assets/project-02.png" alt="Investment Deal Sourcing — Private Equity Firm">
+
+          <div class="workdark_stage" data-workdark-stage>
+            <div class="workdark_frame" data-workdark-frame>
+              <a class="workdark_link" data-hover href="case-study.html" data-route="case-study">
+                <img class="workdark_img" src="assets/project-01.png" alt="Metal Fabricator">
+              </a>
+            </div>
+            <div class="workdark_frame" data-workdark-frame>
+              <a class="workdark_link" data-hover href="placeholder.html?p=case-study-2" data-route="case-study">
+                <img class="workdark_img" src="assets/project-02.png" alt="Private Equity Firm">
+              </a>
+            </div>
+            <div class="workdark_frame" data-workdark-frame>
+              <a class="workdark_link" data-hover href="placeholder.html?p=case-study-3" data-route="case-study">
+                <img class="workdark_img" src="assets/project-03.png" alt="Community Services Nonprofit">
+              </a>
+            </div>
+            <div class="workdark_frame" data-workdark-frame>
+              <a class="workdark_link" data-hover href="placeholder.html?p=case-study-4" data-route="case-study">
+                <img class="workdark_img" src="assets/project-01.png" alt="Multi-Family Real Estate Firm">
+              </a>
+            </div>
+            <div class="workdark_frame" data-workdark-frame>
+              <a class="workdark_link" data-hover href="placeholder.html?p=case-study-5" data-route="case-study">
+                <img class="workdark_img" src="assets/project-02.png" alt="Waste Management Company">
+              </a>
+            </div>
+            <div class="workdark_frame" data-workdark-frame>
+              <a class="workdark_link" data-hover href="placeholder.html?p=case-study-6" data-route="case-study">
+                <img class="workdark_img" src="assets/project-03.png" alt="Industrial Equipment Company">
+              </a>
+            </div>
+            <div class="workdark_frame" data-workdark-frame>
+              <a class="workdark_link" data-hover href="placeholder.html?p=case-study-7" data-route="case-study">
+                <img class="workdark_img" src="assets/project-01.png" alt="Hardwood Lumber Manufacturer">
+              </a>
+            </div>
+            <div class="workdark_frame" data-workdark-frame>
+              <a class="workdark_link" data-hover href="placeholder.html?p=case-study-8" data-route="case-study">
+                <img class="workdark_img" src="assets/project-02.png" alt="Masonry Supplier">
+              </a>
+            </div>
           </div>
-          <div class="projects_preview_frame" data-projects-frame>
-            <img class="projects_preview_img" src="assets/project-03.png" alt="Data & Reporting Transformation — Community Services Nonprofit">
-          </div>
-          <div class="projects_preview_frame" data-projects-frame>
-            <img class="projects_preview_img" src="assets/project-01.png" alt="Marketing Automation — Multi-Family Real Estate Firm">
-          </div>
-          <div class="projects_preview_frame" data-projects-frame>
-            <img class="projects_preview_img" src="assets/project-02.png" alt="Pricing & Quoting Optimization — Waste Management Company">
-          </div>
-          <div class="projects_preview_frame" data-projects-frame>
-            <img class="projects_preview_img" src="assets/project-03.png" alt="Equipment Demand Forecasting — Industrial Equipment Company">
-          </div>
-          <div class="projects_preview_frame" data-projects-frame>
-            <img class="projects_preview_img" src="assets/project-01.png" alt="A/R Forecasting — Hardwood Lumber Manufacturer">
-          </div>
-          <div class="projects_preview_frame" data-projects-frame>
-            <img class="projects_preview_img" src="assets/project-02.png" alt="Operational Transformation — Masonry Supplier">
-          </div>
-          </div>
-            <a class="projects_row" data-hover href="case-study.html" data-route="case-study" data-projects-row>
-              <p class="projects_row_title">Data-Driven Lead Generation</p>
-              <p class="projects_row_client">Metal Fabricator</p>
-              <div class="projects_row_preview"></div>
-              <div class="projects_row_action" data-projects-action><span class="button is-ghost" aria-hidden="true"><span class="button_inner"><svg class="button_icon is-lead" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg><span class="button_text">See more</span><svg class="button_icon is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg></span></span></div>
-            </a>
-            <a class="projects_row" data-hover href="placeholder.html?p=case-study-2" data-route="case-study" data-projects-row>
-              <p class="projects_row_title">Investment Deal Sourcing</p>
-              <p class="projects_row_client">Private Equity Firm</p>
-              <div class="projects_row_preview"></div>
-              <div class="projects_row_action" data-projects-action><span class="button is-ghost" aria-hidden="true"><span class="button_inner"><svg class="button_icon is-lead" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg><span class="button_text">See more</span><svg class="button_icon is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg></span></span></div>
-            </a>
-            <a class="projects_row" data-hover href="placeholder.html?p=case-study-3" data-route="case-study" data-projects-row>
-              <p class="projects_row_title">Data &amp; Reporting Transformation</p>
-              <p class="projects_row_client">Community Services Nonprofit</p>
-              <div class="projects_row_preview"></div>
-              <div class="projects_row_action" data-projects-action><span class="button is-ghost" aria-hidden="true"><span class="button_inner"><svg class="button_icon is-lead" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg><span class="button_text">See more</span><svg class="button_icon is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg></span></span></div>
-            </a>
-            <a class="projects_row" data-hover href="placeholder.html?p=case-study-4" data-route="case-study" data-projects-row>
-              <p class="projects_row_title">Marketing Automation</p>
-              <p class="projects_row_client">Multi-Family Real Estate Firm</p>
-              <div class="projects_row_preview"></div>
-              <div class="projects_row_action" data-projects-action><span class="button is-ghost" aria-hidden="true"><span class="button_inner"><svg class="button_icon is-lead" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg><span class="button_text">See more</span><svg class="button_icon is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg></span></span></div>
-            </a>
-            <a class="projects_row" data-hover href="placeholder.html?p=case-study-5" data-route="case-study" data-projects-row>
-              <p class="projects_row_title">Pricing &amp; Quoting Optimization</p>
-              <p class="projects_row_client">Waste Management Company</p>
-              <div class="projects_row_preview"></div>
-              <div class="projects_row_action" data-projects-action><span class="button is-ghost" aria-hidden="true"><span class="button_inner"><svg class="button_icon is-lead" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg><span class="button_text">See more</span><svg class="button_icon is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg></span></span></div>
-            </a>
-            <a class="projects_row" data-hover href="placeholder.html?p=case-study-6" data-route="case-study" data-projects-row>
-              <p class="projects_row_title">Equipment Demand Forecasting</p>
-              <p class="projects_row_client">Industrial Equipment Company</p>
-              <div class="projects_row_preview"></div>
-              <div class="projects_row_action" data-projects-action><span class="button is-ghost" aria-hidden="true"><span class="button_inner"><svg class="button_icon is-lead" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg><span class="button_text">See more</span><svg class="button_icon is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg></span></span></div>
-            </a>
-            <a class="projects_row" data-hover href="placeholder.html?p=case-study-7" data-route="case-study" data-projects-row>
-              <p class="projects_row_title">A/R Forecasting</p>
-              <p class="projects_row_client">Hardwood Lumber Manufacturer</p>
-              <div class="projects_row_preview"></div>
-              <div class="projects_row_action" data-projects-action><span class="button is-ghost" aria-hidden="true"><span class="button_inner"><svg class="button_icon is-lead" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg><span class="button_text">See more</span><svg class="button_icon is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg></span></span></div>
-            </a>
-            <a class="projects_row is-last" data-hover href="placeholder.html?p=case-study-8" data-route="case-study" data-projects-row>
-              <p class="projects_row_title">Operational Transformation</p>
-              <p class="projects_row_client">Masonry Supplier</p>
-              <div class="projects_row_preview"></div>
-              <div class="projects_row_action" data-projects-action><span class="button is-ghost" aria-hidden="true"><span class="button_inner"><svg class="button_icon is-lead" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg><span class="button_text">See more</span><svg class="button_icon is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg></span></span></div>
-            </a>
+
         </div>
       </div>
     </section>
@@ -165,6 +215,8 @@
 <script src="v2/motion/motion-init.js"></script>
 <script src="v5/motion-specialize.js"></script>
 <script src="v5/motion-projects.js"></script>
+<script src="v5/motion-worktrack.js"></script>
+<script src="v5/motion-worktrack-dark.js"></script>
 <script src="v5/motion-galaxy.js"></script>
 <script src="v5/motion-about.js"></script>
 <script src="v5/motion-collab.js"></script>

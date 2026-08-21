@@ -42,6 +42,41 @@ window.ATK.motion = window.ATK.motion || {};
     return core.prefersReducedMotion();
   }
 
+  /* The ground is part of the destination's own state: a container declares it
+     with data-page-ground, and everything behind that container adopts it
+     before the transition plays, so no default white is ever exposed. */
+  function applyGround(container) {
+    if (!container) return;
+    var dark = container.getAttribute("data-page-ground") === "dark";
+    var wrap = document.querySelector("[data-barba='wrapper']");
+    container.classList.toggle("is-dark-ground", dark);
+    if (wrap) wrap.classList.toggle("is-dark-ground", dark);
+    document.body.classList.toggle("is-dark", dark);
+
+    /* The bar sits outside the swapped container, so its treatment belongs to
+       the destination's state too: it changes with the ground rather than
+       after the slide has finished. */
+    var links = document.querySelectorAll(".nav_link");
+    for (var i = 0; i < links.length; i++) {
+      links[i].classList.toggle("is-inverse", dark);
+    }
+    var marks = document.querySelectorAll(".nav_logo_img");
+    var next = dark ? "assets/logo-atk-light.svg" : "assets/logo-atk.svg";
+    for (var j = 0; j < marks.length; j++) {
+      swapMark(marks[j], next);
+    }
+  }
+
+  /* The two versions cross rather than cut. */
+  function swapMark(mark, next) {
+    if (mark.getAttribute("src") === next) return;
+    mark.classList.add("is-swapping");
+    window.setTimeout(function () {
+      mark.setAttribute("src", next);
+      mark.classList.remove("is-swapping");
+    }, 140);
+  }
+
   /* ------------------------------------------------------------------
      Lifecycle
      ------------------------------------------------------------------ */
@@ -174,6 +209,7 @@ window.ATK.motion = window.ATK.motion || {};
 
   function startBarba() {
     window.history.scrollRestoration = "manual";
+    applyGround(document.querySelector("[data-barba='container']"));
 
     /* Barba fires the enter hooks for the initial page as well as for real
        navigations, and `data.current` is not a reliable way to tell them
@@ -187,6 +223,7 @@ window.ATK.motion = window.ATK.motion || {};
     /* Only for real navigations. Barba fires enter hooks for the initial
        load too, and the page must be left untouched there. */
     window.barba.hooks.beforeEnter(function (data) {
+      applyGround(data.next.container);
       if (initialLoad) return;
       window.gsap.set(data.next.container, {
         position: "fixed",

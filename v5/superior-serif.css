@@ -1,0 +1,110 @@
+/* ==========================================================================
+   Autokatalyst — LT Superior Serif overlay
+
+   Loaded only by the alternative page, after v5/styles.css: it swaps the
+   display family and tightens each display style by one further pixel,
+   stated as a calc so the step holds at every breakpoint.
+   ========================================================================== */
+
+@font-face {
+  font-family: "LT Superior Serif";
+  src: url("../assets/fonts/LTSuperiorSerif-Regular.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "LT Superior Serif";
+  src: url("../assets/fonts/LTSuperiorSerif-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "LT Superior Serif";
+  src: url("../assets/fonts/LTSuperiorSerif-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "LT Superior Serif";
+  src: url("../assets/fonts/LTSuperiorSerif-Semibold.otf") format("opentype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "LT Superior Serif";
+  src: url("../assets/fonts/LTSuperiorSerif-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "LT Superior Serif";
+  src: url("../assets/fonts/LTSuperiorSerif-ExtraBold.otf") format("opentype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-display: "LT Superior Serif", "Tiempos Text", Georgia, serif;
+}
+
+.hero_title {
+  letter-spacing: calc(-0.034em - 1px);
+}
+
+.specialize_link {
+  letter-spacing: -3px;
+}
+
+.work_title {
+  font-size: calc(var(--type-display-l) - 2px);
+  letter-spacing: calc(-0.0417em - 1px);
+}
+
+.cases_number {
+  letter-spacing: calc(-0.031em - 1px);
+}
+
+.cases_title {
+  letter-spacing: calc(-0.03em - 1px);
+}
+
+.cta_title_line {
+  letter-spacing: calc(-0.045em - 1px);
+}
+
+.soon_title {
+  letter-spacing: calc(-0.036em - 1px);
+}
+
+/* A standing note that this build runs the alternative typeface. It sits
+   above every layer the page uses and takes no pointer events, so it can
+   never come between the reader and the design. */
+.version_flag {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 100;
+  margin: 0;
+  padding: 0.4375rem 0.75rem;
+  border-radius: 62.4375rem;
+  background-color: #FF3B1F;
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  pointer-events: none;
+}
