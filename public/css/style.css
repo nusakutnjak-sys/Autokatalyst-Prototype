@@ -151,8 +151,9 @@ html::-webkit-scrollbar {
 
 /* --------------------------------------------------------------------------
    Button Main — the template component, restyled
-   Solid controls are 48px tall, 16px medium, square. Ghost is the arrow link
-   with no ground; olive is the chip used over pictures.
+   Solid controls are a fixed-height bar with a label-1 label at the prominent
+   weight, square. Ghost is the arrow link with no ground; olive is the chip
+   used over pictures.
    -------------------------------------------------------------------------- */
 
 .button_main_wrap {
@@ -328,7 +329,8 @@ html::-webkit-scrollbar {
 
 /* --------------------------------------------------------------------------
    Nav
-   The bar occupies a 72px band: a 44px row with 14px clear above and below.
+   The bar fills the spacing-18 band: the logo and link row with spacing-3-5
+   clear above and below.
    -------------------------------------------------------------------------- */
 
 .nav_component {
@@ -437,7 +439,7 @@ html::-webkit-scrollbar {
 
   .nav_logo_link {
     height: 1.25rem;
-    margin-top: 0.75rem;
+    margin-top: var(--_spacing---static--spacing-3);
   }
 
   .nav_logo {
@@ -479,12 +481,12 @@ html::-webkit-scrollbar {
   z-index: 10;
 }
 
-/* A hero row is a twelfth of the viewport less its 72px top and bottom
-   margins. The composition rests two rows clear of the domino band, which is
-   three rows plus the 72px foot margin tall. */
+/* A hero row is a twelfth of the viewport less a spacing-18 margin at the top
+   (the nav band) and at the foot. The composition rests two rows clear of the
+   domino band, which is three rows plus the foot margin tall. */
 .hero_layout {
   min-height: 100vh;
-  padding-bottom: calc(((100vh - 9rem) / 12) * 5 + 4.5rem);
+  padding-bottom: calc(((100vh - var(--_spacing---static--spacing-18) * 2) / 12) * 5 + var(--_spacing---static--spacing-18));
 }
 
 .hero_title {
@@ -518,7 +520,7 @@ html::-webkit-scrollbar {
   left: 0;
   gap: min(2.52844rem, 2.6756vw);
   width: calc(min(3.62269rem, 3.83353vw) * 18 + min(2.52844rem, 2.6756vw) * 17);
-  height: calc(((100vh - 9rem) / 12) * 3 + 4.5rem);
+  height: calc(((100vh - var(--_spacing---static--spacing-18) * 2) / 12) * 3 + var(--_spacing---static--spacing-18));
 }
 
 .hero_domino_bar {
@@ -1348,8 +1350,8 @@ html::-webkit-scrollbar {
    and across the grid, each a fixed step below the one before it.
    -------------------------------------------------------------------------- */
 
-/* The statement carries 128px of clear space below the 72px nav band, and the
-   foot leaves room for the credo band's lift. */
+/* The statement sits spacing-32 below the nav band (spacing-18), and the foot
+   leaves room for the credo band's lift. */
 .about_section {
   position: relative;
   z-index: 0;
@@ -1382,8 +1384,8 @@ html::-webkit-scrollbar {
   width: calc(var(--grid--step) * 3 + var(--grid--column));
 }
 
-/* The stagger is a fixed 137px step, so the diagonal holds whatever the type
-   does. */
+/* The stagger is a fixed step, kept off-scale to match the design (listed in
+   the handoff), so the diagonal holds whatever the type does. */
 .about_principle.is-2 {
   margin-top: 8.5625rem;
 }
@@ -2772,7 +2774,7 @@ html::-webkit-scrollbar {
 
 /* --------------------------------------------------------------------------
    Contact — details, form, invitation to call
-   The details on the left six columns hold at 80px from the top while the
+   The details on the left six columns hold spacing-20 from the top while the
    form beside them scrolls; the invitation sits below the form.
    -------------------------------------------------------------------------- */
 

@@ -422,6 +422,9 @@ a **404 page** design (Vercel shows its default until then).
   (checked).
 - ✅ No `url()` in `style.css` except `@font-face` (checked).
 - ✅ No `px` except 1px hairlines and media-query bounds (checked, 0 warnings).
+- ✅ Comments and scripts name variables, never token values: no literal sizes, colours or
+  font names (checked). The script reads the display face from
+  `--_typography---font--primary`.
 - ⚠️ Every text element carries a `u-text-style-*` role, but **six component classes override
   line height or tracking** through the created variables (§2.3). **Two titles also switch to
   another role's size below desktop**, bound to existing variables (contact title, Our Work

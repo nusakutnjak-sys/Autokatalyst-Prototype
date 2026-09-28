@@ -165,20 +165,34 @@
      curve and settle together. Title lines lean in half a grid column from
      alternate sides — the first from the left, the last from the right, a
      middle line holding — while they fade up; a single-line title comes in
-     from the right. Copy and control rise 12px.
+     from the right. Copy and control rise into place.
 
      The entrance waits for the display face (at most 120ms), so a line never
      arrives in a fallback face and then swaps.
      ------------------------------------------------------------------------ */
 
-  var DISPLAY_FACE = '1em "HW Cigars"';
+  /* The display face is the first family in the primary font variable, so the
+     wait follows tokens.css rather than naming the face. */
+  function displayFace() {
+    var stack = window.getComputedStyle(document.documentElement)
+      .getPropertyValue("--_typography---font--primary");
+    var family = stack.split(",")[0].trim();
+    return family ? "1em " + family : "";
+  }
+
+  /* A face the browser can't parse counts as loaded, so it never holds the
+     entrance back. */
+  function isFaceLoaded(face) {
+    try {
+      return !!(document.fonts.check && document.fonts.check(face));
+    } catch (error) {
+      return true;
+    }
+  }
 
   function whenTypeIsReady(callback) {
-    if (!document.fonts || !document.fonts.load) {
-      callback();
-      return;
-    }
-    if (document.fonts.check && document.fonts.check(DISPLAY_FACE)) {
+    var face = displayFace();
+    if (!face || !document.fonts || !document.fonts.load || isFaceLoaded(face)) {
       callback();
       return;
     }
@@ -188,7 +202,7 @@
       done = true;
       callback();
     }
-    document.fonts.load(DISPLAY_FACE).then(run, run);
+    document.fonts.load(face).then(run, run);
     window.setTimeout(run, 120);
   }
 
