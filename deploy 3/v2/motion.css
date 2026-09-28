@@ -1,0 +1,155 @@
+/* ==========================================================================
+   Autokatalyst — motion tokens
+   The single source of truth for CSS-driven motion.
+   JS-driven motion mirrors these values in motion/motion-tokens.js.
+   Load before styles.css.
+   ========================================================================== */
+
+:root {
+  /* ------------------------------------------------------------------
+     Easing — four curves, no more. Every movement uses one of them.
+     ------------------------------------------------------------------ */
+
+  /* Primary — near-zero departure velocity, long graceful settle. Weighted
+     and effortless rather than fast. Default for state changes and reveals. */
+  --ease-primary: cubic-bezier(0.33, 0.02, 0.18, 1);
+
+  /* Secondary — symmetric, heavy at both ends. For movement that both
+     starts and ends on screen: scrubbed turnarounds, hover withdrawal,
+     position swaps. */
+  --ease-secondary: cubic-bezier(0.65, 0.05, 0.36, 1);
+
+  /* Reveal — softest departure, longest tail. For masked type and imagery,
+     so the element arrives without ever appearing to stop. */
+  --ease-reveal: cubic-bezier(0.28, 0.06, 0.16, 1);
+
+  /* Exit — heavy acceleration away. Leaving only. */
+  --ease-exit: cubic-bezier(0.76, 0, 0.9, 0.2);
+
+  /* Linear — mandatory for scroll-bound motion. Never for timed motion. */
+  --ease-linear: linear;
+
+  /* ------------------------------------------------------------------
+     Duration
+     ------------------------------------------------------------------ */
+
+  --dur-hover: 280ms;      /* pointer feedback */
+  --dur-fast: 420ms;       /* small state change: icon shift, tint, dim */
+  --dur-standard: 700ms;   /* component transition */
+  --dur-editorial: 1500ms; /* the composition duration — hero, text, imagery */
+  --dur-mask: 1500ms;      /* clip-path reveals share the composition duration */
+  --dur-opacity: 520ms;    /* opacity always resolves before its transform */
+  --dur-page: 1200ms;      /* page transition */
+
+  /* ------------------------------------------------------------------
+     Stagger — the domino interval
+     ------------------------------------------------------------------ */
+
+  --stagger-tight: 60ms;   /* bars, dots, characters */
+  --stagger-base: 130ms;   /* heading lines, list rows */
+  --stagger-loose: 220ms;  /* section-level blocks */
+
+  /* ------------------------------------------------------------------
+     Distance — derived from the layout grid
+     24px gutter · 118px column
+     ------------------------------------------------------------------ */
+
+  --move-sm: 0.75rem;        /* 12px — half gutter */
+  --move-md: 1.5rem;         /* 24px — one gutter */
+  --move-lg: 3rem;           /* 48px — two gutters */
+  --move-parallax: 7.375rem; /* 118px — one column */
+  --move-hairline: 0.25rem;  /* 4px — a sixth of a gutter, the imperceptible one */
+
+  /* ------------------------------------------------------------------
+     Scroll
+     ------------------------------------------------------------------ */
+
+  --scroll-scrub: 1.2;   /* seconds of smoothing — for free parallax */
+  --scroll-scrub-direct: 1; /* boolean: bound 1:1 to scroll, stops when scroll stops */
+  --scroll-start: 85%;   /* element enters at 85% of viewport height */
+  --scroll-end: 15%;
+
+  /* ------------------------------------------------------------------
+     Mask geometry — vertical or horizontal only, never diagonal
+     ------------------------------------------------------------------ */
+
+  --mask-from-bottom: inset(0 0 100% 0);
+  --mask-from-top: inset(100% 0 0 0);
+  --mask-from-left: inset(0 100% 0 0);
+  --mask-from-right: inset(0 0 0 100%);
+  --mask-shown: inset(0 0 0 0);
+
+  /* Type masks bleed past the text box so ascenders and descenders are never
+     clipped at rest. The band collapses to the baseline and wipes upward. */
+  --mask-type-hidden: inset(100% -0.06em -0.18em -0.06em);
+  --mask-type-shown: inset(-0.28em -0.06em -0.18em -0.06em);
+
+  /* Horizontal type mask — the band collapses to the left edge and wipes
+     rightward. For supporting copy set beside a focal element. */
+  --mask-type-hidden-x: inset(-0.28em 100% -0.18em -0.06em);
+}
+
+/* --------------------------------------------------------------------------
+   Opt-in initial states
+   Gated on scripting so a scriptless load never hides content, and released
+   by JS the moment its animation completes.
+   -------------------------------------------------------------------------- */
+
+@media (scripting: enabled) {
+  .is-motion-ready {
+    opacity: 0;
+  }
+
+  .is-motion-masked {
+    clip-path: var(--mask-from-top);
+  }
+
+  .is-motion-masked-type {
+    clip-path: var(--mask-type-hidden);
+  }
+}
+
+.is-motion-active {
+  will-change: transform, opacity, clip-path;
+}
+
+.is-motion-settled {
+  will-change: auto;
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion — the system resolves to instant state changes, never to
+   broken layout. Distances collapse, durations collapse, masks open.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-hover: 1ms;
+    --dur-fast: 1ms;
+    --dur-standard: 1ms;
+    --dur-editorial: 1ms;
+    --dur-mask: 1ms;
+    --dur-opacity: 1ms;
+    --dur-page: 1ms;
+    --stagger-tight: 0ms;
+    --stagger-base: 0ms;
+    --stagger-loose: 0ms;
+    --move-sm: 0rem;
+    --move-md: 0rem;
+    --move-lg: 0rem;
+    --move-parallax: 0rem;
+    --move-hairline: 0rem;
+  }
+
+  .is-motion-ready {
+    opacity: 1;
+  }
+
+  .is-motion-masked {
+    clip-path: var(--mask-shown);
+  }
+
+  .is-motion-masked-type {
+    clip-path: var(--mask-type-shown);
+  }
+}
