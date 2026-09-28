@@ -1,0 +1,1501 @@
+/* ==========================================================================
+   Autokatalyst — global styles
+   Single-class selectors only. rem units. Tokens as CSS variables.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Fonts (self-hosted)
+   -------------------------------------------------------------------------- */
+
+@font-face {
+  font-family: "HW Cigars";
+  src: url("../assets/fonts/HWCigarsTRIAL-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HW Cigars";
+  src: url("../assets/fonts/HWCigarsTRIAL-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HW Cigars";
+  src: url("../assets/fonts/HWCigarsTRIAL-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HW Cigars";
+  src: url("../assets/fonts/HWCigarsTRIAL-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HW Cigars";
+  src: url("../assets/fonts/HWCigarsTRIAL-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --------------------------------------------------------------------------
+   Design system variables
+   -------------------------------------------------------------------------- */
+
+:root {
+  /* Typefaces */
+  --font-body: "Geist", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: "HW Cigars", "Tiempos Text", Georgia, serif;
+
+  /* Primitives */
+  --color-cream-base: #FEFFF1;
+  --color-cream-pale: #F7F9E3;
+  --color-cream-panel: #F1F3D6;
+  --color-khaki-base: #DDD99B;
+  --color-olive-base: #A6A766;
+  --color-ink-base: #0B0B0B;
+  --color-red-base: #8F2C19;
+  --color-white: #FFFFFF;
+
+  /* Semantic — surfaces */
+  --color-khaki-pale: #E5E3B1;
+
+  --color-bg-canvas: var(--color-cream-base);
+  --color-bg-section: var(--color-khaki-base);
+  --color-bg-inverse: var(--color-ink-base);
+  --color-bg-pale: var(--color-cream-pale);
+  --color-bg-pale-section: var(--color-khaki-pale);
+  --color-bg-veil: rgba(241, 243, 214, 0.5);
+  --color-bg-scrim: rgba(11, 11, 11, 0.55);
+  --color-bg-scrim-hover: rgba(11, 11, 11, 0.25);
+  --color-bg-inverse-hover: rgba(247, 249, 227, 0.08);
+
+  /* Semantic — text */
+  --color-text-primary: var(--color-ink-base);
+  --color-text-muted: rgba(11, 11, 11, 0.6);
+  --color-text-subtle: rgba(11, 11, 11, 0.5);
+  --color-text-inverse: var(--color-cream-base);
+  --color-text-inverse-soft: var(--color-cream-pale);
+  --color-text-inverse-muted: rgba(254, 255, 241, 0.6);
+
+  /* Semantic — brand */
+  --color-brand-accent: var(--color-red-base);
+  --color-brand-accent-hover: #741f10;
+  --color-brand-support: var(--color-olive-base);
+  --color-brand-support-hover: var(--color-khaki-base);
+
+  /* Semantic — lines */
+  --color-border: rgba(11, 11, 11, 0.2);
+  --color-border-inverse: rgba(247, 249, 227, 0.2);
+
+  /* Spacing scale */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 3rem;
+  --space-3xl: 5rem;
+  --space-4xl: 8rem;
+  --space-5xl: 9.25rem;
+
+  /* Sizing */
+  --size-button-height: 2.75rem;
+  --size-icon-sm: 1rem;
+  --size-icon-md: 2.5rem;
+  --size-icon-lg: 3rem;
+  --radius-none: 0;
+
+  /* Grid */
+  --page-margin: 1.5rem;
+  --grid-gutter: 1.5rem;
+  --container-max: 108rem;
+  --grid-columns: 12;
+  --grid-content: calc(min(100vw, var(--container-max)) - (var(--page-margin) * 2));
+  --grid-column: calc((var(--grid-content) - (var(--grid-gutter) * 11)) / 12);
+  --grid-step: calc(var(--grid-column) + var(--grid-gutter));
+
+  /* Hero row grid: twelve rows between a visual allowance for the
+     navigation and the page margin at the foot. */
+  --hero-grid-top: 4.5rem;
+  --hero-row: calc((100vh - var(--hero-grid-top) - var(--page-margin)) / 12);
+
+  /* The supporting block, measured from its parts so it can be centred on
+     the band: two lines of body copy, a gap, and the control. */
+  --hero-content-height: calc((var(--type-body) * 2.8) + var(--space-lg) + var(--size-button-height));
+
+  /* Domino band, proportional to the 1728px reference frame */
+  --hero-bar-width: min(8.547125rem, 7.9139vw);
+  --hero-bar-gap: min(4.5rem, 4.1667vw);
+  --hero-bar-height: min(56.980688rem, 52.7599vw);
+
+  /* Type scale */
+  --type-display-xl: min(7rem, 6.4815vw);
+  --type-display-number: min(8rem, 7.4074vw);
+  --type-heading-l: 3.5rem;
+  --type-focus: 3rem;
+  --type-heading-m: 2.5rem;
+  --type-body: 1rem;
+  --type-label: 0.875rem;
+  --type-caption: 0.75rem;
+
+  /* Motion — aliases onto the shared motion system (motion.css) */
+  --ease-standard: var(--ease-primary);
+  --duration-fast: var(--dur-hover);
+  --duration-base: var(--dur-fast);
+}
+
+/* --------------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.page_body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-bg-canvas);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page_wrap {
+  position: relative;
+  width: 100%;
+  overflow-x: clip;
+}
+
+.page_main {
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   Page transition layer
+   Fixed chrome, outside the Barba container. Sits inside page_wrap so the
+   document keeps a single root, and is removed from flow entirely.
+   -------------------------------------------------------------------------- */
+
+.transition_wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: clip;
+  pointer-events: none;
+}
+
+.transition_dark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-ink-base);
+  opacity: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Shared component — Button
+   -------------------------------------------------------------------------- */
+
+.button {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: var(--size-button-height);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-none);
+  background-color: var(--color-ink-base);
+  color: var(--color-text-inverse);
+  font-family: var(--font-body);
+  font-size: var(--type-label);
+  font-weight: 600;
+  line-height: 1.35;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: background-color var(--dur-hover) var(--ease-primary),
+    color var(--dur-hover) var(--ease-primary);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--color-brand-accent);
+  outline-offset: 3px;
+}
+
+.button_inner {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  height: 100%;
+  padding: 0 var(--space-lg);
+  overflow: clip;
+  pointer-events: none;
+}
+
+.button_text {
+  flex: none;
+  transition: translate var(--dur-standard) var(--ease-primary);
+}
+
+.button.is-light {
+  background-color: var(--color-cream-base);
+  color: var(--color-text-primary);
+}
+
+.button.is-olive {
+  background-color: var(--color-brand-support);
+  color: var(--color-text-primary);
+}
+
+.button.is-outline {
+  background-color: transparent;
+  box-shadow: inset 0 0 0 1px var(--color-brand-support);
+  color: var(--color-brand-support);
+}
+
+.button.is-small {
+  font-size: var(--type-label);
+  line-height: 1.35;
+}
+
+.button.is-fill {
+  width: 100%;
+}
+
+.button.is-ghost {
+  height: auto;
+  background-color: transparent;
+  color: var(--color-text-primary);
+}
+
+.button.is-ghost .button_inner {
+  padding: 0;
+}
+
+.button.is-ghost .button_icon.is-lead {
+  left: 0;
+}
+
+.button_icon {
+  display: block;
+  width: 0.9375rem;
+  height: 0.75rem;
+  flex: none;
+  fill: currentColor;
+  transition: translate var(--dur-standard) var(--ease-primary),
+    opacity var(--dur-hover) var(--ease-primary);
+}
+
+.button_icon.is-lead {
+  position: absolute;
+  left: var(--space-lg);
+  opacity: 0;
+  translate: -1.5em 0;
+}
+
+/* Parent-state descendant selectors — a sanctioned custom-CSS case. The
+   trailing arrow leaves to the right, the text slides into the space it
+   vacated, and the leading arrow takes the text's place. Total width never
+   changes, so the button never reflows. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .button:is(:hover, :focus-visible) .button_text,
+  [data-hover]:is(:hover, :focus-within) .button_text {
+    translate: 1.9375rem 0;
+  }
+
+  .button:is(:hover, :focus-visible) .button_icon.is-lead,
+  [data-hover]:is(:hover, :focus-within) .button_icon.is-lead {
+    translate: 0 0;
+    opacity: 1;
+  }
+
+  .button:is(:hover, :focus-visible) .button_icon.is-trail,
+  [data-hover]:is(:hover, :focus-within) .button_icon.is-trail {
+    translate: 1.5em 0;
+    opacity: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Shared component — Eyebrow
+   -------------------------------------------------------------------------- */
+
+.eyebrow {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-label);
+  font-weight: 600;
+  line-height: 1.35;
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+}
+
+.eyebrow.is-red {
+  color: var(--color-brand-accent);
+}
+
+.eyebrow.is-olive {
+  color: var(--color-brand-support);
+}
+
+/* --------------------------------------------------------------------------
+   Navigation
+   -------------------------------------------------------------------------- */
+
+.nav_wrap {
+  position: absolute;
+  top: 1.125rem;
+  right: 0;
+  left: 0;
+  z-index: 20;
+  width: 100%;
+}
+
+.nav_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.nav_layout {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 2.25rem;
+}
+
+.nav_logo_link {
+  display: block;
+  width: 14.5rem;
+  height: 2rem;
+  flex-shrink: 0;
+}
+
+.nav_logo_img {
+  display: block;
+  width: 13.25rem;
+  height: 2rem;
+  object-fit: contain;
+}
+
+.nav_menu {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0;
+}
+
+.nav_link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  font-family: var(--font-body);
+  font-size: var(--type-label);
+  font-weight: 600;
+  line-height: 1.35;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-text-primary);
+}
+
+.nav_link:focus-visible {
+  outline: 2px solid var(--color-brand-accent);
+  outline-offset: 2px;
+}
+
+.nav_link.is-cta {
+  height: auto;
+  padding: var(--space-xs) var(--space-sm);
+  color: var(--color-text-primary);
+}
+
+.nav_link_icon {
+  display: block;
+  width: 0.9375rem;
+  height: 0.75rem;
+  flex-shrink: 0;
+  fill: currentColor;
+}
+
+/* --------------------------------------------------------------------------
+   Hero
+   -------------------------------------------------------------------------- */
+
+.hero_wrap {
+  position: relative;
+  z-index: 0;
+  min-height: 100vh;
+  padding: 0;
+  background-color: var(--color-bg-canvas);
+  overflow: clip;
+}
+
+.hero_contain {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.hero_layout {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding-top: calc(var(--hero-grid-top) + (var(--hero-row) * 3.5) - (var(--type-display-xl) * 0.9) - (var(--hero-row) * 0.25));
+  padding-bottom: calc(
+    (((var(--hero-row) * 5) + var(--page-margin)) / 2)
+    - (var(--hero-content-height) / 2)
+    + (var(--hero-row) * 0.25)
+  );
+}
+
+.hero_title {
+  margin: 0;
+  margin-left: var(--grid-step);
+  max-width: calc((var(--grid-step) * 8) + var(--grid-column));
+  font-family: var(--font-display);
+  font-size: var(--type-display-xl);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.027em;
+  color: var(--color-text-primary);
+}
+
+.hero_title_line {
+  display: block;
+}
+
+/* Below 1320px the second line cannot clear the page margins at full size,
+   so the fluid display scale takes over. */
+@media screen and (min-width: 1320px) {
+  .hero_title {
+    font-size: 7rem;
+  }
+}
+
+.hero_title_line.is-indent {
+  margin-left: var(--grid-step);
+  white-space: nowrap;
+}
+
+.hero_content {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-lg);
+  width: calc((var(--grid-step) * 3) + var(--grid-column));
+  max-width: 100%;
+  margin-top: auto;
+  margin-left: calc(var(--grid-step) * 7);
+}
+
+.hero_text {
+  margin: 0;
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  line-height: 1.4;
+  color: var(--color-text-primary);
+  text-wrap: pretty;
+}
+
+.hero_domino_wrap {
+  position: absolute;
+  top: calc(var(--hero-grid-top) + (var(--hero-row) * 7));
+  left: min(4rem, 3.7037vw);
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-end;
+  gap: var(--hero-bar-gap);
+  width: calc((var(--hero-bar-width) * 19) + (var(--hero-bar-gap) * 18));
+  height: 100%;
+  pointer-events: none;
+}
+
+.hero_domino_bar {
+  width: var(--hero-bar-width);
+  height: 100%;
+  flex: none;
+  background-color: var(--color-bg-pale);
+  transform-origin: bottom right;
+}
+
+/* --------------------------------------------------------------------------
+   Focus (We're working with)
+   -------------------------------------------------------------------------- */
+
+.focus_wrap {
+  position: relative;
+  z-index: 1;
+  padding: var(--space-4xl) 0 var(--space-5xl);
+  background-color: var(--color-bg-section);
+}
+
+.focus_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.focus_layout {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xl);
+}
+
+.focus_eyebrow {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-label);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: normal;
+  text-transform: uppercase;
+}
+
+.focus_list_wrap {
+  position: relative;
+  align-self: stretch;
+}
+
+.focus_list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.focus_item {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  height: auto;
+  padding: 0.25rem 0;
+}
+
+/* The arrow sits outside the flow, so revealing it can never reflow the row. */
+.focus_item_inner {
+  position: relative;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.focus_icon {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  display: block;
+  width: var(--size-icon-md);
+  height: 1.875rem;
+  margin-top: -0.9375rem;
+  fill: var(--color-brand-accent);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.focus_item_text {
+  font-family: var(--font-display);
+  font-size: var(--type-focus);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  color: var(--color-text-primary);
+}
+
+.focus_item_link {
+  position: absolute;
+  inset: 0;
+  display: block;
+  cursor: pointer;
+}
+
+.focus_item_link:focus-visible {
+  outline: 2px solid var(--color-brand-accent);
+  outline-offset: -0.25rem;
+}
+
+.focus_link_label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Work (How we work)
+   -------------------------------------------------------------------------- */
+
+.work_wrap {
+  padding: var(--space-5xl) 0;
+  background-color: var(--color-bg-canvas);
+}
+
+.work_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.work_layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xl);
+}
+
+.work_title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-display-xl);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.036em;
+  color: var(--color-text-primary);
+}
+
+.work_list {
+  display: flex;
+  flex-direction: column;
+}
+
+.work_row {
+  display: grid;
+  grid-template-columns: 3rem 1fr 1fr 1fr;
+  gap: var(--space-3xl);
+  align-items: start;
+  min-height: 10.5rem;
+  padding: var(--space-md) 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.work_row.is-last {
+  min-height: 9.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.work_row_icon {
+  display: block;
+  width: var(--size-icon-lg);
+  height: var(--size-icon-lg);
+}
+
+.work_row_title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-heading-m);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+}
+
+.work_row_label {
+  margin: 0;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-label);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: normal;
+  text-transform: uppercase;
+  color: var(--color-brand-accent);
+}
+
+.work_row_text {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  line-height: 1.4;
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+.work_row_stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-sm);
+}
+
+.work_row_text_block {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  line-height: 1.4;
+  color: var(--color-text-muted);
+  white-space: pre-line;
+}
+
+.work_action {
+  height: var(--size-button-height);
+  margin-top: calc(var(--space-md) - var(--space-3xl));
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xl) 0 0;
+}
+
+/* --------------------------------------------------------------------------
+   Cases
+   Each case is a full-height slide. The frame is pinned while its content
+   tilts back and away, so the next slide arrives over the top of it.
+   -------------------------------------------------------------------------- */
+
+.cases_wrap {
+  background-color: var(--color-bg-inverse);
+}
+
+.cases_slide {
+  height: 100vh;
+  min-height: 44rem;
+}
+
+.cases_slide_frame {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  perspective: 250vw;
+}
+
+.cases_slide_content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--color-border-inverse);
+  background-color: var(--color-bg-inverse);
+  transform-style: preserve-3d;
+  transform-origin: 50% 10%;
+}
+
+.cases_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.cases_layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  align-items: center;
+}
+
+.cases_col {
+  grid-column: span 6;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-3xl);
+  height: 38.75rem;
+}
+
+.cases_number {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-display-number);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.031em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-brand-support);
+}
+
+.cases_detail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-md);
+  width: 37.25rem;
+  max-width: 100%;
+}
+
+.cases_title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-heading-m);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--color-text-inverse);
+  text-wrap: pretty;
+}
+
+.cases_text {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  line-height: 1.4;
+  color: var(--color-text-inverse-muted);
+  text-wrap: pretty;
+}
+
+.cases_stat {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 600;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-inverse);
+}
+
+.cases_visual {
+  position: relative;
+  grid-column: span 6;
+  height: 38.75rem;
+  overflow: clip;
+  background-color: var(--color-bg-inverse);
+}
+
+.cases_img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cases_img {
+  transition: transform var(--dur-standard) var(--ease-primary);
+}
+
+.cases_visual:hover .cases_img {
+  transform: scale(1.04);
+}
+
+.cases_link {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.cases_link:focus-visible {
+  outline: 2px solid var(--color-brand-support);
+  outline-offset: -0.5rem;
+}
+
+.cases_link_label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: clip;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.cases_action {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  translate: -50% -50%;
+  pointer-events: none;
+}
+
+/* The last slide is pinned without spacing, so it stays on screen while what
+   follows scrolls up. These two have to paint above it to do that. */
+.cases_footer {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7rem 0;
+  border-top: 1px solid var(--color-border-inverse);
+  background-color: var(--color-bg-inverse);
+}
+
+.cases_footer_layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --------------------------------------------------------------------------
+   CTA
+   -------------------------------------------------------------------------- */
+
+.cta_wrap {
+  position: relative;
+  z-index: 2;
+  min-height: 47rem;
+  padding: var(--space-4xl) 0 0;
+  background-color: var(--color-bg-section);
+  overflow: clip;
+}
+
+/* The bar motif runs along the foot of the section, on the hero's pitch,
+   and bleeds off the right edge. */
+.cta_motif {
+  position: absolute;
+  bottom: 0;
+  left: min(4rem, 3.7037vw);
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: var(--hero-bar-gap);
+  width: calc((var(--hero-bar-width) * 19) + (var(--hero-bar-gap) * 18));
+  height: 10rem;
+  pointer-events: none;
+}
+
+.cta_motif_bar {
+  width: var(--hero-bar-width);
+  height: 100%;
+  flex: none;
+  background-color: var(--color-bg-pale-section);
+}
+
+.cta_contain {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.cta_layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  align-items: start;
+}
+
+.cta_headline_col {
+  grid-column: span 6;
+}
+
+.cta_title {
+  margin: 0;
+}
+
+.cta_title_line {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--type-display-xl);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.036em;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+.cta_title_row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-md);
+  max-width: 100%;
+  height: 7rem;
+  margin-left: 15.6875rem;
+}
+
+.cta_arrow {
+  display: block;
+  width: 5rem;
+  height: 3.875rem;
+  flex-shrink: 0;
+  fill: var(--color-brand-accent);
+}
+
+.cta_content_col {
+  grid-column: 10 / span 3;
+  align-self: end;
+}
+
+.cta_content {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-lg);
+  width: 100%;
+}
+
+.cta_text {
+  margin: 0;
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  text-wrap: pretty;
+}
+
+/* --------------------------------------------------------------------------
+   Placeholder page
+   -------------------------------------------------------------------------- */
+
+.soon_wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--space-5xl) 0;
+  background-color: var(--color-white);
+}
+
+.soon_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.soon_layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+  text-align: center;
+}
+
+.soon_title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-display-xl);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.036em;
+  color: var(--color-text-primary);
+}
+
+.soon_text {
+  margin: 0;
+  width: 100%;
+  max-width: 33rem;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+/* --------------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------------- */
+
+.footer_wrap {
+  padding: var(--space-2xl) 0;
+  background-color: var(--color-bg-inverse);
+}
+
+.footer_contain {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--page-margin);
+}
+
+.footer_layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  align-items: start;
+}
+
+.footer_brand_col {
+  grid-column: span 6;
+}
+
+.footer_logo {
+  display: block;
+  width: 7.3125rem;
+  height: 5.3125rem;
+  fill: var(--color-cream-base);
+}
+
+.footer_nav_col {
+  grid-column: span 6;
+}
+
+.footer_nav {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.footer_nav_link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  height: auto;
+  padding: 0.75rem var(--space-sm);
+  border-top: 1px solid var(--color-border-inverse);
+  font-family: var(--font-body);
+  font-size: var(--type-label);
+  font-weight: 600;
+  line-height: 1.35;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-text-inverse-muted);
+  transition: color var(--dur-hover) var(--ease-primary);
+}
+
+.footer_nav_link:hover {
+  color: var(--color-text-inverse);
+}
+
+.footer_nav_link:focus-visible {
+  outline: 2px solid var(--color-brand-support);
+  outline-offset: -2px;
+}
+
+.footer_nav_link.is-last {
+  border-bottom: 1px solid var(--color-border-inverse);
+}
+
+.footer_action {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-2xl);
+  margin-top: 10rem;
+}
+
+.footer_tagline {
+  margin: 0;
+  width: 25.125rem;
+  max-width: 100%;
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: -0.0187em;
+  color: var(--color-text-inverse);
+  text-wrap: pretty;
+}
+
+.footer_button {
+  width: 25.125rem;
+  max-width: 100%;
+  flex: none;
+}
+
+.footer_divider {
+  width: 100%;
+  height: 1px;
+  margin-top: var(--space-2xl);
+  background-color: var(--color-border-inverse);
+}
+
+.footer_legal {
+  margin: 0;
+  margin-top: var(--space-md);
+  font-family: var(--font-body);
+  font-size: var(--type-caption);
+  line-height: 1.35;
+  color: var(--color-text-inverse-soft);
+}
+
+/* --------------------------------------------------------------------------
+   Tablet — 991px
+   -------------------------------------------------------------------------- */
+
+@media screen and (max-width: 991px) {
+  :root {
+    --type-display-xl: 4.5rem;
+    --type-display-number: 5rem;
+    --type-heading-l: 2.75rem;
+    --type-heading-m: 2rem;
+    --space-4xl: 5rem;
+    --space-5xl: 5rem;
+  }
+
+  .hero_wrap {
+    min-height: auto;
+    padding-bottom: 12.125rem;
+  }
+
+  .hero_layout {
+    display: block;
+    min-height: 0;
+    padding-top: 9rem;
+    padding-bottom: 0;
+  }
+
+  .hero_title {
+    margin-left: 0;
+  }
+
+  .work_action {
+    height: auto;
+    margin-top: 0;
+  }
+
+  .hero_title {
+    max-width: none;
+  }
+
+  .hero_title_line.is-indent {
+    margin-left: 0;
+  }
+
+  .hero_content {
+    width: 25.125rem;
+    margin-top: var(--space-3xl);
+    margin-left: 0;
+  }
+
+  .hero_domino_wrap {
+    top: auto;
+    bottom: 0;
+    height: 24rem;
+  }
+
+  .focus_item {
+    height: auto;
+    padding: 0.25rem 0;
+  }
+
+  .focus_item_layout {
+    position: relative;
+    inset: auto;
+  }
+
+  .work_row {
+    grid-template-columns: 3rem 1fr 1fr;
+    gap: var(--space-lg);
+    min-height: 0;
+  }
+
+  .work_row.is-last {
+    min-height: 0;
+  }
+
+  .work_row_title {
+    grid-column: span 2;
+  }
+
+  .work_row_label {
+    grid-column: 2;
+  }
+
+  .work_row_text {
+    grid-column: 3;
+  }
+
+  .work_row_stack {
+    grid-column: 3;
+  }
+
+  .cases_col {
+    grid-column: span 12;
+    height: auto;
+  }
+
+  /* Stacked slides need a full viewport to sit in. Below the desktop
+     breakpoint the grid stacks and is intrinsically taller than the frame,
+     so the slides return to normal flow and the pin is skipped. */
+  .cases_slide {
+    height: auto;
+    min-height: 0;
+  }
+
+  .cases_slide_frame {
+    height: auto;
+    perspective: none;
+  }
+
+  .cases_slide_content {
+    position: relative;
+    inset: auto;
+    display: block;
+    padding: var(--space-4xl) 0;
+    transform-style: flat;
+  }
+
+  .cases_visual {
+    grid-column: span 12;
+    height: 24rem;
+  }
+
+  .cta_headline_col {
+    grid-column: span 12;
+  }
+
+  .cta_content_col {
+    grid-column: span 12;
+    align-self: start;
+  }
+
+  .cta_wrap {
+    min-height: 0;
+    padding-bottom: calc(6rem + var(--space-2xl));
+  }
+
+  .cta_motif {
+    height: 6rem;
+  }
+
+  .cta_title_row {
+    height: auto;
+    margin-left: 0;
+    justify-content: flex-start;
+    gap: var(--space-md);
+  }
+
+  .cta_arrow {
+    width: 3rem;
+    height: 2.325rem;
+  }
+
+
+  .footer_brand_col {
+    grid-column: span 12;
+  }
+
+  .footer_nav_col {
+    grid-column: span 12;
+    margin-top: var(--space-2xl);
+  }
+
+  .footer_action {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-lg);
+    margin-top: var(--space-3xl);
+  }
+
+  .nav_menu {
+    gap: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile landscape — 767px
+   -------------------------------------------------------------------------- */
+
+@media screen and (max-width: 767px) {
+  :root {
+    --type-display-xl: 3rem;
+    --type-display-number: 3.5rem;
+    --type-focus: 2rem;
+    --type-heading-l: 2rem;
+    --type-heading-m: 1.75rem;
+  }
+
+  .nav_layout {
+    gap: var(--space-sm);
+  }
+
+  .nav_menu {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .nav_logo_link {
+    width: 10.5rem;
+  }
+
+  .nav_logo_img {
+    width: 10.5rem;
+  }
+
+  .hero_content {
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+  }
+
+  .work_row {
+    grid-template-columns: 3rem 1fr;
+  }
+
+  .work_row_title {
+    grid-column: span 1;
+  }
+
+  .work_row_label {
+    grid-column: 2;
+  }
+
+  .work_row_text {
+    grid-column: 2;
+  }
+
+  .work_row_stack {
+    grid-column: 2;
+  }
+
+  .cases_visual {
+    height: 15rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile portrait — 479px
+   -------------------------------------------------------------------------- */
+
+@media screen and (max-width: 479px) {
+  :root {
+    --type-display-xl: 2.5rem;
+    --space-4xl: 3.5rem;
+    --space-5xl: 3.5rem;
+  }
+
+  .work_action {
+    align-items: stretch;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+}
