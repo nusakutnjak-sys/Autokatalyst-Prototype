@@ -1,0 +1,13 @@
+# OS and editor
+.DS_Store
+Thumbs.db
+*.swp
+
+# Dependencies and tooling (the site has none, but keep them out if added)
+node_modules/
+.vercel/
+
+# Source material — the Claude Design exports and their extracted copy.
+# Kept locally for side-by-side comparison; not part of the site.
+*.zip
+_reference/

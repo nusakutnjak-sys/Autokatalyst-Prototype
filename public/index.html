@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Autokatalyst — Better work starts with better decisions</title>
+<meta name="description" content="We help middle-market companies find and implement high-impact AI opportunities.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Autokatalyst">
+<meta property="og:title" content="Autokatalyst — Better work starts with better decisions">
+<meta property="og:description" content="We help middle-market companies find and implement high-impact AI opportunities.">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#0b0b0b">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/fonts/HWCigarsTRIAL-Regular.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="/fonts/Geist-Variable.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="/css/tokens.css">
+<link rel="stylesheet" href="/css/core.css">
+<link rel="stylesheet" href="/css/style.css">
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/CustomEase.min.js"></script>
+<script defer src="/js/script.js"></script>
+</head>
+<body class="page_body">
+
+<div class="page_wrap" data-barba="wrapper">
+
+  <a class="u-skip-to-main" href="#main">Skip to main content</a>
+
+  <div class="transition_wrap" aria-hidden="true" data-transition-wrap>
+    <div class="transition_dark" data-transition-dark></div>
+  </div>
+
+  <nav class="nav_component" aria-label="Primary" data-nav>
+    <div class="nav_contain u-container-xl">
+      <div class="nav_layout u-hflex-between-center">
+        <a class="nav_logo_link" href="/" aria-label="Autokatalyst home" data-nav-logo>
+          <svg class="nav_logo" viewBox="34.3 31.5 358.3 40" aria-hidden="true" focusable="false">
+          <path d="M378.9,41.7h-8.7v-4.4h22.4v4.4h-8.7v23.9h-5v-23.9Z"></path>
+          <path d="M365.8,43.3c-.5-.7-1.3-1.3-2.3-1.7-1-.5-1.9-.7-2.9-.7s-1.2,0-1.8.2c-.6.1-1.1.4-1.6.7-.5.3-.9.7-1.2,1.2-.3.5-.4,1.1-.4,1.8s.1,1.2.4,1.6c.3.5.6.8,1.1,1.2.5.3,1.1.6,1.7.8.7.2,1.4.5,2.2.7.9.3,1.8.6,2.8,1,1,.4,1.9.9,2.7,1.5.8.6,1.5,1.4,2,2.3.5.9.8,2.1.8,3.5s-.3,2.9-.8,4c-.6,1.1-1.3,2.1-2.2,2.8-.9.7-2,1.3-3.3,1.7-1.3.4-2.6.6-4,.6s-3.6-.3-5.4-1c-1.8-.7-3.2-1.7-4.3-3l3.6-3.4c.7,1,1.6,1.7,2.8,2.3,1.2.6,2.3.8,3.4.8s1.2,0,1.8-.2c.6-.2,1.2-.4,1.6-.8.5-.3.9-.8,1.2-1.3.3-.5.5-1.2.5-2s-.2-1.4-.5-1.8c-.3-.5-.8-.9-1.4-1.3-.6-.4-1.3-.7-2.1-1-.8-.3-1.6-.5-2.5-.8-.9-.3-1.7-.6-2.6-1-.9-.4-1.6-.9-2.3-1.5-.7-.6-1.2-1.4-1.6-2.2-.4-.9-.6-2-.6-3.4s.3-2.7.9-3.7c.6-1,1.4-1.9,2.4-2.6,1-.7,2.1-1.2,3.3-1.5,1.3-.3,2.5-.5,3.8-.5s2.9.3,4.4.8c1.5.5,2.8,1.3,3.9,2.3l-3.3,3.6Z"></path>
+          <path d="M333.9,53.4l-10.6-16h6.2l7.1,11.9,7.2-11.9h5.8l-10.6,16v12.3h-5v-12.3Z"></path>
+          <path d="M311.2,37.3h5v23.8h12v4.5h-17.1v-28.3Z"></path>
+          <path d="M291.6,37.3h4.4l12.2,28.3h-5.8l-2.6-6.5h-12.3l-2.6,6.5h-5.6l12.3-28.3ZM298,54.9l-4.4-11.5-4.4,11.5h8.8Z"></path>
+          <path d="M269,41.7h-8.7v-4.4h22.4v4.4h-8.7v23.9h-5v-23.9Z"></path>
+          <path d="M247.5,37.3h4.4l12.2,28.3h-5.8l-2.6-6.5h-12.3l-2.6,6.5h-5.6l12.3-28.3ZM253.9,54.9l-4.4-11.5-4.4,11.5h8.8Z"></path>
+          <path d="M164.9,41.7h-8.7v-4.4h22.4v4.4h-8.7v23.9h-5v-23.9Z"></path>
+          <path d="M153.3,55.3c0,1.7-.3,3.3-.9,4.6-.6,1.4-1.4,2.5-2.4,3.5-1,1-2.2,1.7-3.6,2.2-1.4.5-2.9.8-4.5.8s-3.1-.3-4.5-.8c-1.4-.5-2.6-1.3-3.6-2.2-1-1-1.8-2.1-2.4-3.5-.6-1.4-.8-2.9-.8-4.6v-17.9h5v17.7c0,.8.1,1.7.3,2.5.2.8.6,1.5,1,2.2.5.6,1.2,1.2,2,1.6.8.4,1.8.6,3,.6s2.2-.2,3-.6c.8-.4,1.5-.9,2-1.6.5-.6.9-1.4,1.1-2.2.2-.8.3-1.7.3-2.5v-17.7h5v17.9Z"></path>
+          <path d="M112.5,37.3h4.4l12.2,28.3h-5.8l-2.6-6.5h-12.3l-2.6,6.5h-5.6l12.3-28.3ZM118.9,54.9l-4.4-11.5-4.4,11.5h8.8Z"></path>
+          <path d="M63.7,31.5h-5.7v40h5.7V31.5Z"></path>
+          <path d="M74.4,31.5h-5.7v40h5.7V31.5Z"></path>
+          <path d="M85.1,31.5h-5.7v40h5.7V31.5Z"></path>
+          <path d="M55.5,34.8l-5.2-2.3-16,36.7,5.2,2.3,16-36.7Z"></path>
+          <path d="M178.2,51.6c0-2.3.4-4.3,1.1-6.2.8-1.9,1.8-3.4,3.1-4.7,1.3-1.3,2.9-2.3,4.7-3,1.8-.7,3.8-1,6-1s4.2.3,6,1c1.8.7,3.4,1.7,4.8,3,1.3,1.3,2.4,2.9,3.1,4.7.8,1.8,1.1,3.9,1.1,6.2s-.4,4.3-1.1,6.1c-.7,1.8-1.8,3.4-3.1,4.8-1.3,1.3-2.9,2.4-4.8,3.1-1.8.7-3.9,1.1-6,1.1s-4.2-.4-6-1.1c-1.8-.8-3.4-1.8-4.7-3.1-1.3-1.3-2.4-2.9-3.1-4.8-.7-1.9-1.1-3.9-1.1-6.1ZM183.6,51.6c0,1.5.2,2.9.7,4.2.5,1.3,1.1,2.4,2,3.3.9.9,1.9,1.7,3,2.2,1.2.5,2.5.8,3.9.8s2.7-.3,3.9-.8c1.2-.5,2.2-1.3,3-2.2.9-.9,1.5-2,2-3.3.5-1.3.7-2.7.7-4.2s-.2-2.8-.7-4.1c-.4-1.3-1.1-2.4-1.9-3.3-.8-.9-1.9-1.7-3-2.2-1.2-.5-2.5-.8-3.9-.8s-2.8.3-3.9.8c-1.2.5-2.2,1.3-3,2.2-.8.9-1.5,2-2,3.3-.4,1.3-.7,2.6-.7,4.1Z"></path>
+          <polygon points="236.1 37.3 230.1 37.3 216.5 53.8 216.5 37.3 211.2 37.3 211.2 65.7 216.5 65.7 216.5 60.5 221 55.2 229.9 65.7 236.1 65.7 224.1 51.5 236.1 37.3"></polygon>
+          </svg>
+        </a>
+        <ul class="nav_menu u-hflex-left-center u-gap-sm" role="list" data-dim-group>
+          <li class="nav_item"><a class="nav_link" href="/private-equity" data-dim-item><div class="nav_link_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize">Expertise</div></a></li>
+          <li class="nav_item"><a class="nav_link" href="/collaboration" data-dim-item><div class="nav_link_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize">Collaboration</div></a></li>
+          <li class="nav_item"><a class="nav_link" href="/our-work" data-dim-item><div class="nav_link_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize">Our work</div></a></li>
+          <li class="nav_item"><a class="nav_link" href="/insights" data-dim-item><div class="nav_link_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize">Insights</div></a></li>
+          <li class="nav_item"><a class="nav_link" href="/about" data-dim-item><div class="nav_link_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize">About</div></a></li>
+          <li class="nav_item"><a class="nav_link" href="/contact" data-dim-item><div class="nav_link_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize">Contact</div></a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page_main" id="main" data-barba="container">
+
+    <section class="hero_section u-section-0" data-hero data-parallax="35">
+      <div class="hero_contain u-container-xl">
+        <div class="hero_layout u-hflex-between-bottom">
+          <h1 class="hero_title u-text-style-headline-2 u-title-normal">
+            <span class="hero_title_line is-lead" data-hero-line>Better work</span>
+            <span class="hero_title_line" data-hero-line>starts with</span>
+            <span class="hero_title_line" data-hero-line>better decisions.</span>
+          </h1>
+          <div class="hero_content u-vflex-left-top u-gap-xl">
+            <p class="hero_text u-text-style-body-1 u-body-normal u-text-wrap-pretty" data-hero-fade>We help middle-market companies find and implement high-impact AI opportunities.</p>
+            <div class="hero_action u-hflex-left-center" data-hero-fade>
+              <div class="button_main_wrap">
+                <div class="clickable_wrap u-cover-absolute">
+                  <a class="clickable_link" href="#talk"><div class="clickable_text u-sr-only">Let’s work together</div></a>
+                </div>
+                <div class="button_main_element is-ghost" aria-hidden="true">
+                  <svg class="button_main_arrow is-lead is-ghost" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+                  <div class="button_main_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize">Let’s work together</div>
+                  <svg class="button_main_arrow is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hero_domino_stage u-cover-absolute u-pointer-off" aria-hidden="true" data-band="slow" data-band-fade="off">
+        <div class="hero_domino_wrap u-hflex-left-bottom" data-domino data-domino-first="0" data-domino-last="16" data-domino-trigger="next" data-domino-start="top bottom" data-domino-end="top -50%">
+          <div class="hero_domino_bar" data-domino-bar></div>
+          <div class="hero_domino_bar" data-domino-bar></div>
+          <div class="hero_domino_bar" data-domino-bar></div>
+          <div class="hero_domino_bar" data-domino-bar></div>
+          <div class="hero_domino_bar" data-domino-bar></div>
+          <div class="hero_domino_bar" data-domino-bar></div>
+          <div class="hero_domino_bar" data-domino-bar></div>
+          <div class="hero_domino_bar" data-domino-bar></div>
+          <div class="hero_domino_bar" data-domino-bar></div>
+          <div class="hero_domino_bar" data-domino-bar></div>
+          <div class="hero_domino_bar" data-domino-bar></div>
+          <div class="hero_domino_bar" data-domino-bar></div>
+          <div class="hero_domino_bar" data-domino-bar></div>
+          <div class="hero_domino_bar" data-domino-bar></div>
+          <div class="hero_domino_bar" data-domino-bar></div>
+          <div class="hero_domino_bar" data-domino-bar></div>
+          <div class="hero_domino_bar" data-domino-bar></div>
+          <div class="hero_domino_bar" data-domino-bar></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="specialize_section">
+      <div class="specialize_contain u-container-xl">
+        <div class="specialize_layout u-vflex-stretch-top u-gap-xl">
+          <div class="rule_wrap u-hflex-between-center u-gap-lg">
+            <div class="rule_label u-text-style-body-4 u-body-normal">We specialize in</div>
+            <div class="button_main_wrap">
+              <div class="clickable_wrap u-cover-absolute">
+                <a class="clickable_link" href="#talk"><div class="clickable_text u-sr-only">Let’s work together</div></a>
+              </div>
+              <div class="button_main_element is-ghost" aria-hidden="true">
+                <svg class="button_main_arrow is-lead is-ghost" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+                <div class="button_main_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize">Let’s work together</div>
+                <svg class="button_main_arrow is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+              </div>
+            </div>
+          </div>
+          <div class="specialize_body" data-specialize>
+            <div class="specialize_preview u-vflex-stretch-top">
+              <div class="specialize_figure">
+                <img class="specialize_img is-current u-cover-absolute" src="/images/audience-private-equity.webp" alt="Private equity" width="1200" height="599" data-specialize-image>
+                <img class="specialize_img u-cover-absolute" src="/images/audience-executive-leadership.webp" alt="Executive leadership" width="1200" height="599" data-specialize-image>
+                <img class="specialize_img u-cover-absolute" src="/images/audience-finance.webp" alt="Finance" width="1200" height="599" data-specialize-image>
+                <img class="specialize_img u-cover-absolute" src="/images/audience-operations.webp" alt="Operations" width="1200" height="599" data-specialize-image>
+                <img class="specialize_img u-cover-absolute" src="/images/audience-revenue-growth.webp" alt="Revenue and growth" width="1200" height="599" data-specialize-image>
+              </div>
+              <div class="specialize_captions">
+                <p class="specialize_caption is-current u-text-style-body-3 u-body-normal u-text-wrap-pretty" data-specialize-caption>Helping investment teams uncover opportunities, strengthen portfolio performance, and make better-informed decisions.</p>
+                <p class="specialize_caption u-text-style-body-3 u-body-normal u-text-wrap-pretty" data-specialize-caption>Helping leaders turn complex opportunities into clear priorities, practical action, and measurable business value.</p>
+                <p class="specialize_caption u-text-style-body-3 u-body-normal u-text-wrap-pretty" data-specialize-caption>Helping finance teams improve forecasting, reporting, and decision-making through better use of data.</p>
+                <p class="specialize_caption u-text-style-body-3 u-body-normal u-text-wrap-pretty" data-specialize-caption>Helping operational teams streamline workflows, reduce manual work, and build more efficient ways of working.</p>
+                <p class="specialize_caption u-text-style-body-3 u-body-normal u-text-wrap-pretty" data-specialize-caption>Helping commercial teams understand customers, improve performance, and identify new opportunities for growth.</p>
+              </div>
+            </div>
+            <div class="specialize_list_wrap" data-specialize-list>
+              <ul class="specialize_list" role="list">
+                <li class="specialize_item" data-specialize-row>
+                  <a class="specialize_link is-current" href="/private-equity" data-specialize-label><div class="specialize_link_text u-text-style-title-2 u-title-normal">Private Equity</div></a>
+                </li>
+                <li class="specialize_item" data-specialize-row>
+                  <a class="specialize_link" href="/placeholder?p=executive-leadership" data-specialize-label><div class="specialize_link_text u-text-style-title-2 u-title-normal">Executive Leadership</div></a>
+                </li>
+                <li class="specialize_item" data-specialize-row>
+                  <a class="specialize_link" href="/placeholder?p=finance" data-specialize-label><div class="specialize_link_text u-text-style-title-2 u-title-normal">Finance</div></a>
+                </li>
+                <li class="specialize_item" data-specialize-row>
+                  <a class="specialize_link" href="/placeholder?p=operations" data-specialize-label><div class="specialize_link_text u-text-style-title-2 u-title-normal">Operations</div></a>
+                </li>
+                <li class="specialize_item" data-specialize-row>
+                  <a class="specialize_link" href="/placeholder?p=revenue-growth" data-specialize-label><div class="specialize_link_text u-text-style-title-2 u-title-normal">Revenue &amp; Growth</div></a>
+                </li>
+              </ul>
+              <div class="specialize_more u-hflex-left-center" data-specialize-more>
+                <div class="button_main_wrap">
+                  <div class="clickable_wrap u-cover-absolute">
+                    <a class="clickable_link" href="/private-equity"><div class="clickable_text u-sr-only">See more</div></a>
+                  </div>
+                  <div class="button_main_element" aria-hidden="true">
+                    <svg class="button_main_arrow is-lead" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+                    <div class="button_main_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize">See more</div>
+                    <svg class="button_main_arrow is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="work_section">
+      <div class="work_contain u-container-xl">
+        <div class="work_layout u-vflex-stretch-top">
+          <h2 class="work_title u-text-style-title-1 u-title-normal u-text-wrap-pretty">
+            <span class="work_title_line is-lead" data-drift="0.5">Flexible ways to work together, from building</span>
+            <span class="work_title_line">in-house capability to hands-on implementation and ongoing collaboration.</span>
+          </h2>
+          <div class="work_grid u-hflex-left-stretch">
+            <div class="work_card u-vflex-stretch-top">
+              <div class="clickable_wrap u-cover-absolute">
+                <a class="clickable_link is-inset" href="/collaboration"><div class="clickable_text u-sr-only">Build internal capability — learn more</div></a>
+              </div>
+              <img class="work_card_icon" src="/images/how-we-work-icon-03.svg" alt="" width="64" height="64">
+              <h3 class="work_card_head u-text-style-title-4 u-title-normal u-text-wrap-pretty">We’re still deciding where to start.</h3>
+              <div class="work_card_body u-vflex-stretch-top u-gap-sm">
+                <div class="work_card_label u-text-style-body-3 u-body-normal">Build internal capability</div>
+                <p class="work_card_text u-text-style-body-3 u-body-normal u-text-wrap-pretty">Workshops, training, and a systems review — finite engagement, clarity and capability to carry forward.</p>
+              </div>
+              <div class="work_card_action u-hflex-left-center">
+                <div class="button_main_wrap u-pointer-off" aria-hidden="true">
+                  <div class="button_main_element is-ghost">
+                    <svg class="button_main_arrow is-lead is-ghost" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+                    <div class="button_main_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize">Learn more</div>
+                    <svg class="button_main_arrow is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="work_card u-vflex-stretch-top">
+              <div class="clickable_wrap u-cover-absolute">
+                <a class="clickable_link is-inset" href="/collaboration"><div class="clickable_text u-sr-only">Put proven solutions to work — learn more</div></a>
+              </div>
+              <img class="work_card_icon" src="/images/how-we-work-icon-02.svg" alt="" width="64" height="64">
+              <h3 class="work_card_head u-text-style-title-4 u-title-normal u-text-wrap-pretty">We want results without months of experimenting.</h3>
+              <div class="work_card_body u-vflex-stretch-top u-gap-sm">
+                <div class="work_card_label u-text-style-body-3 u-body-normal">Put proven solutions to work</div>
+                <p class="work_card_text u-text-style-body-3 u-body-normal u-text-wrap-pretty">Reusable playbooks and engineered starting points — faster deployment, less risk, lower burden on your team.</p>
+              </div>
+              <div class="work_card_action u-hflex-left-center">
+                <div class="button_main_wrap u-pointer-off" aria-hidden="true">
+                  <div class="button_main_element is-ghost">
+                    <svg class="button_main_arrow is-lead is-ghost" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+                    <div class="button_main_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize">Learn more</div>
+                    <svg class="button_main_arrow is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="work_card u-vflex-stretch-top">
+              <div class="clickable_wrap u-cover-absolute">
+                <a class="clickable_link is-inset" href="/collaboration"><div class="clickable_text u-sr-only">Embedded partnership — learn more</div></a>
+              </div>
+              <img class="work_card_icon" src="/images/how-we-work-icon-01.svg" alt="" width="64" height="64">
+              <h3 class="work_card_head u-text-style-title-4 u-title-normal u-text-wrap-pretty">This matters enough that we want a real partner in it.</h3>
+              <div class="work_card_body u-vflex-stretch-top u-gap-sm">
+                <div class="work_card_label u-text-style-body-3 u-body-normal">Embedded partnership</div>
+                <p class="work_card_text u-text-style-body-3 u-body-normal u-text-wrap-pretty">A 90-day pilot leading into an ongoing value-creation relationship, judgment, expertise, and execution together.</p>
+              </div>
+              <div class="work_card_action u-hflex-left-center">
+                <div class="button_main_wrap u-pointer-off" aria-hidden="true">
+                  <div class="button_main_element is-ghost">
+                    <svg class="button_main_arrow is-lead is-ghost" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+                    <div class="button_main_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize">Learn more</div>
+                    <svg class="button_main_arrow is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="work_action u-hflex-left-center">
+            <div class="button_main_wrap">
+              <div class="clickable_wrap u-cover-absolute">
+                <a class="clickable_link" href="/placeholder?p=our-approach"><div class="clickable_text u-sr-only">Explore our approach</div></a>
+              </div>
+              <div class="button_main_element" aria-hidden="true">
+                <svg class="button_main_arrow is-lead" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+                <div class="button_main_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize">Explore our approach</div>
+                <svg class="button_main_arrow is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="galaxy_section u-section-0" data-parallax="35">
+      <div class="galaxy_contain u-container-xl">
+        <div class="galaxy_layout" data-galaxy>
+          <div class="galaxy_tile is-01" aria-hidden="true" data-galaxy-tile data-galaxy-speed="1.5"><div class="galaxy_tile_media"></div></div>
+          <div class="galaxy_tile is-02" aria-hidden="true" data-galaxy-tile data-galaxy-speed="0.85"><div class="galaxy_tile_media is-khaki"></div></div>
+          <div class="galaxy_tile is-04" aria-hidden="true" data-galaxy-tile data-galaxy-speed="0.45"><div class="galaxy_tile_media"></div></div>
+          <div class="galaxy_tile is-05" aria-hidden="true" data-galaxy-tile data-galaxy-speed="1.75"><div class="galaxy_tile_media"></div></div>
+          <div class="galaxy_tile is-06" aria-hidden="true" data-galaxy-tile data-galaxy-speed="0.7"><div class="galaxy_tile_media"></div></div>
+          <div class="galaxy_tile is-07" aria-hidden="true" data-galaxy-tile data-galaxy-speed="1"><div class="galaxy_tile_media"></div></div>
+          <div class="galaxy_tile is-09" aria-hidden="true" data-galaxy-tile data-galaxy-speed="0.5"><div class="galaxy_tile_media"></div></div>
+          <div class="galaxy_tile is-11" aria-hidden="true" data-galaxy-tile data-galaxy-speed="0.62"><div class="galaxy_tile_media is-khaki"></div></div>
+          <div class="galaxy_content">
+            <h2 class="galaxy_statement u-text-style-title-2 u-title-normal u-text-wrap-pretty">We work across enough companies, functions, and business problems to recognize what is genuinely unique and what is not.</h2>
+            <div class="galaxy_aside u-vflex-stretch-top">
+              <p class="galaxy_note u-text-style-body-1 u-body-normal u-text-wrap-pretty">We help determine what's worth doing, and we have the capability to carry it through.</p>
+              <div class="galaxy_action u-hflex-left-center">
+                <div class="button_main_wrap">
+                  <div class="clickable_wrap u-cover-absolute">
+                    <a class="clickable_link" href="#talk"><div class="clickable_text u-sr-only">Let’s Talk</div></a>
+                  </div>
+                  <div class="button_main_element is-ghost" aria-hidden="true">
+                    <svg class="button_main_arrow is-lead is-ghost" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+                    <div class="button_main_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize">Let’s Talk</div>
+                    <svg class="button_main_arrow is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cases_section">
+      <div class="cases_head">
+        <div class="cases_contain u-container-xl">
+          <div class="rule_wrap is-inverse u-hflex-between-center u-gap-lg">
+            <div class="rule_label is-inverse u-text-style-body-4 u-body-normal">Selected work</div>
+            <div class="button_main_wrap">
+              <div class="clickable_wrap u-cover-absolute">
+                <a class="clickable_link" href="/our-work"><div class="clickable_text u-sr-only">Explore our work</div></a>
+              </div>
+              <div class="button_main_element is-ghost is-inverse" aria-hidden="true">
+                <svg class="button_main_arrow is-lead is-ghost" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+                <div class="button_main_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize">Explore our work</div>
+                <svg class="button_main_arrow is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cases_list">
+        <article class="cases_slide" data-stack-slide>
+          <div class="cases_slide_frame" data-stack-frame>
+            <div class="cases_slide_content is-first" data-stack-content>
+              <div class="cases_contain u-container-xl">
+                <div class="cases_layout">
+                  <div class="cases_col u-vflex-stretch-between">
+                    <div class="cases_number u-text-style-headline-1 u-title-normal">01</div>
+                    <div class="cases_detail u-vflex-left-top u-gap-md">
+                      <div class="cases_category u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize">Revenue &amp; Growth</div>
+                      <h2 class="cases_title u-text-style-title-2 u-title-normal u-text-wrap-pretty">Data-Driven Lead Generation – Metal Fabricator</h2>
+                      <p class="cases_text u-text-style-body-3 u-body-normal u-text-wrap-pretty">Turning fragmented construction and permit data into a clearer view of where demand is emerging—and where the sales team should focus next.</p>
+                      <div class="cases_stat u-text-style-label-1 u-body-prominent-1">Higher-value opportunities, identified earlier</div>
+                    </div>
+                  </div>
+                  <div class="cases_visual">
+                    <img class="cases_img" src="/images/case-study-1.webp" alt="Data-Driven Lead Generation – Metal Fabricator" width="2000" height="1334" loading="lazy">
+                    <div class="clickable_wrap u-cover-absolute">
+                      <a class="clickable_link is-inset" href="/placeholder?p=case-study-1"><div class="clickable_text u-sr-only">Read more: Data-Driven Lead Generation – Metal Fabricator</div></a>
+                    </div>
+                    <div class="cases_action u-hflex-center-center">
+                      <div class="button_main_wrap u-pointer-off" aria-hidden="true">
+                        <div class="button_main_element is-olive">
+                          <svg class="button_main_arrow is-lead is-olive" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+                          <div class="button_main_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize">Read more</div>
+                          <svg class="button_main_arrow is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="cases_slide" data-stack-slide>
+          <div class="cases_slide_frame" data-stack-frame>
+            <div class="cases_slide_content" data-stack-content>
+              <div class="cases_contain u-container-xl">
+                <div class="cases_layout">
+                  <div class="cases_col u-vflex-stretch-between">
+                    <div class="cases_number u-text-style-headline-1 u-title-normal">02</div>
+                    <div class="cases_detail u-vflex-left-top u-gap-md">
+                      <div class="cases_category u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize">Private Equity</div>
+                      <h2 class="cases_title u-text-style-title-2 u-title-normal u-text-wrap-pretty">Investment Deal Sourcing – Private Equity Firm</h2>
+                      <p class="cases_text u-text-style-body-3 u-body-normal u-text-wrap-pretty">Bringing together market signals to uncover overlooked assets and give the investment team a more informed way to find opportunities.</p>
+                      <div class="cases_stat u-text-style-label-1 u-body-prominent-1">Undervalued assets surfaced before the market</div>
+                    </div>
+                  </div>
+                  <div class="cases_visual">
+                    <img class="cases_img" src="/images/case-study-2.webp" alt="Investment Deal Sourcing – Private Equity Firm" width="2000" height="1334" loading="lazy">
+                    <div class="clickable_wrap u-cover-absolute">
+                      <a class="clickable_link is-inset" href="/placeholder?p=case-study-2"><div class="clickable_text u-sr-only">Read more: Investment Deal Sourcing – Private Equity Firm</div></a>
+                    </div>
+                    <div class="cases_action u-hflex-center-center">
+                      <div class="button_main_wrap u-pointer-off" aria-hidden="true">
+                        <div class="button_main_element is-olive">
+                          <svg class="button_main_arrow is-lead is-olive" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+                          <div class="button_main_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize">Read more</div>
+                          <svg class="button_main_arrow is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="cases_slide" data-stack-slide>
+          <div class="cases_slide_frame" data-stack-frame>
+            <div class="cases_slide_content" data-stack-content>
+              <div class="cases_contain u-container-xl">
+                <div class="cases_layout">
+                  <div class="cases_col u-vflex-stretch-between">
+                    <div class="cases_number u-text-style-headline-1 u-title-normal">03</div>
+                    <div class="cases_detail u-vflex-left-top u-gap-md">
+                      <div class="cases_category u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize">Finance</div>
+                      <h2 class="cases_title u-text-style-title-2 u-title-normal u-text-wrap-pretty">A/R Forecasting – U.S. Hardwood Lumber Manufacturer</h2>
+                      <p class="cases_text u-text-style-body-3 u-body-normal u-text-wrap-pretty">Helping the finance team see payment risk earlier, understand where it’s building, and take action before it becomes a problem.</p>
+                      <div class="cases_stat u-text-style-label-1 u-body-prominent-1">Payment risk identified before it impacts cash flow</div>
+                    </div>
+                  </div>
+                  <div class="cases_visual">
+                    <img class="cases_img" src="/images/case-study-3.webp" alt="A/R Forecasting – U.S. Hardwood Lumber Manufacturer" width="2000" height="1334" loading="lazy">
+                    <div class="clickable_wrap u-cover-absolute">
+                      <a class="clickable_link is-inset" href="/placeholder?p=case-study-3"><div class="clickable_text u-sr-only">Read more: A/R Forecasting – U.S. Hardwood Lumber Manufacturer</div></a>
+                    </div>
+                    <div class="cases_action u-hflex-center-center">
+                      <div class="button_main_wrap u-pointer-off" aria-hidden="true">
+                        <div class="button_main_element is-olive">
+                          <svg class="button_main_arrow is-lead is-olive" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+                          <div class="button_main_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize">Read more</div>
+                          <svg class="button_main_arrow is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="cta_section" id="talk">
+      <div class="cta_contain u-container-xl">
+        <div class="cta_layout">
+          <h2 class="cta_title u-text-style-headline-2 u-title-normal">
+            <span class="cta_title_line is-lead">Let’s move</span>
+            <span class="cta_title_line">your business</span>
+            <span class="cta_title_line is-trail" data-tip-slide="0.4" data-tip-delay="0">forward</span>
+          </h2>
+          <div class="cta_motif" aria-hidden="true" data-chain-passage>
+            <svg class="cta_motif_svg is-large" data-chain data-chain-last="3" data-chain-delay="0.25" width="1747" height="336" viewBox="0 0 1747 336" focusable="false"><rect x="85.48" width="61.2607" height="336"></rect><rect x="179.572" width="61.2607" height="336"></rect><rect x="273.664" width="61.2607" height="336"></rect><rect x="367.757" width="61.2607" height="336"></rect><rect x="461.865" width="61.2607" height="336"></rect><rect x="555.958" width="61.2607" height="336"></rect><rect x="650.05" width="61.2607" height="336"></rect><rect x="744.143" width="61.2607" height="336"></rect><rect x="838.235" width="61.2607" height="336"></rect><rect x="932.328" width="61.2607" height="336"></rect><rect x="1026.44" width="61.2607" height="336"></rect><rect x="1120.53" width="61.2607" height="336"></rect><rect x="1214.62" width="61.2607" height="336"></rect><rect x="1308.72" width="61.2607" height="336"></rect><rect x="1402.81" width="61.2607" height="336"></rect><rect x="1496.92" width="61.2607" height="336"></rect><rect x="1591.01" width="61.2607" height="336"></rect><rect x="1685.1" width="61.2607" height="336"></rect></svg>
+            <svg class="cta_motif_svg is-small" data-chain data-chain-last="3" data-chain-delay="0.5" width="905" height="174" viewBox="0 0 905 174" focusable="false"><rect x="44.2658" width="31.7243" height="174"></rect><rect x="92.9934" width="31.7243" height="174"></rect><rect x="141.721" width="31.7243" height="174"></rect><rect x="190.448" width="31.7243" height="174"></rect><rect x="239.176" width="31.7243" height="174"></rect><rect x="287.902" width="31.7243" height="174"></rect><rect x="336.63" width="31.7243" height="174"></rect><rect x="385.353" width="31.7243" height="174"></rect><rect x="434.08" width="31.7243" height="174"></rect><rect x="482.808" width="31.7243" height="174"></rect><rect x="531.535" width="31.7243" height="174"></rect><rect x="580.263" width="31.7243" height="174"></rect><rect x="628.99" width="31.7243" height="174"></rect><rect x="677.718" width="31.7243" height="174"></rect><rect x="726.445" width="31.7243" height="174"></rect><rect x="775.173" width="31.7243" height="174"></rect><rect x="823.9" width="31.7243" height="174"></rect><rect x="872.627" width="31.7243" height="174"></rect></svg>
+          </div>
+          <div class="cta_note">
+            <p class="cta_text u-text-style-body-4 u-body-normal u-text-wrap-pretty">Whether you're exploring an opportunity, solving a complex challenge, or looking for a long-term partner, the first step is simply a conversation.</p>
+            <div class="button_main_wrap">
+              <div class="clickable_wrap u-cover-absolute">
+                <a class="clickable_link" href="/contact"><div class="clickable_text u-sr-only">Let’s work together</div></a>
+              </div>
+              <div class="button_main_element" aria-hidden="true">
+                <svg class="button_main_arrow is-lead" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+                <div class="button_main_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize">Let’s work together</div>
+                <svg class="button_main_arrow is-trail" viewBox="0 0 15.095 11.797" aria-hidden="true" focusable="false"><path d="M 9.637 11.797 L 8.676 10.923 L 12.74 6.554 L 0 6.554 L 0 5.264 L 12.737 5.264 L 8.673 0.895 L 9.633 0 L 15.095 5.898 L 9.633 11.797 L 9.637 11.797 Z"></path></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer_wrap">
+    <div class="footer_contain u-container-xl">
+      <div class="footer_layout">
+        <div class="footer_brand">
+          <svg class="footer_logo" viewBox="1.708 11.804 80.265 63.223" role="img" aria-label="Autokatalyst"><path d="M48.1415 11.8037H39.123V75.0273H48.1415V11.8037Z"></path><path d="M65.0584 11.8037H56.04V75.0273H65.0584V11.8037Z"></path><path d="M81.9725 11.8037H72.9541V75.0273H81.9725V11.8037Z"></path><path d="M35.1914 16.9839L26.9153 13.3828L1.70801 71.3628L9.98409 74.9638L35.1914 16.9839Z"></path></svg>
+        </div>
+        <nav class="footer_nav" aria-label="Footer">
+          <ul class="footer_nav_list" role="list" data-dim-group>
+              <li class="footer_nav_item"><a class="footer_nav_link" href="/private-equity"><div class="footer_nav_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize" data-dim-item>Expertise</div></a></li>
+              <li class="footer_nav_item"><a class="footer_nav_link" href="/collaboration"><div class="footer_nav_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize" data-dim-item>Collaboration</div></a></li>
+              <li class="footer_nav_item"><a class="footer_nav_link" href="/our-work"><div class="footer_nav_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize" data-dim-item>Our work</div></a></li>
+              <li class="footer_nav_item"><a class="footer_nav_link" href="/insights"><div class="footer_nav_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize" data-dim-item>Insights</div></a></li>
+              <li class="footer_nav_item"><a class="footer_nav_link" href="/about"><div class="footer_nav_text u-text-style-label-1 u-body-prominent-1 u-text-transform-capitalize" data-dim-item>About</div></a></li>
+          </ul>
+        </nav>
+        <p class="footer_tagline u-text-style-label-1 u-body-prominent-1 u-text-wrap-pretty">Built around people.<br>Guided by good judgment.<br>Designed for lasting impact.</p>
+      </div>
+      <div class="footer_divider"></div>
+      <div class="footer_legal u-text-style-label-3 u-body-normal">© 2026 Autokatalyst</div>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

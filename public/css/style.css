@@ -1,0 +1,3396 @@
+/* ==========================================================================
+   Autokatalyst — site styles
+   One stylesheet for the whole site, in page and section order.
+
+   Reading it for the Webflow rebuild
+   · Every class here is rebuilt natively in the Style panel, bound to the
+     variables in tokens.css. The u-* utilities already exist on the core
+     template (core.css stands in for them) and are never restyled here.
+   · Blocks headed EMBED are the exceptions — CSS the Style panel cannot
+     author. Each names where it goes: the section's CSS embed, or Global
+     Page Codes when it serves the whole site.
+   · Media queries sit at the Webflow breakpoints (991 / 767 / 479) and are
+     native breakpoint overrides. Any other query is marked EMBED.
+   · Column measures come from the page grid: N columns is
+     calc(var(--grid--step) * (N - 1) + var(--grid--column)).
+   · Transitions use the design's four curves:
+       primary  cubic-bezier(0.33, 0.02, 0.18, 1)   state changes, reveals
+       response cubic-bezier(0.16, 1, 0.3, 1)       answers to the pointer
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Fonts — self-hosted (Webflow: Site settings → Fonts)
+   -------------------------------------------------------------------------- */
+
+@font-face {
+  font-family: "HW Cigars";
+  src: url("../fonts/HWCigarsTRIAL-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: url("../fonts/Geist-Variable.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --------------------------------------------------------------------------
+   EMBED — Global Page Codes
+   The root element cannot take a class in Webflow. The page scrollbar is
+   hidden so every page measures the same width and nothing shifts between
+   pages.
+   -------------------------------------------------------------------------- */
+
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   Page structure
+   -------------------------------------------------------------------------- */
+
+.page_body {
+  background-color: var(--_color---bg--default--bg);
+}
+
+.page_body.is-dark {
+  background-color: var(--_color---bg--inverted--bg);
+}
+
+/* The Our Work track spends scroll input on itself, so the document behind it
+   neither moves nor carries a scrollbar. */
+.page_body.is-locked {
+  height: 100vh;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+.page_wrap {
+  position: relative;
+  width: 100%;
+  overflow-x: clip;
+}
+
+.page_wrap.is-dark-ground {
+  background-color: var(--_color---bg--inverted--bg);
+}
+
+/* The swapped container carries the page's own ground, so a section that has
+   not yet arrived shows the right colour during a page transition. */
+.page_main {
+  display: block;
+  background-color: var(--_color---bg--default--bg);
+}
+
+.page_main.is-dark-ground {
+  background-color: var(--_color---bg--inverted--bg);
+}
+
+/* --------------------------------------------------------------------------
+   Page transition layer
+   -------------------------------------------------------------------------- */
+
+.transition_wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: clip;
+  pointer-events: none;
+}
+
+.transition_dark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--_color---bg--inverted--bg);
+  opacity: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Clickable — the template's link layer
+   Sits over a control or a whole card; the visible parts beneath it are
+   presentational.
+   -------------------------------------------------------------------------- */
+
+.clickable_wrap {
+  z-index: 1;
+}
+
+.clickable_link,
+.clickable_btn {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.clickable_link:focus-visible,
+.clickable_btn:focus-visible {
+  outline: 0.125rem solid var(--_color---interactive--secondary--idle);
+  outline-offset: 0.1875rem;
+}
+
+/* On a card the ring is drawn inside the card's edge. */
+.clickable_link.is-inset:focus-visible {
+  outline-offset: -0.25rem;
+}
+
+/* --------------------------------------------------------------------------
+   Button Main — the template component, restyled
+   Solid controls are 48px tall, 16px medium, square. Ghost is the arrow link
+   with no ground; olive is the chip used over pictures.
+   -------------------------------------------------------------------------- */
+
+.button_main_wrap {
+  position: relative;
+  display: inline-block;
+  border-radius: var(--rounding--0);
+}
+
+.button_main_element {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--_spacing---static--spacing-3);
+  height: 3rem;
+  padding: 0 var(--_spacing---inner--inner-md);
+  overflow: clip;
+  background-color: var(--_color---interactive--primary--idle);
+  color: var(--_color---interactive--primary--on);
+  -webkit-user-select: none;
+  user-select: none;
+  transition: background-color 280ms cubic-bezier(0.33, 0.02, 0.18, 1),
+    color 280ms cubic-bezier(0.33, 0.02, 0.18, 1);
+}
+
+.button_main_element.is-ghost {
+  height: auto;
+  padding: 0;
+  background-color: transparent;
+  color: var(--_color---interactive--outline--on);
+}
+
+.button_main_element.is-ghost.is-inverse {
+  color: var(--_color---interactive--outline-inverted--on);
+}
+
+.button_main_element.is-olive {
+  gap: var(--_spacing---gap--gap-sm);
+  padding: 0 var(--_spacing---inner--inner-lg);
+  background-color: var(--_color---interactive--secondary--idle);
+  color: var(--_color---interactive--secondary--on);
+}
+
+.button_main_text {
+  flex: none;
+  transition: translate 700ms cubic-bezier(0.33, 0.02, 0.18, 1);
+}
+
+.button_main_arrow {
+  display: block;
+  width: 0.9375rem;
+  height: 0.75rem;
+  flex: none;
+  fill: currentColor;
+  transition: translate 700ms cubic-bezier(0.33, 0.02, 0.18, 1),
+    opacity 280ms cubic-bezier(0.33, 0.02, 0.18, 1);
+}
+
+/* The leading arrow waits outside the label, clipped by the control. */
+.button_main_arrow.is-lead {
+  position: absolute;
+  left: var(--_spacing---inner--inner-md);
+  opacity: 0;
+  translate: -1.5em 0;
+}
+
+.button_main_arrow.is-lead.is-ghost {
+  left: 0;
+}
+
+.button_main_arrow.is-lead.is-olive {
+  left: var(--_spacing---inner--inner-lg);
+}
+
+/* EMBED — Global Page Codes · parent-state descendant selectors.
+   Pointer and press states for the control's ground. The design changes no
+   colour here — the arrow swap is the feedback — so each state is bound to
+   its interactive variable, which currently holds the idle value. */
+.button_main_wrap:hover .button_main_element {
+  background-color: var(--_color---interactive--primary--hover);
+}
+
+.button_main_wrap:active .button_main_element {
+  background-color: var(--_color---interactive--primary--active);
+}
+
+.button_main_wrap:hover .button_main_element.is-olive {
+  background-color: var(--_color---interactive--secondary--hover);
+}
+
+.button_main_wrap:active .button_main_element.is-olive {
+  background-color: var(--_color---interactive--secondary--active);
+}
+
+.button_main_wrap:hover .button_main_element.is-ghost {
+  background-color: transparent;
+  color: var(--_color---interactive--outline--hover);
+}
+
+.button_main_wrap:active .button_main_element.is-ghost {
+  background-color: transparent;
+  color: var(--_color---interactive--outline--active);
+}
+
+.button_main_wrap:hover .button_main_element.is-ghost.is-inverse {
+  color: var(--_color---interactive--outline-inverted--hover);
+}
+
+.button_main_wrap:active .button_main_element.is-ghost.is-inverse {
+  color: var(--_color---interactive--outline-inverted--active);
+}
+
+/* EMBED — Global Page Codes · parent-state descendant selectors.
+   Hovering the control, or the card that carries it, moves its parts: the
+   trailing arrow leaves to the right, the label slides into the space it
+   vacated, and the leading arrow takes the label's place. Total width never
+   changes, so the control never reflows. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .button_main_wrap:is(:hover, :has(:focus-visible)) .button_main_text,
+  .work_card:is(:hover, :focus-within) .button_main_text,
+  .cases_visual:is(:hover, :focus-within) .button_main_text,
+  .featured_card:is(:hover, :focus-within) .button_main_text,
+  .article_card:is(:hover, :focus-within) .button_main_text,
+  .projects_row:is(:hover, :focus-within) .button_main_text,
+  .studynext_row:is(:hover, :focus-within) .button_main_text {
+    translate: 1.6875rem 0;
+  }
+
+  .button_main_wrap:is(:hover, :has(:focus-visible)) .button_main_arrow.is-lead,
+  .work_card:is(:hover, :focus-within) .button_main_arrow.is-lead,
+  .cases_visual:is(:hover, :focus-within) .button_main_arrow.is-lead,
+  .featured_card:is(:hover, :focus-within) .button_main_arrow.is-lead,
+  .article_card:is(:hover, :focus-within) .button_main_arrow.is-lead,
+  .projects_row:is(:hover, :focus-within) .button_main_arrow.is-lead,
+  .studynext_row:is(:hover, :focus-within) .button_main_arrow.is-lead {
+    translate: 0 0;
+    opacity: 1;
+  }
+
+  .button_main_wrap:is(:hover, :has(:focus-visible)) .button_main_arrow.is-trail,
+  .work_card:is(:hover, :focus-within) .button_main_arrow.is-trail,
+  .cases_visual:is(:hover, :focus-within) .button_main_arrow.is-trail,
+  .featured_card:is(:hover, :focus-within) .button_main_arrow.is-trail,
+  .article_card:is(:hover, :focus-within) .button_main_arrow.is-trail,
+  .projects_row:is(:hover, :focus-within) .button_main_arrow.is-trail,
+  .studynext_row:is(:hover, :focus-within) .button_main_arrow.is-trail {
+    translate: 1.5em 0;
+    opacity: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Rule — a section label and its control over a hairline
+   -------------------------------------------------------------------------- */
+
+.rule_wrap {
+  padding: var(--_spacing---inner--inner-md) 0;
+  border-bottom: 1px solid var(--_color---outline--default);
+}
+
+.rule_wrap.is-inverse {
+  border-bottom-color: var(--_color---outline--inverted);
+}
+
+.rule_label {
+  color: var(--_color---text--default--1);
+}
+
+.rule_label.is-inverse {
+  color: var(--_color---text--inverted--2);
+}
+
+/* --------------------------------------------------------------------------
+   Nav
+   The bar occupies a 72px band: a 44px row with 14px clear above and below.
+   -------------------------------------------------------------------------- */
+
+.nav_component {
+  position: absolute;
+  top: var(--_spacing---static--spacing-3-5);
+  right: 0;
+  left: 0;
+  z-index: 20;
+  width: 100%;
+}
+
+.nav_layout {
+  height: 2.75rem;
+}
+
+.nav_logo_link {
+  display: block;
+  height: 1.5rem;
+  flex-shrink: 0;
+  color: var(--_color---text--default--1);
+}
+
+.nav_logo_link.is-inverse {
+  color: var(--_color---text--inverted--1);
+}
+
+.nav_logo_link:focus-visible {
+  outline: 0.125rem solid var(--_color---interactive--secondary--idle);
+  outline-offset: 0.25rem;
+}
+
+.nav_logo {
+  display: block;
+  width: auto;
+  height: 1.5rem;
+  aspect-ratio: 358.3 / 40;
+  fill: currentColor;
+  transition: opacity 280ms cubic-bezier(0.33, 0.02, 0.18, 1);
+}
+
+/* Held clear for the instant the ground changes, so the two colours cross
+   rather than cut. */
+.nav_logo.is-swapping {
+  opacity: 0;
+}
+
+.nav_menu {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav_item {
+  display: flex;
+}
+
+.nav_link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: var(--_spacing---inner--inner-xs) 0;
+  color: var(--_color---text--default--1);
+  text-decoration: none;
+  transition: color 420ms cubic-bezier(0.33, 0.02, 0.18, 1),
+    opacity 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav_link.is-inverse {
+  color: var(--_color---text--inverted--1);
+}
+
+.nav_link:focus-visible {
+  outline: 0.125rem solid var(--_color---interactive--secondary--idle);
+  outline-offset: 0.125rem;
+}
+
+/* Hovering one link sends the others to half strength. While the group is
+   engaged every change takes the standard duration; leaving it takes the fast
+   one, so the incoming link always leads. */
+.nav_link.is-dimmed {
+  opacity: 0.5;
+}
+
+.nav_link.is-engaged {
+  transition-duration: 420ms, 700ms;
+}
+
+@media screen and (max-width: 991px) {
+  .nav_logo_link,
+  .nav_logo {
+    height: 1.375rem;
+  }
+}
+
+/* On phones the six links drop onto their own line under the mark, so every
+   one of them stays on screen. */
+@media screen and (max-width: 767px) {
+  .nav_layout {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    height: auto;
+    min-height: 2.75rem;
+    row-gap: var(--_spacing---static--spacing-1);
+  }
+
+  .nav_logo_link {
+    height: 1.25rem;
+    margin-top: 0.75rem;
+  }
+
+  .nav_logo {
+    height: 1.25rem;
+  }
+
+  .nav_menu {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    width: 100%;
+    column-gap: var(--_spacing---gap--gap-sm);
+    row-gap: 0;
+  }
+
+  .nav_link {
+    padding: var(--_spacing---static--spacing-1) 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Home — Hero
+   Headline on the left, its first line one grid step in; the supporting
+   block on column nine; the domino band along the foot.
+   -------------------------------------------------------------------------- */
+
+/* The hero travels at a third of the scroll rate while the section below
+   rises over it, so it reads as the far plane rather than a pinned panel. */
+.hero_section {
+  position: relative;
+  z-index: 0;
+  height: 100vh;
+  min-height: 100vh;
+  background-color: var(--_color---bg--default--bg);
+  overflow: clip;
+}
+
+.hero_contain {
+  position: relative;
+  z-index: 10;
+}
+
+/* A hero row is a twelfth of the viewport less its 72px top and bottom
+   margins. The composition rests two rows clear of the domino band, which is
+   three rows plus the 72px foot margin tall. */
+.hero_layout {
+  min-height: 100vh;
+  padding-bottom: calc(((100vh - 9rem) / 12) * 5 + 4.5rem);
+}
+
+.hero_title {
+  width: calc(var(--grid--step) * 7 + var(--grid--column));
+}
+
+.hero_title_line {
+  display: block;
+  white-space: nowrap;
+}
+
+.hero_title_line.is-lead {
+  margin-left: var(--grid--step);
+}
+
+.hero_content {
+  width: calc(var(--grid--step) * 3 + var(--grid--column));
+}
+
+.hero_text {
+  width: 100%;
+}
+
+.hero_domino_stage {
+  z-index: 1;
+}
+
+.hero_domino_wrap {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  gap: min(2.52844rem, 2.6756vw);
+  width: calc(min(3.62269rem, 3.83353vw) * 18 + min(2.52844rem, 2.6756vw) * 17);
+  height: calc(((100vh - 9rem) / 12) * 3 + 4.5rem);
+}
+
+.hero_domino_bar {
+  width: min(3.62269rem, 3.83353vw);
+  height: 100%;
+  flex: none;
+  background-color: var(--_color---bg--default--1);
+  transform-origin: bottom right;
+}
+
+/* The band is anchored to the foot of the hero, so below desktop the hero
+   reserves its height plus clearance, or the control would land on it. */
+@media screen and (max-width: 991px) {
+  .hero_section {
+    height: auto;
+    min-height: auto;
+    padding-bottom: calc(16rem + var(--_spacing---static--spacing-20));
+  }
+
+  .hero_layout {
+    display: block;
+    min-height: 0;
+    padding-top: var(--_spacing---static--spacing-36);
+    padding-bottom: 0;
+  }
+
+  .hero_title {
+    width: auto;
+  }
+
+  .hero_title_line {
+    white-space: normal;
+  }
+
+  .hero_title_line.is-lead {
+    margin-left: 0;
+  }
+
+  .hero_content {
+    width: 25.125rem;
+    max-width: 100%;
+    margin-top: var(--_spacing---static--spacing-20);
+  }
+
+  .hero_domino_wrap {
+    height: 16rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Home — Specialize
+   A preview panel on the left, the audience list on the right. Arriving on a
+   row makes it the reading; the panel follows.
+   -------------------------------------------------------------------------- */
+
+.specialize_section {
+  position: relative;
+  z-index: 1;
+  padding: var(--_spacing---static--spacing-20) 0 6.25rem;
+  background-color: var(--_color---bg--default--bg);
+}
+
+.specialize_body {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.specialize_preview {
+  width: calc(var(--grid--step) * 2 + var(--grid--column));
+  gap: 1.0625rem;
+}
+
+.specialize_figure {
+  position: relative;
+  height: 10.875rem;
+  overflow: clip;
+  background-color: var(--_color---bg--inverted--1);
+}
+
+.specialize_img {
+  opacity: 0;
+  transition: opacity 520ms cubic-bezier(0.33, 0.02, 0.18, 1);
+}
+
+.specialize_img.is-current {
+  opacity: 1;
+}
+
+/* The captions share one grid cell, so the block is always as tall as its
+   longest caption — no height to keep in sync. */
+.specialize_captions {
+  display: grid;
+  grid-template-areas: "caption";
+}
+
+.specialize_caption {
+  grid-area: caption;
+  color: var(--_color---text--default--2);
+  opacity: 0;
+  transition: opacity 520ms cubic-bezier(0.33, 0.02, 0.18, 1);
+}
+
+.specialize_caption.is-current {
+  opacity: 1;
+}
+
+.specialize_list_wrap {
+  position: relative;
+  width: calc(var(--grid--step) * 5 + var(--grid--column));
+}
+
+.specialize_list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.specialize_item {
+  align-self: stretch;
+  padding: var(--_spacing---inner--inner-xs) 0;
+}
+
+.specialize_link {
+  display: block;
+  color: var(--_color---text--default--3);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 280ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.specialize_link.is-current {
+  color: var(--_color---text--default--1);
+}
+
+/* The list runs looser than the other titles at this size. */
+.specialize_link_text {
+  letter-spacing: var(--_typography---letter-spacing--title-2-loose);
+}
+
+.specialize_link:focus-visible {
+  outline: 0.125rem solid var(--_color---interactive--secondary--idle);
+  outline-offset: 0.25rem;
+}
+
+/* On desktop the control rides the pointer inside the list and is shown only
+   while the pointer is there. */
+.specialize_more {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+@media screen and (max-width: 991px) {
+  .specialize_body {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: var(--_spacing---gap--gap-2xl);
+  }
+
+  .specialize_preview {
+    width: 21.75rem;
+    max-width: 100%;
+  }
+
+  .specialize_list_wrap {
+    width: auto;
+  }
+
+  .specialize_more {
+    position: relative;
+    top: auto;
+    left: auto;
+    margin-top: var(--_spacing---static--spacing-6);
+    opacity: 1;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .specialize_link {
+    white-space: normal;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Home — Work (flexible ways to work together)
+   -------------------------------------------------------------------------- */
+
+/* Deep foot: the section below rides up over this one, so the composition
+   needs room to travel clear of the fold before it is covered. */
+.work_section {
+  position: relative;
+  z-index: 1;
+  padding: var(--_spacing---section--section-lg) 0 var(--_spacing---static--spacing-32);
+  background-color: var(--_color---bg--default--bg);
+  overflow: clip;
+}
+
+.work_layout {
+  gap: var(--_spacing---static--spacing-24);
+}
+
+.work_title_line {
+  display: block;
+}
+
+.work_title_line.is-lead {
+  margin-left: var(--grid--step);
+}
+
+/* Three cards on the hairline grid; each opens with its icon, carries the
+   question a client arrives with, and closes on the offer that answers it. */
+.work_grid {
+  border-top: 1px solid var(--_color---outline--default);
+  border-bottom: 1px solid var(--_color---outline--default);
+  border-left: 1px solid var(--_color---outline--default);
+}
+
+.work_card {
+  position: relative;
+  flex: 1 1 0%;
+  min-width: 0;
+  gap: var(--_spacing---gap--gap-2xl);
+  min-height: 27.5rem;
+  padding: var(--_spacing---inner--inner-xl);
+  border-right: 1px solid var(--_color---outline--default);
+}
+
+.work_card_icon {
+  display: block;
+  width: 4rem;
+  aspect-ratio: 1 / 1;
+  flex: none;
+}
+
+.work_card_label {
+  width: 15rem;
+  max-width: 100%;
+}
+
+.work_card_text {
+  color: var(--_color---text--default--2);
+}
+
+/* The control sits on the foot of the card, so the three line up however
+   long the copy above them runs. */
+.work_card_action {
+  margin-top: auto;
+}
+
+.work_action {
+  margin-top: calc(var(--_spacing---static--spacing-8) * -1);
+}
+
+@media screen and (max-width: 991px) {
+  .work_section {
+    padding-bottom: var(--_spacing---section--section-lg);
+  }
+
+  .work_title_line.is-lead {
+    margin-left: 0;
+  }
+
+  .work_action {
+    margin-top: calc(var(--_spacing---static--spacing-8) - var(--_spacing---static--spacing-20));
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .work_grid {
+    flex-direction: column;
+    border-right: 1px solid var(--_color---outline--default);
+  }
+
+  .work_card {
+    flex: none;
+    gap: var(--_spacing---gap--gap-lg);
+    min-height: 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--_color---outline--default);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Home — Galaxy
+   A headline and control held still at the centre, with a sparse stream of
+   pictures moving up past them. The canvas clips; the tile is what travels.
+   -------------------------------------------------------------------------- */
+
+.galaxy_section {
+  position: relative;
+  z-index: 1;
+  background-color: var(--_color---bg--default--bg);
+  overflow: clip;
+}
+
+.galaxy_layout {
+  position: relative;
+  min-height: 46.25rem;
+}
+
+.galaxy_content {
+  position: absolute;
+  top: 42%;
+  right: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--_spacing---gap--gap-md);
+  transform: translateY(-50%);
+}
+
+.galaxy_statement {
+  width: calc(var(--grid--step) * 4 + var(--grid--column));
+}
+
+.galaxy_aside {
+  width: calc(var(--grid--step) * 3 + var(--grid--column));
+}
+
+/* A hairline above the link, running the note's full measure. */
+.galaxy_action {
+  margin-top: var(--_spacing---static--spacing-8);
+  padding-top: var(--_spacing---inner--inner-md);
+  border-top: 1px solid var(--_color---outline--default);
+}
+
+/* Position is owned by the stream, so a tile declares only its place in the
+   scatter and its size. Two grounds, dealt unevenly so no reading of the
+   scatter makes a pattern. */
+.galaxy_tile {
+  position: absolute;
+  overflow: clip;
+  will-change: transform;
+}
+
+.galaxy_tile_media {
+  width: 100%;
+  height: 100%;
+  background-color: var(--_color---bg--default--1);
+}
+
+.galaxy_tile_media.is-khaki {
+  background-color: var(--_color---bg--default--2);
+}
+
+.galaxy_tile.is-01 { left: 3.5%; top: 10%; width: 4.75rem; height: 9.5rem; }
+.galaxy_tile.is-02 { left: 64%; top: 14%; width: 6rem; height: 6rem; }
+.galaxy_tile.is-04 { left: 85.5%; top: 42%; width: 3.75rem; height: 7.5rem; }
+.galaxy_tile.is-05 { left: 9%; top: 62%; width: 7.5rem; height: 3.75rem; }
+.galaxy_tile.is-06 { left: 72%; top: 70%; width: 5.25rem; height: 5.25rem; }
+.galaxy_tile.is-07 { left: 41%; top: 87%; width: 5.75rem; height: 2.875rem; }
+.galaxy_tile.is-09 { left: 18%; top: 76%; width: 3.75rem; height: 7.5rem; }
+.galaxy_tile.is-11 { left: 78%; top: 88%; width: 6rem; height: 3rem; }
+
+/* Five pictures, scaled back: two are withheld rather than the whole scatter
+   shrunk, so the spacing stays open. */
+@media screen and (max-width: 991px) {
+  .galaxy_layout {
+    min-height: 36rem;
+  }
+
+  .galaxy_content {
+    flex-direction: column;
+    gap: var(--_spacing---gap--gap-2xl);
+  }
+
+  .galaxy_statement {
+    width: 100%;
+  }
+
+  .galaxy_aside {
+    width: 100%;
+    max-width: 25rem;
+  }
+
+  .galaxy_tile.is-06,
+  .galaxy_tile.is-09,
+  .galaxy_tile.is-11 {
+    display: none;
+  }
+
+  .galaxy_tile.is-01 { width: 4rem; height: 8rem; }
+  .galaxy_tile.is-02 { width: 4.75rem; height: 4.75rem; }
+  .galaxy_tile.is-04 { width: 3rem; height: 6rem; }
+  .galaxy_tile.is-05 { width: 6rem; height: 3rem; }
+  .galaxy_tile.is-07 { width: 4.75rem; height: 2.375rem; }
+}
+
+/* Three pictures, held clear of the typography. */
+@media screen and (max-width: 767px) {
+  .galaxy_layout {
+    min-height: 32rem;
+  }
+
+  .galaxy_tile.is-02,
+  .galaxy_tile.is-04 {
+    display: none;
+  }
+
+  .galaxy_tile.is-09,
+  .galaxy_tile.is-11 {
+    display: block;
+  }
+
+  .galaxy_tile.is-01 { left: 2%; top: 6%; width: 3.5rem; height: 7rem; }
+  .galaxy_tile.is-05 { left: 8%; top: 64%; width: 5.75rem; height: 2.875rem; }
+  .galaxy_tile.is-07 { left: 58%; top: 28%; width: 4.5rem; height: 4.5rem; }
+  .galaxy_tile.is-09 { left: 66%; top: 84%; width: 3rem; height: 6rem; }
+  .galaxy_tile.is-11 { left: 68%; top: 40%; width: 5rem; height: 2.5rem; }
+}
+
+/* --------------------------------------------------------------------------
+   Home — Cases
+   A dark header band, then one full-height slide per case. The frame pins
+   while its content tilts back and away, so the next slide arrives over it.
+   -------------------------------------------------------------------------- */
+
+.cases_section {
+  position: relative;
+  z-index: 1;
+  background-color: var(--_color---bg--inverted--bg);
+}
+
+.cases_head {
+  position: relative;
+  z-index: 2;
+  padding: var(--_spacing---static--spacing-20) 0;
+  background-color: var(--_color---bg--inverted--bg);
+}
+
+.cases_slide {
+  height: 100vh;
+  min-height: 48.75rem;
+}
+
+.cases_slide_frame {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  perspective: 250vw;
+}
+
+.cases_slide_content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--_color---outline--inverted);
+  background-color: var(--_color---bg--inverted--bg);
+  transform-style: preserve-3d;
+  transform-origin: 50% 10%;
+}
+
+.cases_slide_content.is-first {
+  border-top: 0;
+}
+
+.cases_layout {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: var(--_spacing---gap--gap-md);
+}
+
+.cases_col {
+  width: calc(var(--grid--step) * 5 + var(--grid--column));
+  gap: var(--_spacing---gap--gap-3xl);
+  height: 38.75rem;
+}
+
+.cases_number {
+  color: var(--_color---text--brand--1);
+  font-variant-numeric: tabular-nums;
+}
+
+.cases_detail {
+  width: 37.25rem;
+  max-width: 100%;
+}
+
+.cases_category {
+  color: var(--_color---text--brand--1);
+}
+
+/* Set looser than the other titles at this size, as the design has it. */
+.cases_title {
+  color: var(--_color---text--inverted--1);
+  line-height: var(--_typography---line-height--title-2-loose);
+  letter-spacing: var(--_typography---letter-spacing--title-2-loose);
+}
+
+.cases_text {
+  color: var(--_color---text--inverted--3);
+}
+
+.cases_stat {
+  color: var(--_color---text--inverted--1);
+  font-variant-numeric: tabular-nums;
+}
+
+.cases_visual {
+  position: relative;
+  width: calc(var(--grid--step) * 5 + var(--grid--column));
+  height: 38.75rem;
+  overflow: clip;
+  background-color: var(--_color---bg--inverted--bg);
+}
+
+.cases_img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 700ms cubic-bezier(0.33, 0.02, 0.18, 1);
+}
+
+.cases_action {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  translate: -50% -50%;
+  pointer-events: none;
+}
+
+/* Stacked slides need a full viewport to sit in. Below desktop the columns
+   stack and outgrow the frame, so the slides return to normal flow and the
+   pin is skipped. */
+@media screen and (max-width: 991px) {
+  .cases_slide {
+    height: auto;
+    min-height: 0;
+  }
+
+  .cases_slide_frame {
+    height: auto;
+    perspective: none;
+  }
+
+  .cases_slide_content {
+    position: relative;
+    inset: auto;
+    display: block;
+    padding: var(--_spacing---section--section-md) 0;
+    border-top: 1px solid var(--_color---outline--inverted);
+    transform-style: flat;
+  }
+
+  .cases_layout {
+    flex-direction: column;
+  }
+
+  .cases_col {
+    width: 100%;
+    height: auto;
+  }
+
+  .cases_visual {
+    width: 100%;
+    height: 24rem;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .cases_visual {
+    height: 15rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   CTA — shared by five pages
+   -------------------------------------------------------------------------- */
+
+.cta_section {
+  position: relative;
+  z-index: 2;
+  min-height: 59.25rem;
+  padding: var(--_spacing---section--section-md) 0 var(--_spacing---static--spacing-40);
+  background-color: var(--_color---bg--default--bg);
+  overflow: clip;
+}
+
+.cta_contain {
+  position: relative;
+  z-index: 1;
+}
+
+.cta_layout {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--_spacing---gap--gap-3xl);
+}
+
+.cta_title {
+  position: relative;
+  z-index: 1;
+}
+
+/* The closing headline is set tighter than the other display lines. */
+.cta_title_line {
+  display: block;
+  white-space: nowrap;
+  letter-spacing: var(--_typography---letter-spacing--headline-2-tight);
+}
+
+.cta_title_line.is-lead {
+  margin-left: var(--grid--step);
+}
+
+/* The trail line sits one column back from where the line above ends, so the
+   overlap reads as a measured step. The offset is the width of the line above
+   in ems, so it holds at every type size. */
+.cta_title_line.is-trail {
+  margin-left: calc(5.515em - (var(--grid--step) - var(--_spacing---gap--gap-md)));
+}
+
+/* The graphic starts level with the third line of the headline and runs past
+   the right edge into the section clip. The two bands are separate drawings
+   laid over each other, so each can travel at its own rate. */
+.cta_motif {
+  position: relative;
+  z-index: 0;
+  margin-top: calc((var(--_spacing---gap--gap-3xl) + var(--_typography---font-size--headline-2) * var(--_typography---line-height--headline-2)) * -1);
+  margin-left: calc(var(--grid--step) * 5);
+  width: 119.33%;
+  pointer-events: none;
+}
+
+.cta_motif_svg {
+  display: block;
+  height: auto;
+  overflow: visible;
+}
+
+.cta_motif_svg.is-large {
+  width: 100%;
+  fill: var(--_color---bg--default--1);
+}
+
+.cta_motif_svg.is-small {
+  position: absolute;
+  bottom: 0;
+  left: 14.31%;
+  width: 51.8%;
+  fill: var(--_color---bg--default--2);
+}
+
+.cta_note {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--_spacing---gap--gap-2xl);
+  padding: var(--_spacing---inner--inner-xl) 0;
+  border-top: 1px solid var(--_color---outline--default);
+}
+
+.cta_text {
+  width: calc(var(--grid--step) * 5 + var(--grid--column));
+  max-width: 100%;
+}
+
+@media screen and (max-width: 991px) {
+  .cta_section {
+    min-height: 0;
+    padding-bottom: var(--_spacing---section--section-md);
+  }
+
+  .cta_layout {
+    gap: var(--_spacing---gap--gap-2xl);
+  }
+
+  .cta_title_line {
+    white-space: normal;
+  }
+
+  .cta_title_line.is-lead,
+  .cta_title_line.is-trail {
+    margin-left: 0;
+  }
+
+  .cta_motif {
+    margin-top: 0;
+    margin-left: 0;
+    width: 130%;
+  }
+
+  .cta_note {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--_spacing---gap--gap-lg);
+  }
+
+  .cta_text {
+    width: 100%;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------------- */
+
+.footer_wrap {
+  padding: 2.625rem 0 var(--_spacing---static--spacing-6);
+  background-color: var(--_color---bg--inverted--bg);
+  color: var(--_color---text--inverted--1);
+}
+
+.footer_wrap.is-hidden {
+  display: none;
+}
+
+.footer_layout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--_spacing---gap--gap-md);
+}
+
+.footer_brand {
+  width: calc(var(--grid--step) * 5 + var(--grid--column));
+}
+
+.footer_logo {
+  display: block;
+  width: 6.75rem;
+  height: 5.3125rem;
+  fill: var(--_color---text--inverted--1);
+}
+
+.footer_nav {
+  width: calc(var(--grid--step) * 5 + var(--grid--column));
+}
+
+.footer_nav_list {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--_color---outline--inverted);
+}
+
+.footer_nav_link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: var(--_spacing---inner--inner-xs) 0;
+  border-bottom: 1px solid var(--_color---outline--inverted);
+  color: var(--_color---text--inverted--1);
+  text-decoration: none;
+}
+
+.footer_nav_link:focus-visible {
+  outline: 0.125rem solid var(--_color---interactive--secondary--idle);
+  outline-offset: -0.125rem;
+}
+
+/* The dimming rides the label alone, so the rule under each link holds
+   steady while the text answers the pointer. */
+.footer_nav_text {
+  display: block;
+  transition: opacity 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.footer_nav_text.is-dimmed {
+  opacity: 0.5;
+}
+
+.footer_nav_text.is-engaged {
+  transition-duration: 700ms;
+}
+
+.footer_tagline {
+  width: 25.125rem;
+  max-width: calc(var(--grid--step) * 3 + var(--grid--column));
+  margin-top: var(--_spacing---static--spacing-40);
+  margin-left: calc(var(--grid--step) * 6);
+  color: var(--_color---text--inverted--2);
+}
+
+.footer_divider {
+  width: 100%;
+  height: 1px;
+  margin-top: var(--_spacing---static--spacing-14);
+  background-color: var(--_color---outline--inverted);
+}
+
+.footer_legal {
+  margin-top: var(--_spacing---static--spacing-6);
+  color: var(--_color---text--inverted--2);
+}
+
+@media screen and (max-width: 991px) {
+  .footer_brand {
+    width: 100%;
+  }
+
+  .footer_nav {
+    width: 100%;
+    margin-top: var(--_spacing---static--spacing-12);
+  }
+
+  .footer_tagline {
+    max-width: 100%;
+    margin-top: var(--_spacing---static--spacing-12);
+    margin-left: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   About — statement and principles
+   A full-measure statement, then three four-column principles walking down
+   and across the grid, each a fixed step below the one before it.
+   -------------------------------------------------------------------------- */
+
+/* The statement carries 128px of clear space below the 72px nav band, and the
+   foot leaves room for the credo band's lift. */
+.about_section {
+  position: relative;
+  z-index: 0;
+  padding: calc(var(--_spacing---static--spacing-18) + var(--_spacing---static--spacing-32)) 0 var(--_spacing---static--spacing-56);
+  background-color: var(--_color---bg--default--bg);
+  overflow: clip;
+}
+
+.about_layout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--_spacing---gap--gap-md);
+}
+
+.about_statement {
+  width: 100%;
+  margin-bottom: var(--_spacing---static--spacing-32);
+}
+
+.about_statement_line {
+  display: block;
+}
+
+.about_statement_line.is-lead {
+  padding-left: var(--grid--step);
+}
+
+.about_principle {
+  width: calc(var(--grid--step) * 3 + var(--grid--column));
+}
+
+/* The stagger is a fixed 137px step, so the diagonal holds whatever the type
+   does. */
+.about_principle.is-2 {
+  margin-top: 8.5625rem;
+}
+
+.about_principle.is-3 {
+  margin-top: 17.125rem;
+}
+
+.about_principle_text {
+  color: var(--_color---text--default--2);
+}
+
+@media screen and (max-width: 991px) {
+  .about_section {
+    padding: var(--_spacing---static--spacing-36) 0 var(--_spacing---static--spacing-20);
+  }
+
+  .about_statement_line.is-lead {
+    padding-left: 0;
+  }
+
+  .about_principle {
+    width: 100%;
+  }
+
+  .about_principle.is-2,
+  .about_principle.is-3 {
+    margin-top: var(--_spacing---static--spacing-10);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   About — credo
+   A dark band with the statement across the middle eight columns, and a
+   perforated olive panel entering at column eight and running off the page.
+   -------------------------------------------------------------------------- */
+
+.credo_section {
+  position: relative;
+  z-index: 1;
+  min-height: 42.5rem;
+  padding-top: 14.625rem;
+  background-color: var(--_color---bg--inverted--bg);
+  overflow: clip;
+}
+
+.credo_contain {
+  position: relative;
+  z-index: 1;
+}
+
+.credo_text {
+  width: calc(var(--grid--step) * 7 + var(--grid--column));
+  margin-left: calc(var(--grid--step) * 2);
+  text-indent: var(--grid--step);
+  color: var(--_color---text--inverted--1);
+}
+
+/* A second container laid over the band, so the panel starts on a column
+   rather than at a computed offset. It crosses over the type. */
+.credo_panel_contain {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.credo_panel_layout {
+  height: 100%;
+}
+
+.credo_panel {
+  display: block;
+  width: auto;
+  height: 100%;
+  max-width: none;
+  margin-left: calc(var(--grid--step) * 7);
+}
+
+@media screen and (max-width: 991px) {
+  .credo_section {
+    min-height: 0;
+    padding: var(--_spacing---static--spacing-20) 0;
+  }
+
+  .credo_text {
+    width: 100%;
+    margin-left: 0;
+    text-indent: 0;
+  }
+
+  .credo_panel_contain {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   About — figures
+   The lede on the left four columns; the counted record on the right five,
+   as hairline rows with the number set large against its description.
+   -------------------------------------------------------------------------- */
+
+.figures_section {
+  position: relative;
+  z-index: 1;
+  padding: var(--_spacing---static--spacing-32) 0 5.625rem;
+  background-color: var(--_color---bg--default--bg);
+}
+
+.figures_lede {
+  width: calc(var(--grid--step) * 3 + var(--grid--column));
+  letter-spacing: var(--_typography---letter-spacing--body-1-tight);
+}
+
+.figures_list {
+  display: flex;
+  flex-direction: column;
+  width: calc(var(--grid--step) * 4 + var(--grid--column));
+  border-bottom: 1px solid var(--_color---outline--default);
+}
+
+.figures_row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--_spacing---gap--gap-xl);
+  padding: var(--_spacing---inner--inner-md) 0;
+  border-top: 1px solid var(--_color---outline--default);
+}
+
+.figures_value {
+  flex: 1 1 auto;
+}
+
+.figures_label {
+  flex: 0 0 auto;
+  width: 21.75rem;
+  text-align: right;
+}
+
+.figures_layout {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+@media screen and (max-width: 991px) {
+  .figures_section {
+    padding: var(--_spacing---static--spacing-20) 0;
+  }
+
+  .figures_layout {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--_spacing---gap--gap-md);
+  }
+
+  .figures_lede,
+  .figures_list {
+    width: 100%;
+  }
+
+  .figures_list {
+    margin-top: var(--_spacing---static--spacing-10);
+  }
+
+  .figures_label {
+    width: 12rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Collaboration — hero
+   -------------------------------------------------------------------------- */
+
+.collabhero_section {
+  position: relative;
+  padding: calc(var(--_spacing---static--spacing-18) + var(--_spacing---static--spacing-32)) 0 var(--_spacing---static--spacing-32);
+  background-color: var(--_color---bg--default--bg);
+}
+
+.collabhero_title_line {
+  display: block;
+}
+
+/* The opening line is set in from the left; the line beneath it returns to
+   the margin. */
+.collabhero_title_line.is-lead {
+  padding-left: var(--grid--step);
+}
+
+.collabhero_standfirst {
+  width: calc(var(--grid--step) * 4 + var(--grid--column));
+  margin-top: var(--_spacing---static--spacing-10);
+  margin-left: calc(var(--grid--step) * 7);
+}
+
+@media screen and (max-width: 991px) {
+  .collabhero_section {
+    padding: var(--_spacing---static--spacing-28) 0 var(--_spacing---static--spacing-20);
+  }
+
+  .collabhero_title_line.is-lead {
+    padding-left: 0;
+  }
+
+  .collabhero_standfirst {
+    width: 100%;
+    margin-top: var(--_spacing---static--spacing-8);
+    margin-left: 0;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .collabhero_section {
+    padding-top: var(--_spacing---static--spacing-36);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Collaboration — models
+   The models run in the last nine columns: number and title on the left four,
+   the motif tile on the right four, the detail rows across all nine beneath.
+   -------------------------------------------------------------------------- */
+
+.models_section {
+  position: relative;
+  padding: 0 0 7.5rem;
+  background-color: var(--_color---bg--default--bg);
+}
+
+.models_head {
+  padding: var(--_spacing---inner--inner-md) 0;
+  border-bottom: 1px solid var(--_color---outline--default);
+}
+
+/* The rail shares the models' rows, so each label can start level with its
+   own model and hold its place to the end of the group. */
+.models_list {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--_spacing---gap--gap-md);
+  row-gap: 7.4375rem;
+  padding-top: var(--_spacing---static--spacing-20);
+}
+
+.models_rail {
+  grid-column: 1 / span 3;
+  grid-row: 1 / span 3;
+  display: grid;
+  grid-template-rows: subgrid;
+  pointer-events: none;
+}
+
+/* Each label sticks from its own model to the end of the group, one line
+   below the label before it, so the set collects into a stack. */
+.models_rail_link {
+  grid-column: 1;
+  grid-row: 1 / -1;
+  align-self: start;
+  justify-self: start;
+  position: sticky;
+  top: var(--_spacing---static--spacing-18);
+  color: var(--_color---text--default--1);
+  text-decoration: none;
+  pointer-events: auto;
+  transition: opacity 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.models_rail_link.is-2 {
+  grid-row: 2 / -1;
+  top: calc(var(--_spacing---static--spacing-18) + var(--_typography---font-size--body-3) * var(--_typography---line-height--body-3) + var(--_spacing---static--spacing-2));
+}
+
+.models_rail_link.is-3 {
+  grid-row: 3 / -1;
+  top: calc(var(--_spacing---static--spacing-18) + (var(--_typography---font-size--body-3) * var(--_typography---line-height--body-3) + var(--_spacing---static--spacing-2)) * 2);
+}
+
+.models_rail_link.is-dimmed {
+  opacity: 0.5;
+}
+
+.models_rail_link.is-engaged {
+  transition-duration: 700ms;
+}
+
+.models_rail_link:focus-visible {
+  outline: 0.125rem solid var(--_color---interactive--secondary--idle);
+  outline-offset: 0.125rem;
+}
+
+.model_item {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--_spacing---gap--gap-md);
+}
+
+.model_item.is-2 {
+  grid-row: 2;
+}
+
+.model_item.is-3 {
+  grid-row: 3;
+}
+
+/* The track is the sticky boundary: exactly as tall as the row the tile sets,
+   so the number and title release where the tile ends. */
+.model_headtrack {
+  align-self: stretch;
+  width: calc(var(--grid--step) * 3 + var(--grid--column));
+  margin-left: calc(var(--grid--step) * 3);
+}
+
+.model_head {
+  position: sticky;
+  top: var(--_spacing---static--spacing-18);
+  display: flex;
+  flex-direction: column;
+}
+
+.model_title {
+  margin-top: var(--_spacing---static--spacing-8);
+}
+
+.model_media {
+  width: calc(var(--grid--step) * 3 + var(--grid--column));
+  margin-left: var(--grid--step);
+  background-color: var(--_color---bg--default--1);
+}
+
+.model_tile {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.model_rows {
+  width: calc(var(--grid--step) * 8 + var(--grid--column));
+  margin-top: var(--_spacing---static--spacing-6);
+  margin-left: calc(var(--grid--step) * 3);
+}
+
+/* Accordion List / Accordion Item — the template components, restyled. One
+   row open per model; the group holds its tallest height so nothing below
+   moves when the open row changes. */
+.accordion_list {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--_color---outline--default);
+}
+
+.accordion_item {
+  display: flex;
+  flex-direction: column;
+  padding: var(--_spacing---static--spacing-5) 0;
+  border-top: 1px solid var(--_color---outline--default);
+}
+
+.accordion_toggle {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  color: var(--_color---text--default--1);
+  text-align: left;
+  cursor: pointer;
+}
+
+.accordion_toggle:focus-visible {
+  outline: 0.125rem solid var(--_color---interactive--secondary--idle);
+  outline-offset: 0.25rem;
+}
+
+/* Points up while the row is open and down when it is shut. */
+.accordion_toggle_icon {
+  display: block;
+  width: 0.9375rem;
+  height: 0.75rem;
+  flex-shrink: 0;
+  fill: currentColor;
+  transform: rotate(-90deg);
+  transition: transform 700ms cubic-bezier(0.33, 0.02, 0.18, 1);
+}
+
+.accordion_toggle_icon.is-collapsed {
+  transform: rotate(90deg);
+}
+
+/* The space between a row's head and its body belongs to the body, so it
+   leaves with the body's height. */
+.accordion_panel {
+  overflow: hidden;
+  padding-top: var(--_spacing---inner--inner-md);
+}
+
+.accordion_panel.is-collapsed {
+  display: none;
+}
+
+.model_detail {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--_spacing---gap--gap-md);
+}
+
+/* The body is set on its own nine columns — the width of the rows — with the
+   text on the first four and the list on the last four. */
+.model_detail_text {
+  width: calc((100% - var(--_spacing---gap--gap-md) * 8) / 9 * 4 + var(--_spacing---gap--gap-md) * 3);
+  color: var(--_color---text--default--2);
+}
+
+.model_detail_list {
+  width: calc((100% - var(--_spacing---gap--gap-md) * 8) / 9 * 4 + var(--_spacing---gap--gap-md) * 3);
+  margin: 0;
+  padding: 0 0 0 1.125rem;
+  list-style: disc outside;
+}
+
+.model_detail_item {
+  color: var(--_color---text--default--2);
+}
+
+@media screen and (max-width: 991px) {
+  .models_rail {
+    display: none;
+  }
+
+  .model_item,
+  .model_item.is-2,
+  .model_item.is-3 {
+    grid-row: auto;
+  }
+
+  .model_headtrack {
+    align-self: auto;
+    width: calc(var(--grid--step) * 5 + var(--grid--column));
+    margin-left: 0;
+  }
+
+  .model_head {
+    position: static;
+  }
+
+  .model_media {
+    width: calc(var(--grid--step) * 5 + var(--grid--column));
+    margin-left: 0;
+  }
+
+  .model_rows {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .models_head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--_spacing---gap--gap-md);
+  }
+
+  .model_headtrack,
+  .model_media {
+    width: 100%;
+  }
+
+  .model_title {
+    margin-top: var(--_spacing---static--spacing-4);
+  }
+
+  .model_media {
+    margin-top: var(--_spacing---static--spacing-8);
+  }
+
+  .model_detail {
+    flex-direction: column;
+  }
+
+  .model_detail_text,
+  .model_detail_list {
+    width: 100%;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Our Work — project track
+   Two parts: the active project's information on the left, the pictures on
+   the right. Without the live state this is a plain document-flow list —
+   what a small screen and a reduced-motion reader get; the track adds
+   .is-live and takes over position, scale and opacity.
+   -------------------------------------------------------------------------- */
+
+.workdark_section {
+  position: relative;
+  background-color: var(--_color---bg--inverted--bg);
+}
+
+.workdark_layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--_spacing---gap--gap-md);
+  align-items: start;
+  padding: var(--_spacing---static--spacing-20) 0;
+}
+
+/* One viewport tall. The pictures pass under the nav and off both edges, so
+   the clip is the viewport itself. */
+.workdark_layout.is-live {
+  height: 100vh;
+  padding: 0;
+  overflow: hidden;
+}
+
+.workdark_lede {
+  grid-column: 1 / span 6;
+}
+
+.workdark_lede.is-live {
+  position: relative;
+  z-index: 2;
+  grid-row: 1;
+  height: 100%;
+}
+
+/* The one instruction on the page: the track answers the wheel rather than
+   the document, so it says so, and leaves once it has been obeyed. */
+.workdark_hint {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--_spacing---gap--gap-sm);
+  height: 3rem;
+  margin: 0 0 var(--_spacing---static--spacing-8);
+  padding: 0 var(--_spacing---inner--inner-sm);
+  background-color: var(--_color---bg--inverted--bg);
+  color: var(--_color---text--inverted--1);
+}
+
+/* Live, the label rides the cursor, where the reader is already looking. */
+.workdark_hint.is-live {
+  position: fixed;
+  top: 0;
+  right: auto;
+  bottom: auto;
+  left: 0;
+  z-index: 6;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform;
+  transition: opacity 700ms cubic-bezier(0.33, 0.02, 0.18, 1);
+}
+
+.workdark_hint.is-shown {
+  opacity: 1;
+}
+
+.workdark_hint.is-gone {
+  opacity: 0;
+}
+
+/* Out of the way while the pointer is in the nav band. */
+.workdark_hint.is-away {
+  opacity: 0;
+  transition-duration: 280ms;
+}
+
+.workdark_hint_arrow {
+  display: block;
+  width: 0.75rem;
+  height: 0.9375rem;
+  flex: none;
+  fill: currentColor;
+}
+
+/* EMBED — section CSS · keyframes and a reduced-motion query. */
+@media (prefers-reduced-motion: no-preference) {
+  .workdark_hint_arrow.is-live {
+    animation: workdark-hint-drift 1.8s cubic-bezier(0.33, 0.02, 0.18, 1) infinite;
+  }
+}
+
+@keyframes workdark-hint-drift {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  45% {
+    transform: translateY(0.25rem);
+  }
+}
+
+.workdark_window {
+  display: flex;
+  flex-direction: column;
+  gap: var(--_spacing---gap--gap-3xl);
+}
+
+/* The block centres on the viewport, level with the focal picture. */
+.workdark_window.is-live {
+  display: block;
+  position: absolute;
+  inset: 0;
+}
+
+.workdark_card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--_spacing---gap--gap-md);
+  width: calc(var(--grid--step) * 5 + var(--grid--column));
+  max-width: 100%;
+}
+
+.workdark_card.is-live {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  will-change: opacity;
+}
+
+/* Set more compactly than the title style, as the design has it. */
+.workdark_title {
+  color: var(--_color---text--inverted--1);
+  line-height: var(--_typography---line-height--title-1-compact);
+  letter-spacing: var(--_typography---letter-spacing--title-1-loose);
+}
+
+.workdark_note {
+  display: flex;
+  flex-direction: column;
+  gap: var(--_spacing---gap--gap-md);
+  width: calc(var(--grid--step) * 3 + var(--grid--column));
+  max-width: 100%;
+}
+
+/* The one piece of brand colour on the page, set small and wide. */
+.workdark_meta {
+  color: var(--_color---text--brand--1);
+}
+
+.workdark_text {
+  color: var(--_color---text--inverted--2);
+}
+
+.workdark_stage {
+  grid-column: 7 / span 6;
+  display: flex;
+  flex-direction: column;
+  gap: var(--_spacing---gap--gap-lg);
+}
+
+/* Live, the stage takes the full width so the pictures hold the right margin
+   while the title runs under them. It can be dragged, so it says so. */
+.workdark_stage.is-live {
+  display: block;
+  position: relative;
+  z-index: 0;
+  grid-column: 1 / -1;
+  grid-row: 1;
+  height: 100%;
+  cursor: grab;
+  touch-action: pan-y;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.workdark_stage.is-dragging {
+  cursor: grabbing;
+}
+
+.workdark_frame {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Five columns held against the right margin; the stack scales from that
+   edge, so every picture lines up on the right. */
+.workdark_frame.is-live {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: auto;
+  width: calc(var(--grid--step) * 4 + var(--grid--column));
+  transform: translateY(-50%);
+  transform-origin: right center;
+  will-change: transform, opacity;
+}
+
+.workdark_link {
+  position: relative;
+  display: block;
+  overflow: clip;
+  text-decoration: none;
+}
+
+.workdark_link:focus-visible {
+  outline: 0.125rem solid var(--_color---interactive--secondary--idle);
+  outline-offset: -0.25rem;
+}
+
+.workdark_img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  transition: transform 700ms cubic-bezier(0.33, 0.02, 0.18, 1);
+}
+
+/* Only the live track answers the wheel, so only there is the instruction
+   true; in document flow the page scrolls as any page does. */
+@media screen and (max-width: 991px) {
+  .workdark_hint {
+    display: none;
+  }
+
+  .workdark_lede,
+  .workdark_stage {
+    grid-column: 1 / -1;
+  }
+
+  .workdark_card,
+  .workdark_note {
+    width: 100%;
+  }
+
+  /* In flow the titles step down to the section-title size. */
+  .workdark_title {
+    font-size: var(--_typography---font-size--title-2);
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .workdark_layout {
+    padding-top: var(--_spacing---static--spacing-36);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Insights — hero
+   -------------------------------------------------------------------------- */
+
+.insightshero_section {
+  position: relative;
+  padding: calc(var(--_spacing---static--spacing-18) + var(--_spacing---static--spacing-32)) 0 var(--_spacing---static--spacing-32);
+  background-color: var(--_color---bg--default--bg);
+}
+
+@media screen and (max-width: 991px) {
+  .insightshero_section {
+    padding: var(--_spacing---static--spacing-36) 0 var(--_spacing---static--spacing-20);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Insights — articles
+   The featured piece runs the full frame width inside one hairline, its text
+   on the left and its picture on the right; the pieces below sit three to a
+   row, each a picture with its date and title beneath.
+   -------------------------------------------------------------------------- */
+
+.articles_section {
+  position: relative;
+  padding: 0 0 7.5rem;
+  background-color: var(--_color---bg--default--bg);
+}
+
+.articles_layout {
+  display: flex;
+  flex-direction: column;
+  gap: 8.875rem;
+}
+
+/* The one block that ignores the page margin. */
+.featured_card {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--_spacing---gap--gap-md);
+  padding: var(--_spacing---inner--inner-md);
+  border: 1px solid var(--_color---outline--default);
+}
+
+.featured_text {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: 37.125rem;
+  height: 46.5rem;
+}
+
+.featured_meta {
+  width: 25rem;
+}
+
+.featured_date {
+  color: var(--_color---text--default--2);
+}
+
+.featured_body {
+  width: 34.125rem;
+  margin-top: 14.0625rem;
+}
+
+.featured_standfirst {
+  color: var(--_color---text--default--2);
+}
+
+.featured_media {
+  position: relative;
+  flex: 1 1 auto;
+  height: 46.5rem;
+  overflow: clip;
+}
+
+.featured_img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 700ms cubic-bezier(0.33, 0.02, 0.18, 1);
+}
+
+.featured_action {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  pointer-events: none;
+}
+
+.articles_list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--_spacing---gap--gap-2xl) var(--_spacing---gap--gap-md);
+}
+
+.article_card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1875rem;
+  width: calc(var(--grid--step) * 3 + var(--grid--column));
+}
+
+.article_media {
+  position: relative;
+  overflow: clip;
+}
+
+/* The chip is held at the centre of the picture and only shown on hover. */
+.article_action {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 700ms cubic-bezier(0.33, 0.02, 0.18, 1);
+}
+
+/* Three picture heights alternate across the rows — the middle of each row
+   tallest — so the grid reads as a rhythm rather than a table. */
+.article_img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 472 / 514;
+  object-fit: cover;
+  transition: transform 700ms cubic-bezier(0.33, 0.02, 0.18, 1);
+}
+
+.article_img.is-mid {
+  aspect-ratio: 472 / 385;
+}
+
+.article_img.is-short {
+  aspect-ratio: 472 / 270;
+}
+
+.article_date {
+  color: var(--_color---text--default--2);
+}
+
+@media screen and (max-width: 991px) {
+  .articles_layout {
+    gap: var(--_spacing---section--section-md);
+  }
+
+  .featured_card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .featured_text {
+    width: 100%;
+    height: auto;
+  }
+
+  .featured_meta {
+    width: 100%;
+  }
+
+  .featured_body {
+    width: 100%;
+    margin-top: var(--_spacing---static--spacing-8);
+  }
+
+  .featured_media {
+    height: auto;
+    aspect-ratio: 845 / 744;
+  }
+
+  .article_card {
+    width: calc(var(--grid--step) * 5 + var(--grid--column));
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .article_card {
+    width: 100%;
+  }
+
+  .featured_media {
+    aspect-ratio: 3 / 2;
+  }
+}
+
+/* EMBED — section CSS · parent-state descendant selectors.
+   Pictures grow inside their windows on hover; nothing else moves. */
+.cases_visual:hover .cases_img,
+.featured_card:hover .featured_img,
+.article_card:hover .article_img,
+.workdark_link:hover .workdark_img {
+  transform: scale(1.04);
+}
+
+.article_card:is(:hover, :focus-within) .article_action {
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Private Equity — hero
+   The title across the full grid, the motif on the first six columns and the
+   standfirst on the last four.
+   -------------------------------------------------------------------------- */
+
+/* Holds its plane while the help section rises over it. */
+.pehero_section {
+  position: relative;
+  z-index: 0;
+  padding: calc(var(--_spacing---static--spacing-18) + var(--_spacing---static--spacing-32)) 0 var(--_spacing---static--spacing-28);
+  background-color: var(--_color---bg--default--bg);
+}
+
+.pehero_layout {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--_spacing---static--spacing-32) var(--_spacing---gap--gap-md);
+}
+
+.pehero_title {
+  width: 100%;
+}
+
+.pehero_title_line {
+  display: block;
+}
+
+.pehero_title_line.is-lead {
+  padding-left: var(--grid--step);
+}
+
+.pehero_media {
+  width: calc(var(--grid--step) * 5 + var(--grid--column));
+  overflow: clip;
+}
+
+.pehero_img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 720 / 359;
+  object-fit: cover;
+}
+
+.pehero_standfirst {
+  width: calc(var(--grid--step) * 3 + var(--grid--column));
+}
+
+@media screen and (max-width: 991px) {
+  .pehero_section {
+    padding: var(--_spacing---static--spacing-36) 0 var(--_spacing---static--spacing-20);
+  }
+
+  .pehero_layout {
+    row-gap: var(--_spacing---static--spacing-20);
+  }
+
+  .pehero_title_line.is-lead {
+    padding-left: 0;
+  }
+
+  .pehero_media,
+  .pehero_standfirst {
+    width: 100%;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Private Equity — what we help with
+   Two columns of items, starting on the fifth column of the page grid.
+   -------------------------------------------------------------------------- */
+
+.pehelp_section {
+  position: relative;
+  z-index: 1;
+  padding: var(--_spacing---static--spacing-20) 0 var(--_spacing---static--spacing-32);
+  background-color: var(--_color---bg--default--bg);
+}
+
+.pehelp_head {
+  padding: var(--_spacing---inner--inner-md) 0;
+  border-bottom: 1px solid var(--_color---outline--default);
+}
+
+.pehelp_list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_spacing---gap--gap-2xl) var(--_spacing---gap--gap-md);
+  width: calc(var(--grid--step) * 7 + var(--grid--column));
+  max-width: 100%;
+  margin-left: calc(var(--grid--step) * 4);
+  padding-top: var(--_spacing---static--spacing-12);
+}
+
+.pehelp_item {
+  width: calc((100% - var(--_spacing---gap--gap-md)) / 2);
+}
+
+.pehelp_item_text {
+  color: var(--_color---text--default--2);
+}
+
+@media screen and (max-width: 991px) {
+  .pehelp_list {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .pehelp_head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--_spacing---gap--gap-md);
+  }
+
+  .pehelp_item {
+    width: 100%;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Private Equity — relevant work
+   A typographic table of projects on the page grid. At rest every row is at
+   full strength; once the reader is in the list the others recede, and a
+   picture of the row in focus follows the pointer in the three columns the
+   table holds clear for it.
+   -------------------------------------------------------------------------- */
+
+.pecases_section {
+  position: relative;
+  z-index: 2;
+  padding: var(--_spacing---static--spacing-20) 0 var(--_spacing---static--spacing-32);
+  background-color: var(--_color---bg--default--bg);
+}
+
+.pecases_head {
+  padding: var(--_spacing---inner--inner-md) 0 var(--_spacing---static--spacing-24);
+}
+
+.projects_list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--_color---outline--light);
+}
+
+.projects_row {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--_spacing---gap--gap-md);
+  align-items: center;
+  padding: var(--_spacing---inner--inner-lg) 0;
+  border-top: 1px solid var(--_color---outline--light);
+}
+
+/* The dimming sits on the text, never on the row: the row carries the
+   divider, and the divider is not part of the interaction. */
+.projects_row_title {
+  grid-column: 1 / span 4;
+  transition: opacity 700ms cubic-bezier(0.33, 0.02, 0.18, 1);
+}
+
+.projects_row_client {
+  grid-column: 5 / span 3;
+  transition: opacity 700ms cubic-bezier(0.33, 0.02, 0.18, 1);
+}
+
+.projects_row_title.is-recessed,
+.projects_row_client.is-recessed {
+  opacity: 0.4;
+}
+
+/* Held clear for the picture the hover state shows. */
+.projects_row_preview {
+  grid-column: 8 / span 3;
+}
+
+/* Only the row in focus carries its control. */
+.projects_row_action {
+  grid-column: 11 / span 2;
+  opacity: 0;
+  transition: opacity 700ms cubic-bezier(0.33, 0.02, 0.18, 1);
+}
+
+.projects_row_action.is-shown {
+  opacity: 1;
+}
+
+/* One window of one fixed size. It never resizes and never moves sideways;
+   only its height answers the pointer, and a change of row crosses one
+   picture into the next in place. */
+.projects_preview {
+  position: absolute;
+  top: 0;
+  left: calc(var(--grid--step) * 7);
+  z-index: 2;
+  width: 25rem;
+  height: 17.8125rem;
+  overflow: clip;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 700ms cubic-bezier(0.33, 0.02, 0.18, 1);
+  will-change: transform;
+}
+
+.projects_preview.is-open {
+  opacity: 1;
+}
+
+.projects_preview_frame {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  opacity: 0;
+  transition: opacity 700ms cubic-bezier(0.33, 0.02, 0.18, 1);
+}
+
+.projects_preview_frame.is-current {
+  opacity: 1;
+}
+
+.projects_preview_img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media screen and (max-width: 991px) {
+  .projects_row {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    align-items: start;
+    padding: var(--_spacing---inner--inner-md) 0;
+  }
+
+  .projects_row_title {
+    grid-column: span 4;
+  }
+
+  .projects_row_client {
+    grid-column: span 2;
+  }
+
+  .projects_row_preview,
+  .projects_preview {
+    display: none;
+  }
+
+  .projects_row_title.is-recessed,
+  .projects_row_client.is-recessed {
+    opacity: 1;
+  }
+
+  .projects_row_action {
+    grid-column: span 6;
+    justify-content: flex-start;
+    margin-top: var(--_spacing---static--spacing-4);
+    opacity: 1;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .pecases_head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--_spacing---gap--gap-md);
+  }
+
+  .projects_row_title,
+  .projects_row_client {
+    grid-column: span 6;
+  }
+
+  .projects_row_client {
+    margin-top: var(--_spacing---static--spacing-2);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Private Equity — how we can work together
+   Three bounded cards stepping down the page, each starting where the one
+   before it has been read.
+   -------------------------------------------------------------------------- */
+
+.pemodels_section {
+  position: relative;
+  z-index: 3;
+  padding: var(--_spacing---static--spacing-20) 0 var(--_spacing---static--spacing-32);
+  background-color: var(--_color---bg--default--bg);
+}
+
+.pemodels_head {
+  padding: var(--_spacing---inner--inner-md) 0;
+}
+
+.pemodels_list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--_spacing---gap--gap-md);
+  padding-top: var(--_spacing---static--spacing-12);
+}
+
+.pemodel_card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--_spacing---gap--gap-xl);
+  width: calc(var(--grid--step) * 3 + var(--grid--column));
+  padding: 0 var(--_spacing---inner--inner-lg);
+  border-left: 1px solid var(--_color---outline--default);
+}
+
+.pemodel_card.is-2 {
+  margin-top: 7.5rem;
+}
+
+.pemodel_card.is-3 {
+  margin-top: var(--_spacing---static--spacing-60);
+}
+
+.pemodel_media {
+  flex-shrink: 0;
+  width: 12rem;
+  aspect-ratio: 1 / 1;
+  overflow: clip;
+  background-color: var(--_color---bg--default--1);
+}
+
+.pemodel_tile {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pemodel_text {
+  padding-bottom: var(--_spacing---static--spacing-8);
+  color: var(--_color---text--default--2);
+}
+
+@media screen and (max-width: 991px) {
+  .pemodel_card {
+    width: calc(var(--grid--step) * 5 + var(--grid--column));
+  }
+
+  .pemodel_card.is-2,
+  .pemodel_card.is-3 {
+    margin-top: 0;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .pemodels_head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--_spacing---gap--gap-md);
+  }
+
+  .pemodel_card {
+    width: 100%;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Contact — masthead
+   The title and the standfirst share one band near the foot of the opening:
+   the title on the left seven columns, the standfirst on the last four.
+   -------------------------------------------------------------------------- */
+
+.masthead_section {
+  position: relative;
+  z-index: 0;
+  padding: calc(var(--_spacing---static--spacing-18) + var(--_spacing---static--spacing-32)) 0 var(--_spacing---static--spacing-32);
+  background-color: var(--_color---bg--default--bg);
+  overflow: clip;
+}
+
+.masthead_layout {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--_spacing---gap--gap-md);
+}
+
+.masthead_title {
+  width: calc(var(--grid--step) * 6 + var(--grid--column));
+  white-space: nowrap;
+}
+
+.masthead_standfirst {
+  width: calc(var(--grid--step) * 3 + var(--grid--column));
+}
+
+@media screen and (max-width: 991px) {
+  .masthead_section {
+    padding: var(--_spacing---static--spacing-36) 0 var(--_spacing---static--spacing-20);
+  }
+
+  .masthead_layout {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Below desktop this title steps down to the title-1 size, as the design
+     has it. */
+  .masthead_title {
+    width: 100%;
+    white-space: normal;
+    font-size: var(--_typography---font-size--title-1);
+  }
+
+  .masthead_standfirst {
+    width: 100%;
+    margin-top: var(--_spacing---static--spacing-8);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Contact — details, form, invitation to call
+   The details on the left six columns hold at 80px from the top while the
+   form beside them scrolls; the invitation sits below the form.
+   -------------------------------------------------------------------------- */
+
+.contact_section {
+  position: relative;
+  z-index: 1;
+  padding: var(--_spacing---static--spacing-4) 0 var(--_spacing---static--spacing-32);
+  background-color: var(--_color---bg--default--bg);
+}
+
+.contact_layout {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--_spacing---gap--gap-md);
+  align-items: start;
+}
+
+.contact_details {
+  grid-column: 1 / span 6;
+  position: sticky;
+  top: var(--_spacing---static--spacing-20);
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--_spacing---gap--gap-sm);
+  padding: var(--_spacing---inner--inner-xs) 0;
+}
+
+/* Label on the first column, value from the second, so the pairs align down
+   the block. */
+.contact_detail {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.contact_detail_label {
+  flex-shrink: 0;
+  width: var(--grid--step);
+  color: var(--_color---text--default--2);
+}
+
+.contact_value {
+  color: var(--_color---text--default--1);
+  text-decoration: none;
+  transition: opacity 700ms cubic-bezier(0.33, 0.02, 0.18, 1);
+}
+
+.contact_value:hover {
+  opacity: 0.5;
+}
+
+.contact_value:focus-visible {
+  outline: 0.125rem solid var(--_color---interactive--secondary--idle);
+  outline-offset: 0.25rem;
+}
+
+.contact_form_col {
+  grid-column: 7 / span 6;
+  display: flex;
+  flex-direction: column;
+  gap: var(--_spacing---gap--gap-2xl);
+}
+
+.contact_call {
+  grid-column: 7 / span 6;
+  margin-top: var(--_spacing---static--spacing-24);
+}
+
+/* Contact Form — the template component, restyled to the site's own field:
+   square, filled, no outline at rest. Every field is labelled above. */
+.form_form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--_spacing---gap--gap-md);
+}
+
+.form_field_wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--_spacing---gap--gap-xs);
+}
+
+.form_label {
+  color: var(--_color---text--default--1);
+}
+
+.form_input {
+  width: 100%;
+  height: 3rem;
+  padding: var(--_spacing---static--spacing-3) var(--_spacing---inner--inner-sm);
+  border: 0;
+  border-radius: var(--rounding--0);
+  background-color: var(--_color---interactive--input--idle);
+  color: var(--_color---interactive--input--on);
+  transition: background-color 700ms cubic-bezier(0.33, 0.02, 0.18, 1);
+}
+
+.form_input.is-area {
+  height: auto;
+  min-height: 14.3125rem;
+  resize: vertical;
+}
+
+.form_input::placeholder {
+  color: var(--_color---interactive--input--on-disabled);
+}
+
+.form_input:hover {
+  background-color: var(--_color---interactive--input--hover);
+}
+
+.form_input:focus {
+  outline: none;
+  background-color: var(--_color---interactive--input--active);
+}
+
+.form_input:focus-visible {
+  outline: 0.125rem solid var(--_color---interactive--secondary--idle);
+  outline-offset: 0;
+}
+
+.form_submit {
+  margin-top: var(--_spacing---static--spacing-2);
+}
+
+.form_success_wrap,
+.form_error_wrap {
+  display: none;
+}
+
+.form_success_text {
+  color: var(--_color---text--default--2);
+}
+
+.form_error_text {
+  color: var(--_color---info--error);
+}
+
+@media screen and (max-width: 991px) {
+  .contact_section {
+    padding-bottom: var(--_spacing---static--spacing-20);
+  }
+
+  .contact_details,
+  .contact_form_col,
+  .contact_call {
+    grid-column: 1 / -1;
+  }
+
+  .contact_details {
+    position: static;
+    margin-bottom: var(--_spacing---static--spacing-10);
+  }
+
+  .contact_call {
+    margin-top: var(--_spacing---static--spacing-20);
+  }
+
+  /* Below desktop a grid column is narrower than the labels, so they take the
+     same fixed column as the case-study details. */
+  .contact_detail_label {
+    width: 6.25rem;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .contact_detail {
+    flex-direction: column;
+  }
+
+  .contact_detail_label {
+    width: auto;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Case study — hero
+   A 4-column label rail on the left and a 7-column measure from column five
+   for everything that reads.
+   -------------------------------------------------------------------------- */
+
+.studyhero_section {
+  position: relative;
+  padding: calc(var(--_spacing---static--spacing-18) + var(--_spacing---static--spacing-32)) 0 var(--_spacing---static--spacing-32);
+  background-color: var(--_color---bg--default--bg);
+}
+
+.studyhero_layout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--_spacing---gap--gap-md);
+}
+
+/* First line set in one column; the rest run the full measure. */
+.studyhero_title {
+  width: 100%;
+  margin-bottom: 5.5rem;
+  text-indent: var(--grid--step);
+}
+
+.studyhero_meta {
+  width: calc(var(--grid--step) * 3 + var(--grid--column));
+  gap: var(--_spacing---static--spacing-3);
+}
+
+.studyhero_meta_row {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: var(--_spacing---gap--gap-md);
+}
+
+.studyhero_meta_label {
+  flex-shrink: 0;
+  width: 6.25rem;
+  color: var(--_color---text--default--3);
+}
+
+.studyhero_meta_value {
+  flex: 1 1 0%;
+  min-width: 0;
+}
+
+.studyhero_standfirst {
+  width: calc(var(--grid--step) * 6 + var(--grid--column));
+  text-indent: var(--grid--step);
+}
+
+@media screen and (max-width: 991px) {
+  .studyhero_section {
+    padding: var(--_spacing---static--spacing-28) 0 var(--_spacing---static--spacing-20);
+  }
+
+  .studyhero_title {
+    margin-bottom: var(--_spacing---static--spacing-20);
+    text-indent: 0;
+  }
+
+  .studyhero_meta,
+  .studyhero_standfirst {
+    width: 100%;
+  }
+
+  .studyhero_standfirst {
+    margin-top: var(--_spacing---static--spacing-8);
+    text-indent: 0;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .studyhero_section {
+    padding-top: var(--_spacing---static--spacing-36);
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .studyhero_meta_row {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Case study — banner
+   The frame holds the crop and stays put; the picture inside it is taller than
+   the frame by the parallax travel, so the drift never uncovers an edge.
+   -------------------------------------------------------------------------- */
+
+.studybanner_section {
+  position: relative;
+  z-index: 0;
+  background-color: var(--_color---bg--default--bg);
+}
+
+.studybanner_layout {
+  position: relative;
+  display: block;
+  aspect-ratio: 1512 / 380;
+  overflow: clip;
+}
+
+.studybanner_img {
+  position: absolute;
+  top: -3.5rem;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: calc(100% + 7rem);
+  max-width: none;
+  object-fit: cover;
+}
+
+@media screen and (max-width: 767px) {
+  .studybanner_layout {
+    aspect-ratio: 3 / 2;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Case study — body
+   Blocks separated by a single hairline at the top, so stacked blocks never
+   double their lines. Prose sits one column in from the measure, five wide.
+   -------------------------------------------------------------------------- */
+
+.studybody_section {
+  position: relative;
+  z-index: 1;
+  padding: var(--_spacing---static--spacing-20) 0 0;
+  background-color: var(--_color---bg--default--bg);
+}
+
+.studybody_layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.studybody_block {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--_spacing---gap--gap-md);
+  padding: var(--_spacing---static--spacing-8) 0 var(--_spacing---static--spacing-20);
+  border-top: 1px solid var(--_color---outline--light);
+}
+
+.studybody_label {
+  width: calc(var(--grid--step) * 3 + var(--grid--column));
+}
+
+.studybody_body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--_spacing---gap--gap-md);
+  width: calc(var(--grid--step) * 6 + var(--grid--column));
+}
+
+.studybody_prose {
+  display: flex;
+  flex-direction: column;
+  gap: var(--_spacing---gap--gap-md);
+  width: calc(var(--grid--step) * 4 + var(--grid--column));
+  max-width: 100%;
+  margin-left: var(--grid--step);
+}
+
+/* Content (Rich Text) — paragraph spacing inside the prose. */
+.studybody_rich p {
+  margin-bottom: var(--_spacing---gap--gap-md);
+}
+
+/* Figures read as a table: the label on the left, the figure closing the
+   line on the right, a hairline between rows. */
+.studybody_table {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--_spacing---static--spacing-6);
+  border-bottom: 1px solid var(--_color---outline--light);
+}
+
+.studybody_metric {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--_spacing---gap--gap-md);
+  padding: var(--_spacing---inner--inner-md) 0;
+  border-top: 1px solid var(--_color---outline--light);
+}
+
+.studybody_metric_label {
+  flex: 1 1 0%;
+  min-width: 0;
+}
+
+.studybody_metric_value {
+  flex: none;
+  line-height: var(--_typography---line-height--title-4-compact);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.studybody_quote {
+  padding: var(--_spacing---static--spacing-12) 0;
+}
+
+.studybody_quote_text,
+.studybody_quote_source {
+  text-indent: var(--grid--step);
+}
+
+.studybody_quote_source {
+  margin-top: var(--_spacing---static--spacing-6);
+}
+
+/* Set in one column with the prose, but run out to the page margin: the full
+   measure, offset by the indent. */
+.studybody_figure {
+  width: 100%;
+  margin: 0 0 0 var(--grid--step);
+  padding: var(--_spacing---inner--inner-md) 0;
+}
+
+.studybody_figure_img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 844 / 474;
+  object-fit: cover;
+}
+
+@media screen and (max-width: 991px) {
+  .studybody_label {
+    width: 100%;
+    margin-bottom: var(--_spacing---static--spacing-6);
+  }
+
+  .studybody_body {
+    width: 100%;
+  }
+
+  .studybody_prose {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .studybody_quote_text,
+  .studybody_quote_source {
+    text-indent: 0;
+  }
+
+  .studybody_figure {
+    margin-left: 0;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .studybody_quote {
+    padding: var(--_spacing---static--spacing-8) 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Case study — next work
+   -------------------------------------------------------------------------- */
+
+.studynext_section {
+  position: relative;
+  z-index: 2;
+  padding: var(--_spacing---static--spacing-16) 0 6.25rem;
+  background-color: var(--_color---bg--default--bg);
+}
+
+.studynext_layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.studynext_head {
+  padding: var(--_spacing---inner--inner-md) 0;
+  border-bottom: 1px solid var(--_color---outline--default);
+}
+
+.studynext_link {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--_spacing---static--spacing-3);
+  color: var(--_color---text--default--1);
+  text-decoration: none;
+  transition: opacity 700ms cubic-bezier(0.33, 0.02, 0.18, 1);
+}
+
+.studynext_link:hover {
+  opacity: 0.55;
+}
+
+.studynext_link:focus-visible {
+  outline: 0.125rem solid var(--_color---interactive--secondary--idle);
+  outline-offset: 0.25rem;
+}
+
+.studynext_link_icon {
+  display: block;
+  flex-shrink: 0;
+  width: 0.9375rem;
+  height: 0.75rem;
+  fill: currentColor;
+}
+
+/* The row is set on its own twelve columns, inside its side padding. */
+.studynext_row {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--_spacing---gap--gap-md);
+  align-items: center;
+  padding: var(--_spacing---inner--inner-xl) var(--_spacing---inner--inner-md);
+  border-bottom: 1px solid var(--_color---outline--default);
+}
+
+.studynext_row_title {
+  grid-column: 1 / span 4;
+}
+
+.studynext_row_client {
+  grid-column: 5 / span 3;
+}
+
+.studynext_row_media {
+  grid-column: 8 / span 3;
+}
+
+.studynext_row_img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 348 / 232;
+  object-fit: cover;
+}
+
+.studynext_row_action {
+  grid-column: 11 / span 2;
+}
+
+@media screen and (max-width: 991px) {
+  .studynext_row {
+    padding: var(--_spacing---inner--inner-lg) 0;
+  }
+
+  .studynext_row_title,
+  .studynext_row_client {
+    grid-column: span 6;
+  }
+
+  .studynext_row_media {
+    grid-column: span 8;
+    margin-top: var(--_spacing---static--spacing-6);
+  }
+
+  .studynext_row_action {
+    grid-column: span 4;
+    align-items: flex-end;
+    margin-top: var(--_spacing---static--spacing-6);
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .studynext_head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--_spacing---gap--gap-md);
+  }
+
+  .studynext_row_title,
+  .studynext_row_client,
+  .studynext_row_media,
+  .studynext_row_action {
+    grid-column: span 12;
+  }
+
+  .studynext_row_action {
+    justify-content: flex-start;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Placeholder — page coming soon
+   -------------------------------------------------------------------------- */
+
+.soon_section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: var(--_color---bg--default--bg);
+}
+
+.soon_text {
+  width: 100%;
+  max-width: 33rem;
+  color: var(--_color---text--default--2);
+}
+
+/* --------------------------------------------------------------------------
+   EMBED — Global Page Codes · reduced motion
+   A reader who asks for reduced motion gets every state change at once: the
+   pictures stop growing on hover and fades resolve instantly. The GSAP motion
+   has its own reduced variants in script.js.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .button_main_element,
+  .button_main_text,
+  .button_main_arrow,
+  .nav_link,
+  .nav_logo,
+  .footer_nav_text,
+  .models_rail_link,
+  .specialize_img,
+  .specialize_caption,
+  .specialize_link,
+  .cases_img,
+  .featured_img,
+  .article_img,
+  .article_action,
+  .workdark_img,
+  .workdark_hint,
+  .projects_row_title,
+  .projects_row_client,
+  .projects_row_action,
+  .projects_preview,
+  .projects_preview_frame,
+  .accordion_toggle_icon,
+  .contact_value,
+  .studynext_link,
+  .form_input {
+    transition-duration: 1ms;
+  }
+}

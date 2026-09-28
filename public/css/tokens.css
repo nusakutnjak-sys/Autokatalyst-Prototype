@@ -1,0 +1,326 @@
+/* ==========================================================================
+   Autokatalyst — variables
+   The Povio core template's four variable collections, re-valued for this
+   project. In Webflow these are the Variables panel, not code: re-value the
+   existing variables, create the few marked CREATE, and delete this file.
+
+   Values are read from the Claude Design export. Anything marked CREATE does
+   not exist on the core template — HANDOFF.md says why each one is needed.
+
+   Breakpoint modes
+   The design steps its type sizes and its two largest section spacings at
+   the Webflow breakpoints, so those variables carry Tablet / Mobile
+   landscape / Mobile portrait values below — the same mechanism the
+   template already uses for radius.
+   ========================================================================== */
+
+:root {
+  /* ------------------------------------------------------------------------
+     default — container max-widths, radius, page grid
+     ------------------------------------------------------------------------ */
+
+  --max-width--main: 108rem;
+  --max-width--full: 100%;
+
+  --rounding--0: 0rem;
+  --rounding--sm: 0.5rem;
+  --rounding--md: 0.75rem;
+  --rounding--lg: 1rem;
+  --rounding--xl: 1.75rem;
+  --rounding--full: 9999px;
+
+  /* CREATE — the design sets indents and measures in whole columns of a
+     12-column page grid. One column, and one column plus its gutter. */
+  --grid--column: calc((min(100vw, var(--max-width--main)) - (var(--_spacing---margin--margin-sm) * 2) - (var(--_spacing---gap--gap-md) * 11)) / 12);
+  --grid--step: calc(var(--grid--column) + var(--_spacing---gap--gap-md));
+
+  /* ------------------------------------------------------------------------
+     color
+     ------------------------------------------------------------------------ */
+
+  --_color---bg--default--bg: #ffffff;
+  --_color---bg--default--1: #f1f3d6;
+  --_color---bg--default--2: #ddd99b;
+  --_color---bg--inverted--bg: #0b0b0b;
+  --_color---bg--inverted--1: #1b1b1c;
+  --_color---bg--inverted--2: #292c33;
+
+  --_color---outline--default: rgba(11, 11, 11, 0.2);
+  --_color---outline--inverted: rgba(247, 249, 227, 0.2);
+  /* CREATE — the lighter hairline the design uses where rows sit closer. */
+  --_color---outline--light: rgba(11, 11, 11, 0.14);
+
+  --_color---text--default--1: #0b0b0b;
+  --_color---text--default--2: rgba(11, 11, 11, 0.6);
+  --_color---text--default--3: rgba(11, 11, 11, 0.4);
+  --_color---text--inverted--1: #fefff1;
+  --_color---text--inverted--2: #f7f9e3;
+  --_color---text--inverted--3: rgba(254, 255, 241, 0.6);
+  --_color---text--brand--1: #a6a766;
+  --_color---text--brand--2: #ddd99b;
+  --_color---text--brand--3: #f1f3d6;
+
+  /* Solid control — ink ground, cream label. The design changes no colour on
+     hover or press; the arrow swap is the feedback. */
+  --_color---interactive--primary--on: #fefff1;
+  --_color---interactive--primary--idle: #0b0b0b;
+  --_color---interactive--primary--hover: #0b0b0b;
+  --_color---interactive--primary--active: #0b0b0b;
+  --_color---interactive--primary--on-disabled: rgba(254, 255, 241, 0.6);
+  --_color---interactive--primary--disabled: rgba(11, 11, 11, 0.4);
+
+  /* Olive control — also the focus ring colour across the site. */
+  --_color---interactive--secondary--on: #0b0b0b;
+  --_color---interactive--secondary--idle: #a6a766;
+  --_color---interactive--secondary--hover: #a6a766;
+  --_color---interactive--secondary--active: #a6a766;
+  --_color---interactive--secondary--on-disabled: rgba(11, 11, 11, 0.4);
+  --_color---interactive--secondary--disabled: rgba(166, 167, 102, 0.4);
+
+  /* Ghost control on a light ground — label and arrow only. */
+  --_color---interactive--outline--on: #0b0b0b;
+  --_color---interactive--outline--idle: #0b0b0b;
+  --_color---interactive--outline--hover: #0b0b0b;
+  --_color---interactive--outline--active: #0b0b0b;
+  --_color---interactive--outline--on-disabled: rgba(11, 11, 11, 0.4);
+  --_color---interactive--outline--disabled: rgba(11, 11, 11, 0.4);
+
+  /* Ghost control on a dark ground. */
+  --_color---interactive--outline-inverted--on: #f7f9e3;
+  --_color---interactive--outline-inverted--idle: #f7f9e3;
+  --_color---interactive--outline-inverted--hover: #f7f9e3;
+  --_color---interactive--outline-inverted--active: #f7f9e3;
+  --_color---interactive--outline-inverted--on-disabled: rgba(247, 249, 227, 0.4);
+  --_color---interactive--outline-inverted--disabled: rgba(247, 249, 227, 0.4);
+
+  /* Form fields — a filled field with no outline; focus changes nothing but
+     the caret. */
+  --_color---interactive--input--on: #0b0b0b;
+  --_color---interactive--input--idle: #f8f8f9;
+  --_color---interactive--input--hover: #f8f8f9;
+  --_color---interactive--input--active: #f8f8f9;
+  --_color---interactive--input--on-disabled: rgba(11, 11, 11, 0.4);
+  --_color---interactive--input--disabled: #f8f8f9;
+
+  --_color---info--success: #16a34a;
+  --_color---info--success-outline: #4ade81;
+  --_color---info--error: #d43f2b;
+  --_color---info--error-outline: #e85e4b;
+  --_color---info--warning: #f5880b;
+  --_color---info--warning-outline: #fb9724;
+
+  /* ------------------------------------------------------------------------
+     typography
+     ------------------------------------------------------------------------ */
+
+  --_typography---font--primary: "HW Cigars", "Tiempos Text", Georgia, serif;
+  --_typography---font--secondary: "Geist", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --_typography---font--tertiary: "Geist", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  /* The design sets its titles in the regular cut. */
+  --_typography---font-weight--title-normal: 400;
+  --_typography---font-weight--title-prominent-1: 600;
+  --_typography---font-weight--title-prominent-2: 700;
+  --_typography---font-weight--body-normal: 400;
+  --_typography---font-weight--body-prominent-1: 500;
+  --_typography---font-weight--body-prominent-2: 600;
+
+  --_typography---viewport--min: 24;
+  --_typography---viewport--max: 94.5;
+
+  /* Display sizes scale with the viewport on desktop, as the design does, and
+     step at the breakpoints below. */
+  --_typography---font-size--headline-1: min(9rem, 8.4656vw);
+  --_typography---line-height--headline-1: 1;
+  --_typography---letter-spacing--headline-1: -0.031em;
+
+  --_typography---font-size--headline-2: min(6.25rem, 5.8201vw);
+  --_typography---line-height--headline-2: 0.9;
+  --_typography---letter-spacing--headline-2: -0.034em;
+
+  --_typography---font-size--title-1: min(5.125rem, 4.7619vw);
+  --_typography---line-height--title-1: 1.1;
+  --_typography---letter-spacing--title-1: -0.0417em;
+
+  --_typography---font-size--title-2: 3rem;
+  --_typography---line-height--title-2: 1.1;
+  --_typography---letter-spacing--title-2: -0.0417em;
+
+  --_typography---font-size--title-3: 2.5rem;
+  --_typography---line-height--title-3: 1.2;
+  --_typography---letter-spacing--title-3: -0.02em;
+
+  --_typography---font-size--title-4: 1.625rem;
+  --_typography---line-height--title-4: 1.3;
+  --_typography---letter-spacing--title-4: -0.01em;
+
+  --_typography---font-size--title-5: 1.625rem;
+  --_typography---line-height--title-5: 1.3;
+  --_typography---letter-spacing--title-5: -0.01em;
+
+  --_typography---font-size--title-6: 1.5rem;
+  --_typography---line-height--title-6: 1.3;
+  --_typography---letter-spacing--title-6: -0.01em;
+
+  --_typography---font-size--body-1: 1.625rem;
+  --_typography---line-height--body-1: 1.2;
+  --_typography---letter-spacing--body-1: 0em;
+
+  --_typography---font-size--body-2: 1.125rem;
+  --_typography---line-height--body-2: 1.4;
+  --_typography---letter-spacing--body-2: 0em;
+
+  --_typography---font-size--body-3: 1rem;
+  --_typography---line-height--body-3: 1.6;
+  --_typography---letter-spacing--body-3: 0em;
+
+  --_typography---font-size--body-4: 1.625rem;
+  --_typography---line-height--body-4: 1.2;
+  --_typography---letter-spacing--body-4: -0.03em;
+
+  --_typography---font-size--label-1: 1rem;
+  --_typography---line-height--label-1: 1.4;
+  --_typography---letter-spacing--label-1: 0em;
+
+  --_typography---font-size--label-2: 0.875rem;
+  --_typography---line-height--label-2: 1.4;
+  --_typography---letter-spacing--label-2: 0.06em;
+
+  --_typography---font-size--label-3: 0.75rem;
+  --_typography---line-height--label-3: 1.35;
+  --_typography---letter-spacing--label-3: 0em;
+
+  /* CREATE — settings the design holds apart from their text style. Each one
+     changes a line break or a measured composition if snapped: the closing
+     headline is set tighter; the specialize list and the case titles run
+     looser than title-2; the Our Work titles are set more compactly than
+     title-1; the case-study figures sit tighter than title-4; the About lede
+     is tracked in slightly. */
+  --_typography---letter-spacing--headline-2-tight: -0.045em;
+  --_typography---line-height--title-1-compact: 1.05;
+  --_typography---letter-spacing--title-1-loose: -0.03em;
+  --_typography---line-height--title-2-loose: 1.2;
+  --_typography---letter-spacing--title-2-loose: -0.03em;
+  --_typography---line-height--title-4-compact: 1.2;
+  --_typography---letter-spacing--body-1-tight: -0.01em;
+
+  /* ------------------------------------------------------------------------
+     spacing
+     ------------------------------------------------------------------------ */
+
+  --_spacing---section--section-0: 0rem;
+  --_spacing---section--section-xs: 2.5rem;
+  --_spacing---section--section-sm: 5rem;
+  --_spacing---section--section-md: 7.5rem;
+  --_spacing---section--section-lg: 8.75rem;
+
+  --_spacing---inner--inner-0: 0rem;
+  --_spacing---inner--inner-xs: 0.5rem;
+  --_spacing---inner--inner-sm: 1rem;
+  --_spacing---inner--inner-md: 1.5rem;
+  --_spacing---inner--inner-lg: 2rem;
+  --_spacing---inner--inner-xl: 2.5rem;
+  --_spacing---inner--inner-2xl: 3rem;
+
+  --_spacing---gap--gap-0: 0rem;
+  --_spacing---gap--gap-2xs: 0.375rem;
+  --_spacing---gap--gap-xs: 0.5rem;
+  --_spacing---gap--gap-sm: 1rem;
+  --_spacing---gap--gap-md: 1.5rem;
+  --_spacing---gap--gap-lg: 2rem;
+  --_spacing---gap--gap-xl: 2.5rem;
+  --_spacing---gap--gap-2xl: 3rem;
+  --_spacing---gap--gap-3xl: 5rem;
+
+  /* margin-sm is the page gutter the container utilities apply. */
+  --_spacing---margin--margin-0: 0rem;
+  --_spacing---margin--margin-xs: 0.5rem;
+  --_spacing---margin--margin-sm: 1.5rem;
+  --_spacing---margin--margin-md: 2rem;
+  --_spacing---margin--margin-lg: 3rem;
+  --_spacing---margin--margin-xl: 5rem;
+
+  --_spacing---static--spacing-0: 0rem;
+  --_spacing---static--spacing-px: 0.0625rem;
+  --_spacing---static--spacing-0-5: 0.125rem;
+  --_spacing---static--spacing-1: 0.25rem;
+  --_spacing---static--spacing-1-5: 0.375rem;
+  --_spacing---static--spacing-2: 0.5rem;
+  --_spacing---static--spacing-2-5: 0.625rem;
+  --_spacing---static--spacing-3: 0.75rem;
+  --_spacing---static--spacing-3-5: 0.875rem;
+  --_spacing---static--spacing-4: 1rem;
+  --_spacing---static--spacing-5: 1.25rem;
+  --_spacing---static--spacing-6: 1.5rem;
+  --_spacing---static--spacing-7: 1.75rem;
+  --_spacing---static--spacing-8: 2rem;
+  --_spacing---static--spacing-9: 2.25rem;
+  --_spacing---static--spacing-10: 2.5rem;
+  --_spacing---static--spacing-11: 2.75rem;
+  --_spacing---static--spacing-12: 3rem;
+  --_spacing---static--spacing-14: 3.5rem;
+  --_spacing---static--spacing-16: 4rem;
+  --_spacing---static--spacing-18: 4.5rem;
+  --_spacing---static--spacing-20: 5rem;
+  --_spacing---static--spacing-24: 6rem;
+  --_spacing---static--spacing-28: 7rem;
+  --_spacing---static--spacing-32: 8rem;
+  --_spacing---static--spacing-36: 9rem;
+  --_spacing---static--spacing-40: 10rem;
+  --_spacing---static--spacing-44: 11rem;
+  --_spacing---static--spacing-48: 12rem;
+  --_spacing---static--spacing-52: 13rem;
+  --_spacing---static--spacing-56: 14rem;
+  --_spacing---static--spacing-60: 15rem;
+  --_spacing---static--spacing-64: 16rem;
+  --_spacing---static--spacing-72: 18rem;
+  --_spacing---static--spacing-80: 20rem;
+  --_spacing---static--spacing-96: 24rem;
+}
+
+/* --------------------------------------------------------------------------
+   Tablet mode — 991px
+   -------------------------------------------------------------------------- */
+
+@media screen and (max-width: 991px) {
+  :root {
+    --_typography---font-size--headline-1: 5rem;
+    --_typography---font-size--headline-2: 4rem;
+    --_typography---font-size--title-1: 3.25rem;
+    --_typography---font-size--title-2: 2.25rem;
+    --_typography---font-size--title-4: 1.375rem;
+    --_typography---font-size--title-5: 1.25rem;
+    --_typography---font-size--body-1: 1.25rem;
+    --_typography---font-size--body-4: 1.25rem;
+
+    --_spacing---section--section-md: 5rem;
+    --_spacing---section--section-lg: 5rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile landscape mode — 767px
+   -------------------------------------------------------------------------- */
+
+@media screen and (max-width: 767px) {
+  :root {
+    --_typography---font-size--headline-1: 3.5rem;
+    --_typography---font-size--headline-2: 2.75rem;
+    --_typography---font-size--title-1: 2.25rem;
+    --_typography---font-size--title-2: 1.75rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile portrait mode — 479px
+   -------------------------------------------------------------------------- */
+
+@media screen and (max-width: 479px) {
+  :root {
+    --_typography---font-size--headline-2: 2.25rem;
+    --_typography---font-size--title-3: 2rem;
+
+    --_spacing---section--section-md: 3.5rem;
+    --_spacing---section--section-lg: 3.5rem;
+  }
+}
