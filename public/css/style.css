@@ -3239,33 +3239,6 @@ html::-webkit-scrollbar {
   border-bottom: 1px solid var(--_color---outline--default);
 }
 
-.studynext_link {
-  display: inline-flex;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--_spacing---static--spacing-3);
-  color: var(--_color---text--default--1);
-  text-decoration: none;
-  transition: opacity 700ms cubic-bezier(0.33, 0.02, 0.18, 1);
-}
-
-.studynext_link:hover {
-  opacity: 0.55;
-}
-
-.studynext_link:focus-visible {
-  outline: 0.125rem solid var(--_color---interactive--secondary--idle);
-  outline-offset: 0.25rem;
-}
-
-.studynext_link_icon {
-  display: block;
-  flex-shrink: 0;
-  width: 0.9375rem;
-  height: 0.75rem;
-  fill: currentColor;
-}
-
 /* The row is set on its own twelve columns, inside its side padding. */
 .studynext_row {
   position: relative;
@@ -3391,7 +3364,6 @@ html::-webkit-scrollbar {
   .projects_preview_frame,
   .accordion_toggle_icon,
   .contact_value,
-  .studynext_link,
   .form_input {
     transition-duration: 1ms;
   }

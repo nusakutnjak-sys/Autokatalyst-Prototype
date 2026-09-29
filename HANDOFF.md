@@ -340,6 +340,12 @@ hidden. Nothing is pre-hidden in CSS either, so a failed script leaves every pag
   narrower than "Location". The label ran into its value on tablet and overlapped it on
   phones. The labels now use a fixed 6.25rem column below desktop, matching the case-study
   details, and stack above their values at 479px and below.
+- **Case study links**: only Our Work's first case opened the case study page. Every other
+  case card, including Metal Fabricator on the homepage, went to a placeholder. Every case
+  card now opens the case study page, as a stand-in until each case has its own page.
+- **Next Work**: its "Explore Our Work" link was a one-off with a dimming hover. It is now the
+  ghost Button Main, with the same arrow hover as every other button, and looks the same at
+  rest.
 - Links to the missing `V5.html#talk` / `V6.html#talk` now point to the page's own closing
   section.
 - The homepage case slides were mis-nested (`<article>` closed by `</a>`). That was fixed in
@@ -462,8 +468,9 @@ a **404 page** design (Vercel shows its default until then).
    alternative if you want the page heads to start higher on phones.
 2. **Galaxy statement on tablet** — now 36px (the system step). Say if you want 48px kept on
    tablet; it's one override.
-3. **Homepage case links** go to placeholder pages, as in the export, though case 1 has a real
-   page at `/case-study`.
+3. **Case study pages** — every case card opens the one designed case study (Metal
+   Fabricator) as a stand-in. In Webflow the page becomes the Case studies CMS template, so
+   each card links to its own item.
 4. **First-paint flash** — the skill forbids hiding content in CSS before the script runs, so
    on a cold first visit the page head can show for a frame before its entrance begins. In
    Webflow, GSAP loads in the head and the gap shrinks. A pre-hide with a timed fallback would

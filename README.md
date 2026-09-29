@@ -78,4 +78,6 @@ preview in `.claude/launch.json` serves the export at http://localhost:5501.
 - **The contact form is not wired.** Submitting is held so the static site never posts
   anywhere; connect a form service, or use Webflow's native form after the rebuild.
 - **Placeholder pages** (`/placeholder?p=…`) stand in for pages not designed yet.
+- **Case studies**: every case card opens the one designed case study (Metal Fabricator) as
+  a stand-in until each case has its own page.
 - Add a social sharing image and the production domain (see `HANDOFF.md` → Page metadata).
