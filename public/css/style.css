@@ -278,8 +278,7 @@ html::-webkit-scrollbar {
   .cases_visual:is(:hover, :focus-within) .button_main_text,
   .featured_card:is(:hover, :focus-within) .button_main_text,
   .article_card:is(:hover, :focus-within) .button_main_text,
-  .projects_row:is(:hover, :focus-within) .button_main_text,
-  .studynext_row:is(:hover, :focus-within) .button_main_text {
+  .caseslider_card:is(:hover, :focus-within) .button_main_text {
     translate: 1.6875rem 0;
   }
 
@@ -288,8 +287,7 @@ html::-webkit-scrollbar {
   .cases_visual:is(:hover, :focus-within) .button_main_arrow.is-lead,
   .featured_card:is(:hover, :focus-within) .button_main_arrow.is-lead,
   .article_card:is(:hover, :focus-within) .button_main_arrow.is-lead,
-  .projects_row:is(:hover, :focus-within) .button_main_arrow.is-lead,
-  .studynext_row:is(:hover, :focus-within) .button_main_arrow.is-lead {
+  .caseslider_card:is(:hover, :focus-within) .button_main_arrow.is-lead {
     translate: 0 0;
     opacity: 1;
   }
@@ -299,8 +297,7 @@ html::-webkit-scrollbar {
   .cases_visual:is(:hover, :focus-within) .button_main_arrow.is-trail,
   .featured_card:is(:hover, :focus-within) .button_main_arrow.is-trail,
   .article_card:is(:hover, :focus-within) .button_main_arrow.is-trail,
-  .projects_row:is(:hover, :focus-within) .button_main_arrow.is-trail,
-  .studynext_row:is(:hover, :focus-within) .button_main_arrow.is-trail {
+  .caseslider_card:is(:hover, :focus-within) .button_main_arrow.is-trail {
     translate: 1.5em 0;
     opacity: 0;
   }
@@ -472,7 +469,7 @@ html::-webkit-scrollbar {
   z-index: 0;
   height: 100vh;
   min-height: 100vh;
-  background-color: var(--_color---bg--default--bg);
+  background-color: var(--_color---bg--default--2);
   overflow: clip;
 }
 
@@ -527,7 +524,7 @@ html::-webkit-scrollbar {
   width: min(3.62269rem, 3.83353vw);
   height: 100%;
   flex: none;
-  background-color: var(--_color---bg--default--1);
+  background-color: var(--_color---bg--default--light);
   transform-origin: bottom right;
 }
 
@@ -712,20 +709,26 @@ html::-webkit-scrollbar {
 
 /* --------------------------------------------------------------------------
    Home — Work (flexible ways to work together)
+   The statement, the way on under it, then the three engagement cards. The
+   cards are shared: the Expertise page sets the same work_grid.
    -------------------------------------------------------------------------- */
 
-/* Deep foot: the section below rides up over this one, so the composition
-   needs room to travel clear of the fold before it is covered. */
 .work_section {
   position: relative;
   z-index: 1;
-  padding: var(--_spacing---section--section-lg) 0 var(--_spacing---static--spacing-32);
-  background-color: var(--_color---bg--default--bg);
+  padding: var(--_spacing---static--spacing-24) 0 var(--_spacing---section--section-md);
+  background-color: var(--_color---bg--default--light);
   overflow: clip;
 }
 
+/* The title with its way on 40px under it (work_intro, gap-xl), then the
+   cards a fuller step below. */
 .work_layout {
   gap: var(--_spacing---static--spacing-24);
+}
+
+.work_title {
+  font-size: var(--_typography---font-size--title-2-large);
 }
 
 .work_title_line {
@@ -736,34 +739,55 @@ html::-webkit-scrollbar {
   margin-left: var(--grid--step);
 }
 
-/* Three cards on the hairline grid; each opens with its icon, carries the
-   question a client arrives with, and closes on the offer that answers it. */
 .work_grid {
-  border-top: 1px solid var(--_color---outline--default);
-  border-bottom: 1px solid var(--_color---outline--default);
-  border-left: 1px solid var(--_color---outline--default);
+  gap: var(--_spacing---gap--gap-md);
 }
 
+/* A khaki card: the photograph across the top, then the offer, the question
+   or promise it answers, the detail and the control. */
 .work_card {
   position: relative;
   flex: 1 1 0%;
   min-width: 0;
-  gap: var(--_spacing---gap--gap-2xl);
-  min-height: 27.5rem;
-  padding: var(--_spacing---inner--inner-xl);
-  border-right: 1px solid var(--_color---outline--default);
+  background-color: var(--_color---bg--default--2);
 }
 
-.work_card_icon {
-  display: block;
-  width: 4rem;
-  aspect-ratio: 1 / 1;
+/* The photograph sits under a pattern of bars in the card's own colour; the
+   gaps between the bars show the picture through. */
+.work_card_media {
+  position: relative;
   flex: none;
+  height: 17.5rem;
+  overflow: clip;
 }
 
-.work_card_label {
-  width: 15rem;
-  max-width: 100%;
+.work_card_image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.work_card_pattern {
+  fill: var(--_color---bg--default--2);
+  shape-rendering: crispEdges;
+  clip-path: inset(0 0 0 0);
+}
+
+/* The photograph grows about its own centre as the pattern leaves. */
+.work_card_image {
+  transform-origin: center;
+}
+
+.work_card_label,
+.work_card_head {
+  color: var(--_color---text--default--1);
+}
+
+.work_card_content {
+  flex: 1 1 auto;
+  gap: var(--_spacing---gap--gap-md);
+  padding: var(--_spacing---inner--inner-lg);
 }
 
 .work_card_text {
@@ -776,169 +800,305 @@ html::-webkit-scrollbar {
   margin-top: auto;
 }
 
-.work_action {
-  margin-top: calc(var(--_spacing---static--spacing-8) * -1);
-}
-
 @media screen and (max-width: 991px) {
   .work_section {
-    padding-bottom: var(--_spacing---section--section-lg);
+    padding: var(--_spacing---section--section-lg) 0;
+  }
+
+  .work_layout {
+    gap: var(--_spacing---static--spacing-12);
   }
 
   .work_title_line.is-lead {
     margin-left: 0;
   }
 
-  .work_action {
-    margin-top: calc(var(--_spacing---static--spacing-8) - var(--_spacing---static--spacing-20));
+  .work_card_media {
+    height: 12.5rem;
+  }
+
+  .work_card_content {
+    padding: var(--_spacing---inner--inner-md);
   }
 }
 
 @media screen and (max-width: 767px) {
   .work_grid {
     flex-direction: column;
-    border-right: 1px solid var(--_color---outline--default);
   }
 
   .work_card {
     flex: none;
-    gap: var(--_spacing---gap--gap-lg);
-    min-height: 0;
-    border-right: 0;
-    border-bottom: 1px solid var(--_color---outline--default);
+  }
+
+  .work_card_media {
+    height: 15rem;
+  }
+}
+
+/* EMBED — Global Page Codes · parent-state descendant selectors.
+   Hovering a work card (or focusing its link) turns it burgundy with light
+   type, and its pattern takes the same colour while it is wiped away from
+   the left, as the photograph under it grows a tenth. The wipe only runs one
+   way: leaving, the script sets is-returning and the pattern wipes back in
+   from the left rather than retracing its path. */
+@media (prefers-reduced-motion: no-preference) {
+  .work_card,
+  .work_card_pattern,
+  .work_card_label,
+  .work_card_head,
+  .work_card_text {
+    transition: background-color 420ms cubic-bezier(0.33, 0.02, 0.18, 1),
+      fill 420ms cubic-bezier(0.33, 0.02, 0.18, 1),
+      color 420ms cubic-bezier(0.33, 0.02, 0.18, 1);
+  }
+
+  .work_card_pattern {
+    transition: fill 420ms cubic-bezier(0.33, 0.02, 0.18, 1);
+  }
+
+  .work_card_pattern.is-returning {
+    animation: work-pattern-return 575ms cubic-bezier(0.33, 0.02, 0.18, 1) both;
+  }
+
+  .work_card_image {
+    transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .work_card:is(:hover, :focus-within) {
+    background-color: var(--_color---bg--brand--1);
+  }
+
+  .work_card:is(:hover, :focus-within) .work_card_pattern {
+    fill: var(--_color---bg--brand--1);
+    clip-path: inset(0 0 0 100%);
+  }
+
+  .work_card:is(:hover, :focus-within) .work_card_image {
+    transform: scale(1.1);
+  }
+
+  .work_card:is(:hover, :focus-within) .work_card_label,
+  .work_card:is(:hover, :focus-within) .work_card_head {
+    color: var(--_color---text--inverted--1);
+  }
+
+  .work_card:is(:hover, :focus-within) .work_card_text {
+    color: var(--_color---text--inverted--3);
+  }
+
+  .work_card:is(:hover, :focus-within) .button_main_element.is-ghost {
+    color: var(--_color---interactive--outline-inverted--on);
+  }
+}
+
+/* Only the way out is a transition; the way back in is the keyframes. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .work_card:is(:hover, :focus-within) .work_card_pattern {
+    transition: fill 420ms cubic-bezier(0.33, 0.02, 0.18, 1),
+      clip-path 575ms cubic-bezier(0.33, 0.02, 0.18, 1);
+  }
+}
+
+@keyframes work-pattern-return {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
   }
 }
 
 /* --------------------------------------------------------------------------
-   Home — Galaxy
-   A headline and control held still at the centre, with a sparse stream of
-   pictures moving up past them. The canvas clips; the tile is what travels.
+   Home — Differentiator
+   The statement and its supporting line, and under them a bar eight
+   columns wide: the tailored solution (traditional consulting) in burgundy,
+   proven approaches (established solutions) in khaki. On a screen at least
+   992px wide and 540px tall the section
+   holds once it is centred on the screen, gliding to a stop rather than
+   stopping dead, while the halves slide in, shrinking as they go, and comb
+   through each other as stripes, covering their labels; the block turns
+   dark as the button's label comes in on it, and it shrinks on into the
+   dark button on its own centre.
+   Anywhere else the bar rests in its two halves with the button under it.
    -------------------------------------------------------------------------- */
 
-.galaxy_section {
+.differ_section {
   position: relative;
   z-index: 1;
+  padding-top: var(--_spacing---section--section-lg);
+  padding-bottom: var(--_spacing---section--section-md);
   background-color: var(--_color---bg--default--bg);
   overflow: clip;
 }
 
-.galaxy_layout {
+/* Live, the button forms on the bar's centre, and the bar's height under it
+   is room enough below the section; the section also gives back part of the
+   glide's travel, so the button sits a little closer to what follows. */
+.differ_section.is-live {
+  padding-bottom: 0;
+  margin-bottom: calc(var(--_spacing---static--spacing-10) * -1);
+}
+
+.differ_layout {
+  gap: var(--_spacing---static--spacing-14);
+}
+
+/* The statement runs ten columns wide, one column of margin each side, a
+   size up from title-2; the bar sits under it at eight. */
+.differ_title {
+  width: calc(var(--grid--step) * 9 + var(--grid--column));
+  font-size: var(--_typography---font-size--title-2-large);
+}
+
+.differ_text {
+  color: var(--_color---text--default--2);
+}
+
+/* At rest the button sits under the bar. */
+.differ_stage {
   position: relative;
-  min-height: 46.25rem;
-}
-
-.galaxy_content {
-  position: absolute;
-  top: 42%;
-  right: 0;
-  left: 0;
-  z-index: 1;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--_spacing---gap--gap-md);
-  transform: translateY(-50%);
-}
-
-.galaxy_statement {
-  width: calc(var(--grid--step) * 4 + var(--grid--column));
-}
-
-.galaxy_aside {
-  width: calc(var(--grid--step) * 3 + var(--grid--column));
-}
-
-/* A hairline above the link, running the note's full measure. */
-.galaxy_action {
-  margin-top: var(--_spacing---static--spacing-8);
-  padding-top: var(--_spacing---inner--inner-md);
-  border-top: 1px solid var(--_color---outline--default);
-}
-
-/* Position is owned by the stream, so a tile declares only its place in the
-   scatter and its size. Two grounds, dealt unevenly so no reading of the
-   scatter makes a pattern. */
-.galaxy_tile {
-  position: absolute;
-  overflow: clip;
-  will-change: transform;
-}
-
-.galaxy_tile_media {
   width: 100%;
-  height: 100%;
-  background-color: var(--_color---bg--default--1);
+  gap: var(--_spacing---static--spacing-12);
 }
 
-.galaxy_tile_media.is-khaki {
+.differ_band {
+  position: relative;
+  width: calc(var(--grid--step) * 7 + var(--grid--column));
+}
+
+.differ_half {
+  position: relative;
+  z-index: 2;
+  flex: none;
+  width: 50%;
+  height: 11rem;
+  padding: 0 var(--_spacing---inner--inner-sm);
+}
+
+.differ_half.is-left {
+  background-color: var(--_color---bg--brand--1);
+  color: var(--_color---text--inverted--1);
+}
+
+.differ_half.is-right {
+  background-color: var(--_color---bg--default--2);
+  color: var(--_color---text--default--1);
+}
+
+/* Live, the stripes carry the colour and the halves only carry the labels. */
+.differ_half.is-live {
+  background-color: transparent;
+}
+
+.differ_label {
+  font-size: var(--_typography---font-size--title-3-small);
+  text-align: center;
+}
+
+/* The label with, a little under it, the kind of offer it stands for, in
+   the sans and the half's quieter text colour. */
+.differ_copy {
+  gap: var(--_spacing---static--spacing-3);
+}
+
+.differ_note {
+  color: var(--_color---text--default--2);
+  text-align: center;
+}
+
+.differ_note.is-inverse {
+  color: var(--_color---text--inverted--3);
+}
+
+/* Live, the button waits on the bar's centre under the stripes, where the
+   block shrinks into it. */
+.differ_cta.is-live {
+  position: absolute;
+  inset: 0;
+}
+
+/* Four stripes, generated in two layers: under the labels each half's own
+   ground, and over them the crossing, where the two colours overlap. The
+   crossing shrinks to the button's height, centred on the bar. */
+.differ_rows {
+  z-index: 1;
+  margin: auto 0;
+}
+
+.differ_rows.is-cross {
+  z-index: 3;
+}
+
+.differ_row {
+  position: relative;
+  flex: 1 1 0;
+}
+
+.differ_seg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+
+.differ_seg.is-left {
+  right: 50%;
+  left: 0;
+  background-color: var(--_color---bg--brand--1);
+}
+
+.differ_seg.is-right {
+  right: 0;
+  left: 50%;
   background-color: var(--_color---bg--default--2);
 }
 
-.galaxy_tile.is-01 { left: 3.5%; top: 10%; width: 4.75rem; height: 9.5rem; }
-.galaxy_tile.is-02 { left: 64%; top: 14%; width: 6rem; height: 6rem; }
-.galaxy_tile.is-04 { left: 85.5%; top: 42%; width: 3.75rem; height: 7.5rem; }
-.galaxy_tile.is-05 { left: 9%; top: 62%; width: 7.5rem; height: 3.75rem; }
-.galaxy_tile.is-06 { left: 72%; top: 70%; width: 5.25rem; height: 5.25rem; }
-.galaxy_tile.is-07 { left: 41%; top: 87%; width: 5.75rem; height: 2.875rem; }
-.galaxy_tile.is-09 { left: 18%; top: 76%; width: 3.75rem; height: 7.5rem; }
-.galaxy_tile.is-11 { left: 78%; top: 88%; width: 6rem; height: 3rem; }
-
-/* Five pictures, scaled back: two are withheld rather than the whole scatter
-   shrunk, so the spacing stays open. */
-@media screen and (max-width: 991px) {
-  .galaxy_layout {
-    min-height: 36rem;
-  }
-
-  .galaxy_content {
-    flex-direction: column;
-    gap: var(--_spacing---gap--gap-2xl);
-  }
-
-  .galaxy_statement {
-    width: 100%;
-  }
-
-  .galaxy_aside {
-    width: 100%;
-    max-width: 25rem;
-  }
-
-  .galaxy_tile.is-06,
-  .galaxy_tile.is-09,
-  .galaxy_tile.is-11 {
-    display: none;
-  }
-
-  .galaxy_tile.is-01 { width: 4rem; height: 8rem; }
-  .galaxy_tile.is-02 { width: 4.75rem; height: 4.75rem; }
-  .galaxy_tile.is-04 { width: 3rem; height: 6rem; }
-  .galaxy_tile.is-05 { width: 6rem; height: 3rem; }
-  .galaxy_tile.is-07 { width: 4.75rem; height: 2.375rem; }
+/* A stripe of the crossing starts as nothing on the bar's centre, in the
+   colour on top there: burgundy on the first and third, khaki on the second
+   and fourth. */
+.differ_seg.is-cross {
+  right: 50%;
+  left: 50%;
 }
 
-/* Three pictures, held clear of the typography. */
-@media screen and (max-width: 767px) {
-  .galaxy_layout {
-    min-height: 32rem;
-  }
+/* Inside each stripe of the crossing, the dark it turns. */
+.differ_seg.is-dark {
+  right: 0;
+  left: 0;
+  background-color: var(--_color---bg--inverted--bg);
+}
 
-  .galaxy_tile.is-02,
-  .galaxy_tile.is-04 {
-    display: none;
-  }
+/* Over the forming block, a copy of the button's label and arrow comes in
+   before the button itself takes over; it is laid out as the button lays
+   out its own, on the bar's centre. */
+.differ_face {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--_spacing---static--spacing-3);
+  color: var(--_color---interactive--primary--on);
+}
 
-  .galaxy_tile.is-09,
-  .galaxy_tile.is-11 {
-    display: block;
+/* EMBED — Global Page Codes · between-breakpoint query. On a small desktop
+   (a 13-inch laptop's window) the statement takes the full measure, so it
+   keeps to three lines. */
+@media screen and (max-width: 1279px) {
+  .differ_title {
+    width: 100%;
   }
+}
 
-  .galaxy_tile.is-01 { left: 2%; top: 6%; width: 3.5rem; height: 7rem; }
-  .galaxy_tile.is-05 { left: 8%; top: 64%; width: 5.75rem; height: 2.875rem; }
-  .galaxy_tile.is-07 { left: 58%; top: 28%; width: 4.5rem; height: 4.5rem; }
-  .galaxy_tile.is-09 { left: 66%; top: 84%; width: 3rem; height: 6rem; }
-  .galaxy_tile.is-11 { left: 68%; top: 40%; width: 5rem; height: 2.5rem; }
+/* Tablet and below, the bar takes the full measure too. */
+@media screen and (max-width: 991px) {
+  .differ_band {
+    width: 100%;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -1345,57 +1505,36 @@ html::-webkit-scrollbar {
 }
 
 /* --------------------------------------------------------------------------
-   About — statement and principles
-   A full-measure statement, then three four-column principles walking down
-   and across the grid, each a fixed step below the one before it.
+   About — hero
+   The page title on the left, and under it the account of how the firm
+   works on the last five columns, in two groups of two paragraphs.
    -------------------------------------------------------------------------- */
 
-/* The statement sits spacing-32 below the nav band (spacing-18), and the foot
-   leaves room for the credo band's lift. */
+/* The title sits spacing-32 below the nav band (spacing-18). */
 .about_section {
   position: relative;
   z-index: 0;
-  padding: calc(var(--_spacing---static--spacing-18) + var(--_spacing---static--spacing-32)) 0 var(--_spacing---static--spacing-56);
-  background-color: var(--_color---bg--default--bg);
+  padding: calc(var(--_spacing---static--spacing-18) + var(--_spacing---static--spacing-32)) 0 var(--_spacing---static--spacing-32);
+  background-color: var(--_color---bg--default--light);
   overflow: clip;
 }
 
 .about_layout {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: var(--_spacing---gap--gap-md);
+  gap: var(--_spacing---static--spacing-10);
 }
 
-.about_statement {
-  width: 100%;
-  margin-bottom: var(--_spacing---static--spacing-32);
-}
-
-.about_statement_line {
+.about_title_line {
   display: block;
 }
 
-.about_statement_line.is-lead {
-  padding-left: var(--grid--step);
+.about_body {
+  align-self: flex-end;
+  width: calc(var(--grid--step) * 4 + var(--grid--column));
+  gap: var(--_spacing---static--spacing-16);
 }
 
-.about_principle {
-  width: calc(var(--grid--step) * 3 + var(--grid--column));
-}
-
-/* The stagger is a fixed step, kept off-scale to match the design (listed in
-   the handoff), so the diagonal holds whatever the type does. */
-.about_principle.is-2 {
-  margin-top: 8.5625rem;
-}
-
-.about_principle.is-3 {
-  margin-top: 17.125rem;
-}
-
-.about_principle_text {
-  color: var(--_color---text--default--2);
+.about_group {
+  gap: var(--_spacing---gap--gap-md);
 }
 
 @media screen and (max-width: 991px) {
@@ -1403,17 +1542,16 @@ html::-webkit-scrollbar {
     padding: var(--_spacing---static--spacing-36) 0 var(--_spacing---static--spacing-20);
   }
 
-  .about_statement_line.is-lead {
-    padding-left: 0;
+  .about_body {
+    width: calc(var(--grid--step) * 7 + var(--grid--column));
+    gap: var(--_spacing---static--spacing-10);
   }
+}
 
-  .about_principle {
+@media screen and (max-width: 767px) {
+  .about_body {
+    align-self: stretch;
     width: 100%;
-  }
-
-  .about_principle.is-2,
-  .about_principle.is-3 {
-    margin-top: var(--_spacing---static--spacing-10);
   }
 }
 
@@ -1498,8 +1636,12 @@ html::-webkit-scrollbar {
   background-color: var(--_color---bg--default--bg);
 }
 
-.figures_lede {
+.figures_intro {
   width: calc(var(--grid--step) * 3 + var(--grid--column));
+  gap: var(--_spacing---gap--gap-xl);
+}
+
+.figures_lede {
   letter-spacing: var(--_typography---letter-spacing--body-1-tight);
 }
 
@@ -1547,7 +1689,7 @@ html::-webkit-scrollbar {
     gap: var(--_spacing---gap--gap-md);
   }
 
-  .figures_lede,
+  .figures_intro,
   .figures_list {
     width: 100%;
   }
@@ -1565,10 +1707,12 @@ html::-webkit-scrollbar {
    Collaboration — hero
    -------------------------------------------------------------------------- */
 
+/* Holds its plane while the models section rises over it. */
 .collabhero_section {
   position: relative;
+  z-index: 0;
   padding: calc(var(--_spacing---static--spacing-18) + var(--_spacing---static--spacing-32)) 0 var(--_spacing---static--spacing-32);
-  background-color: var(--_color---bg--default--bg);
+  background-color: var(--_color---bg--default--light);
 }
 
 .collabhero_title_line {
@@ -1612,12 +1756,15 @@ html::-webkit-scrollbar {
 /* --------------------------------------------------------------------------
    Collaboration — models
    The models run in the last nine columns: number and title on the left four,
-   the motif tile on the right four, the detail rows across all nine beneath.
+   the picture on the right four, the detail rows across all nine beneath. On
+   a desktop each picture closes on its title as the model reaches the top
+   band (Collaboration — the models' pictures, in the script).
    -------------------------------------------------------------------------- */
 
 .models_section {
   position: relative;
-  padding: 0 0 7.5rem;
+  z-index: 1;
+  padding: var(--_spacing---static--spacing-10) 0 7.5rem;
   background-color: var(--_color---bg--default--bg);
 }
 
@@ -1645,7 +1792,9 @@ html::-webkit-scrollbar {
 }
 
 /* Each label sticks from its own model to the end of the group, one line
-   below the label before it, so the set collects into a stack. */
+   below the label before it, so the set collects into a stack. Each also
+   keeps the lines of the labels after it free below itself, so where the
+   group ends and pushes them all up they stay a stack and never overlap. */
 .models_rail_link {
   grid-column: 1;
   grid-row: 1 / -1;
@@ -1653,6 +1802,7 @@ html::-webkit-scrollbar {
   justify-self: start;
   position: sticky;
   top: var(--_spacing---static--spacing-18);
+  margin-bottom: calc((var(--_typography---font-size--body-3) * var(--_typography---line-height--body-3) + var(--_spacing---static--spacing-2)) * 2);
   color: var(--_color---text--default--1);
   text-decoration: none;
   pointer-events: auto;
@@ -1662,11 +1812,13 @@ html::-webkit-scrollbar {
 .models_rail_link.is-2 {
   grid-row: 2 / -1;
   top: calc(var(--_spacing---static--spacing-18) + var(--_typography---font-size--body-3) * var(--_typography---line-height--body-3) + var(--_spacing---static--spacing-2));
+  margin-bottom: calc(var(--_typography---font-size--body-3) * var(--_typography---line-height--body-3) + var(--_spacing---static--spacing-2));
 }
 
 .models_rail_link.is-3 {
   grid-row: 3 / -1;
   top: calc(var(--_spacing---static--spacing-18) + (var(--_typography---font-size--body-3) * var(--_typography---line-height--body-3) + var(--_spacing---static--spacing-2)) * 2);
+  margin-bottom: 0;
 }
 
 .models_rail_link.is-dimmed {
@@ -1686,9 +1838,15 @@ html::-webkit-scrollbar {
   grid-column: 1 / -1;
   grid-row: 1;
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
+  flex-direction: column;
   gap: var(--_spacing---gap--gap-md);
+}
+
+/* Live, the model is held at its starting height and its content sits on
+   the foot of it, so as the picture shrinks the number and title stay put
+   and the rows rise under them. */
+.model_item.is-live {
+  justify-content: flex-end;
 }
 
 .model_item.is-2 {
@@ -1699,51 +1857,71 @@ html::-webkit-scrollbar {
   grid-row: 3;
 }
 
-/* The track is the sticky boundary: exactly as tall as the row the tile sets,
-   so the number and title release where the tile ends. */
-.model_headtrack {
-  align-self: stretch;
+/* The number and title on the left, the picture held to the right edge, so
+   it shrinks towards its top right corner. */
+.model_top {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--_spacing---gap--gap-md);
+}
+
+.model_head {
+  display: flex;
+  flex-direction: column;
   width: calc(var(--grid--step) * 3 + var(--grid--column));
   margin-left: calc(var(--grid--step) * 3);
 }
 
-.model_head {
-  position: sticky;
-  top: var(--_spacing---static--spacing-18);
-  display: flex;
-  flex-direction: column;
+.model_number {
+  color: var(--_color---text--brand--1);
 }
 
 .model_title {
   margin-top: var(--_spacing---static--spacing-8);
 }
 
+/* The homepage's pictures and patterns, set upright; no hover here. */
 .model_media {
+  position: relative;
+  flex: none;
   width: calc(var(--grid--step) * 3 + var(--grid--column));
-  margin-left: var(--grid--step);
-  background-color: var(--_color---bg--default--1);
+  aspect-ratio: 472 / 580;
+  margin-left: auto;
+  overflow: clip;
 }
 
-.model_tile {
+.model_img {
   display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: 1 / 1;
+  height: 100%;
   object-fit: cover;
 }
 
+.model_pattern {
+  fill: var(--_color---bg--default--2);
+  shape-rendering: crispEdges;
+}
+
+/* The rows, then the way on to a conversation under them. */
 .model_rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--_spacing---static--spacing-10);
   width: calc(var(--grid--step) * 8 + var(--grid--column));
-  margin-top: var(--_spacing---static--spacing-6);
   margin-left: calc(var(--grid--step) * 3);
 }
 
 /* Accordion List / Accordion Item — the template components, restyled. One
    row open per model; the group holds its tallest height so nothing below
    moves when the open row changes. */
+/* The group sits in the rows' flex column; a flex item's minimum height is
+   auto, which GSAP can't hold the group from, so it starts at zero and the
+   script raises it to the tallest row. */
 .accordion_list {
   display: flex;
   flex-direction: column;
+  min-height: 0;
   border-bottom: 1px solid var(--_color---outline--default);
 }
 
@@ -1814,15 +1992,19 @@ html::-webkit-scrollbar {
   color: var(--_color---text--default--2);
 }
 
+/* The list in the sans at 18px, unmarked, a small gap between the lines. */
 .model_detail_list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--_spacing---static--spacing-2);
   width: calc((100% - var(--_spacing---gap--gap-md) * 8) / 9 * 4 + var(--_spacing---gap--gap-md) * 3);
   margin: 0;
-  padding: 0 0 0 1.125rem;
-  list-style: disc outside;
+  padding: 0;
+  list-style: none;
 }
 
 .model_detail_item {
-  color: var(--_color---text--default--2);
+  color: var(--_color---text--default--1);
 }
 
 @media screen and (max-width: 991px) {
@@ -1836,18 +2018,12 @@ html::-webkit-scrollbar {
     grid-row: auto;
   }
 
-  .model_headtrack {
-    align-self: auto;
+  .model_head,
+  .model_media {
     width: calc(var(--grid--step) * 5 + var(--grid--column));
-    margin-left: 0;
   }
 
   .model_head {
-    position: static;
-  }
-
-  .model_media {
-    width: calc(var(--grid--step) * 5 + var(--grid--column));
     margin-left: 0;
   }
 
@@ -1864,7 +2040,11 @@ html::-webkit-scrollbar {
     gap: var(--_spacing---gap--gap-md);
   }
 
-  .model_headtrack,
+  .model_top {
+    flex-direction: column;
+  }
+
+  .model_head,
   .model_media {
     width: 100%;
   }
@@ -2350,28 +2530,16 @@ html::-webkit-scrollbar {
 
 /* --------------------------------------------------------------------------
    Private Equity — hero
-   The title across the full grid, the motif on the first six columns and the
-   standfirst on the last four.
+   The same layout as the Collaboration hero: the title across the grid, its
+   first line one step in, and the standfirst under it on columns 8 to 12.
    -------------------------------------------------------------------------- */
 
 /* Holds its plane while the help section rises over it. */
 .pehero_section {
   position: relative;
   z-index: 0;
-  padding: calc(var(--_spacing---static--spacing-18) + var(--_spacing---static--spacing-32)) 0 var(--_spacing---static--spacing-28);
-  background-color: var(--_color---bg--default--bg);
-}
-
-.pehero_layout {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: var(--_spacing---static--spacing-32) var(--_spacing---gap--gap-md);
-}
-
-.pehero_title {
-  width: 100%;
+  padding: calc(var(--_spacing---static--spacing-18) + var(--_spacing---static--spacing-32)) 0 var(--_spacing---static--spacing-32);
+  background-color: var(--_color---bg--default--light);
 }
 
 .pehero_title_line {
@@ -2382,39 +2550,31 @@ html::-webkit-scrollbar {
   padding-left: var(--grid--step);
 }
 
-.pehero_media {
-  width: calc(var(--grid--step) * 5 + var(--grid--column));
-  overflow: clip;
-}
-
-.pehero_img {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 720 / 359;
-  object-fit: cover;
-}
-
 .pehero_standfirst {
-  width: calc(var(--grid--step) * 3 + var(--grid--column));
+  width: calc(var(--grid--step) * 4 + var(--grid--column));
+  margin-top: var(--_spacing---static--spacing-10);
+  margin-left: calc(var(--grid--step) * 7);
 }
 
 @media screen and (max-width: 991px) {
   .pehero_section {
-    padding: var(--_spacing---static--spacing-36) 0 var(--_spacing---static--spacing-20);
-  }
-
-  .pehero_layout {
-    row-gap: var(--_spacing---static--spacing-20);
+    padding: var(--_spacing---static--spacing-28) 0 var(--_spacing---static--spacing-20);
   }
 
   .pehero_title_line.is-lead {
     padding-left: 0;
   }
 
-  .pehero_media,
   .pehero_standfirst {
     width: 100%;
+    margin-top: var(--_spacing---static--spacing-8);
+    margin-left: 0;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .pehero_section {
+    padding-top: var(--_spacing---static--spacing-36);
   }
 }
 
@@ -2473,235 +2633,176 @@ html::-webkit-scrollbar {
 }
 
 /* --------------------------------------------------------------------------
-   Private Equity — relevant work
-   A typographic table of projects on the page grid. At rest every row is at
-   full strength; once the reader is in the list the others recede, and a
-   picture of the row in focus follows the pointer in the three columns the
-   table holds clear for it.
+   Relevant work — the Expertise page and the case study page
+   The title and its way on, then the case studies as a slider: a track of
+   dark cards, the summary on the left of each and its picture on the right,
+   running from the page margin off the right edge of the screen. Each card
+   is a link to its case study. The script (Case slider) lets the track be
+   dragged, swiped or moved sideways on a trackpad and loops it. Without the
+   script the track is a native horizontal scroller.
    -------------------------------------------------------------------------- */
 
-.pecases_section {
+.relevant_section {
   position: relative;
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--_spacing---gap--gap-2xl);
   padding: var(--_spacing---static--spacing-20) 0 var(--_spacing---static--spacing-32);
   background-color: var(--_color---bg--default--bg);
 }
 
-.pecases_head {
-  padding: var(--_spacing---inner--inner-md) 0 var(--_spacing---static--spacing-24);
+/* The title row closes on a hairline, the width of the page grid. */
+.relevant_head {
+  padding: var(--_spacing---inner--inner-md) 0;
+  border-bottom: 1px solid var(--_color---outline--default);
 }
 
-.projects_list {
+/* The track runs the full width of the screen; its first card starts on the
+   page margin, wherever the centred page grid puts it. */
+.caseslider_wrap {
+  width: 100%;
+  overflow: clip;
+}
+
+.caseslider_list {
   position: relative;
   display: flex;
-  flex-direction: column;
-  border-bottom: 1px solid var(--_color---outline--light);
+  padding-left: max(var(--_spacing---margin--margin-sm), calc((100% - var(--max-width--main)) / 2 + var(--_spacing---margin--margin-sm)));
+  overflow-x: auto;
 }
 
-.projects_row {
+/* Live, the script moves the slides; the track only takes the gesture. */
+.caseslider_list.is-live {
+  overflow: visible;
+  cursor: grab;
+  touch-action: pan-y;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.caseslider_list.is-dragging {
+  cursor: grabbing;
+}
+
+/* The gutter is the slide's own, so every slide is one card and one gap. */
+.caseslider_item {
+  flex: none;
+  padding-right: var(--_spacing---gap--gap-md);
+}
+
+.caseslider_card {
   position: relative;
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: var(--_spacing---gap--gap-md);
-  align-items: center;
-  padding: var(--_spacing---inner--inner-lg) 0;
-  border-top: 1px solid var(--_color---outline--light);
-}
-
-/* The dimming sits on the text, never on the row: the row carries the
-   divider, and the divider is not part of the interaction. */
-.projects_row_title {
-  grid-column: 1 / span 4;
-  transition: opacity 700ms cubic-bezier(0.33, 0.02, 0.18, 1);
-}
-
-.projects_row_client {
-  grid-column: 5 / span 3;
-  transition: opacity 700ms cubic-bezier(0.33, 0.02, 0.18, 1);
-}
-
-.projects_row_title.is-recessed,
-.projects_row_client.is-recessed {
-  opacity: 0.4;
-}
-
-/* Held clear for the picture the hover state shows. */
-.projects_row_preview {
-  grid-column: 8 / span 3;
-}
-
-/* Only the row in focus carries its control. */
-.projects_row_action {
-  grid-column: 11 / span 2;
-  opacity: 0;
-  transition: opacity 700ms cubic-bezier(0.33, 0.02, 0.18, 1);
-}
-
-.projects_row_action.is-shown {
-  opacity: 1;
-}
-
-/* One window of one fixed size. It never resizes and never moves sideways;
-   only its height answers the pointer, and a change of row crosses one
-   picture into the next in place. */
-.projects_preview {
-  position: absolute;
-  top: 0;
-  left: calc(var(--grid--step) * 7);
-  z-index: 2;
-  width: 25rem;
-  height: 17.8125rem;
+  display: flex;
+  width: 50rem;
+  height: 30rem;
   overflow: clip;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 700ms cubic-bezier(0.33, 0.02, 0.18, 1);
-  will-change: transform;
+  background-color: var(--_color---bg--inverted--bg);
 }
 
-.projects_preview.is-open {
-  opacity: 1;
+.caseslider_content {
+  flex: 1 1 50%;
+  min-width: 0;
+  padding: var(--_spacing---inner--inner-xl);
 }
 
-.projects_preview_frame {
-  position: absolute;
-  inset: 0;
+.caseslider_category {
+  color: var(--_color---text--brand--1);
+}
+
+.caseslider_title {
+  color: var(--_color---text--inverted--1);
+}
+
+.caseslider_text {
+  color: var(--_color---text--inverted--3);
+}
+
+.caseslider_media {
+  position: relative;
+  flex: 0 0 50%;
   overflow: clip;
-  opacity: 0;
-  transition: opacity 700ms cubic-bezier(0.33, 0.02, 0.18, 1);
 }
 
-.projects_preview_frame.is-current {
-  opacity: 1;
-}
-
-.projects_preview_img {
+/* Grows a tenth about its centre while the card is hovered (Case slider
+   hover, below). */
+.caseslider_img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  -webkit-user-select: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* EMBED — Global Page Codes · parent-state descendant selectors. Hovering a
+   card, or focusing its link, grows its picture; the control's arrows move
+   with the shared control rule above. */
+@media (prefers-reduced-motion: no-preference) {
+  .caseslider_img {
+    transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .caseslider_card:is(:hover, :focus-within) .caseslider_img {
+    transform: scale(1.1);
+  }
 }
 
 @media screen and (max-width: 991px) {
-  .projects_row {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    align-items: start;
-    padding: var(--_spacing---inner--inner-md) 0;
-  }
-
-  .projects_row_title {
-    grid-column: span 4;
-  }
-
-  .projects_row_client {
-    grid-column: span 2;
-  }
-
-  .projects_row_preview,
-  .projects_preview {
-    display: none;
-  }
-
-  .projects_row_title.is-recessed,
-  .projects_row_client.is-recessed {
-    opacity: 1;
-  }
-
-  .projects_row_action {
-    grid-column: span 6;
-    justify-content: flex-start;
-    margin-top: var(--_spacing---static--spacing-4);
-    opacity: 1;
+  .caseslider_card {
+    width: 40rem;
   }
 }
 
 @media screen and (max-width: 767px) {
-  .pecases_head {
+  .relevant_head {
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--_spacing---gap--gap-md);
   }
 
-  .projects_row_title,
-  .projects_row_client {
-    grid-column: span 6;
+  /* On a phone the picture sits above the summary, and the next card shows
+     at the edge. */
+  .caseslider_card {
+    flex-direction: column-reverse;
+    width: calc(100vw - var(--_spacing---margin--margin-sm) * 2 - var(--_spacing---static--spacing-10));
+    height: 100%;
   }
 
-  .projects_row_client {
-    margin-top: var(--_spacing---static--spacing-2);
+  .caseslider_content {
+    flex: 1 1 auto;
+    gap: var(--_spacing---gap--gap-xl);
+    padding: var(--_spacing---inner--inner-md);
+  }
+
+  .caseslider_media {
+    flex: none;
+    height: 13.75rem;
   }
 }
 
 /* --------------------------------------------------------------------------
    Private Equity — how we can work together
-   Three bounded cards stepping down the page, each starting where the one
-   before it has been read.
+   The title and its way on across the top, then the shared engagement cards
+   (work_grid, styled with the homepage's Work section).
    -------------------------------------------------------------------------- */
 
 .pemodels_section {
   position: relative;
   z-index: 3;
-  padding: var(--_spacing---static--spacing-20) 0 var(--_spacing---static--spacing-32);
-  background-color: var(--_color---bg--default--bg);
+  padding: var(--_spacing---static--spacing-24) 0;
+  background-color: var(--_color---bg--default--light);
 }
 
-.pemodels_head {
-  padding: var(--_spacing---inner--inner-md) 0;
-}
-
-.pemodels_list {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: var(--_spacing---gap--gap-md);
-  padding-top: var(--_spacing---static--spacing-12);
-}
-
-.pemodel_card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: var(--_spacing---gap--gap-xl);
-  width: calc(var(--grid--step) * 3 + var(--grid--column));
-  padding: 0 var(--_spacing---inner--inner-lg);
-  border-left: 1px solid var(--_color---outline--default);
-}
-
-.pemodel_card.is-2 {
-  margin-top: 7.5rem;
-}
-
-.pemodel_card.is-3 {
-  margin-top: var(--_spacing---static--spacing-60);
-}
-
-.pemodel_media {
-  flex-shrink: 0;
-  width: 12rem;
-  aspect-ratio: 1 / 1;
-  overflow: clip;
-  background-color: var(--_color---bg--default--1);
-}
-
-.pemodel_tile {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.pemodel_text {
-  padding-bottom: var(--_spacing---static--spacing-8);
-  color: var(--_color---text--default--2);
+.pemodels_layout {
+  gap: var(--_spacing---gap--gap-2xl);
 }
 
 @media screen and (max-width: 991px) {
-  .pemodel_card {
-    width: calc(var(--grid--step) * 5 + var(--grid--column));
-  }
-
-  .pemodel_card.is-2,
-  .pemodel_card.is-3 {
-    margin-top: 0;
+  .pemodels_section {
+    padding: var(--_spacing---section--section-lg) 0;
   }
 }
 
@@ -2709,11 +2810,6 @@ html::-webkit-scrollbar {
   .pemodels_head {
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--_spacing---gap--gap-md);
-  }
-
-  .pemodel_card {
-    width: 100%;
   }
 }
 
@@ -2727,7 +2823,7 @@ html::-webkit-scrollbar {
   position: relative;
   z-index: 0;
   padding: calc(var(--_spacing---static--spacing-18) + var(--_spacing---static--spacing-32)) 0 var(--_spacing---static--spacing-32);
-  background-color: var(--_color---bg--default--bg);
+  background-color: var(--_color---bg--default--light);
   overflow: clip;
 }
 
@@ -2781,7 +2877,7 @@ html::-webkit-scrollbar {
 .contact_section {
   position: relative;
   z-index: 1;
-  padding: var(--_spacing---static--spacing-4) 0 var(--_spacing---static--spacing-32);
+  padding: var(--_spacing---static--spacing-14) 0 var(--_spacing---static--spacing-32);
   background-color: var(--_color---bg--default--bg);
 }
 
@@ -3219,103 +3315,6 @@ html::-webkit-scrollbar {
 }
 
 /* --------------------------------------------------------------------------
-   Case study — next work
-   -------------------------------------------------------------------------- */
-
-.studynext_section {
-  position: relative;
-  z-index: 2;
-  padding: var(--_spacing---static--spacing-16) 0 6.25rem;
-  background-color: var(--_color---bg--default--bg);
-}
-
-.studynext_layout {
-  display: flex;
-  flex-direction: column;
-}
-
-.studynext_head {
-  padding: var(--_spacing---inner--inner-md) 0;
-  border-bottom: 1px solid var(--_color---outline--default);
-}
-
-/* The row is set on its own twelve columns, inside its side padding. */
-.studynext_row {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: var(--_spacing---gap--gap-md);
-  align-items: center;
-  padding: var(--_spacing---inner--inner-xl) var(--_spacing---inner--inner-md);
-  border-bottom: 1px solid var(--_color---outline--default);
-}
-
-.studynext_row_title {
-  grid-column: 1 / span 4;
-}
-
-.studynext_row_client {
-  grid-column: 5 / span 3;
-}
-
-.studynext_row_media {
-  grid-column: 8 / span 3;
-}
-
-.studynext_row_img {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 348 / 232;
-  object-fit: cover;
-}
-
-.studynext_row_action {
-  grid-column: 11 / span 2;
-}
-
-@media screen and (max-width: 991px) {
-  .studynext_row {
-    padding: var(--_spacing---inner--inner-lg) 0;
-  }
-
-  .studynext_row_title,
-  .studynext_row_client {
-    grid-column: span 6;
-  }
-
-  .studynext_row_media {
-    grid-column: span 8;
-    margin-top: var(--_spacing---static--spacing-6);
-  }
-
-  .studynext_row_action {
-    grid-column: span 4;
-    align-items: flex-end;
-    margin-top: var(--_spacing---static--spacing-6);
-  }
-}
-
-@media screen and (max-width: 767px) {
-  .studynext_head {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--_spacing---gap--gap-md);
-  }
-
-  .studynext_row_title,
-  .studynext_row_client,
-  .studynext_row_media,
-  .studynext_row_action {
-    grid-column: span 12;
-  }
-
-  .studynext_row_action {
-    justify-content: flex-start;
-  }
-}
-
-/* --------------------------------------------------------------------------
    Placeholder — page coming soon
    -------------------------------------------------------------------------- */
 
@@ -3357,11 +3356,6 @@ html::-webkit-scrollbar {
   .article_action,
   .workdark_img,
   .workdark_hint,
-  .projects_row_title,
-  .projects_row_client,
-  .projects_row_action,
-  .projects_preview,
-  .projects_preview_frame,
   .accordion_toggle_icon,
   .contact_value,
   .form_input {

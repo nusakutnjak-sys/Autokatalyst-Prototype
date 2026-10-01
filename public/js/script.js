@@ -9,8 +9,8 @@
       and explicit start states. These are the candidates for Webflow's
       native interactions.
    B  Interaction and physics — pointer tracking, contact-solved dominos, the
-      galaxy stream, the Our Work track, the accordion and page transitions.
-      These stay custom code.
+      differentiator tabs, the Our Work track, the accordion and page
+      transitions. These stay custom code.
 
    Every behaviour is one init function, scoped to its component root, guarded
    against running twice, and wired by data-* attributes. Styles come from
@@ -92,6 +92,14 @@
 
   function isDesktop() {
     return window.matchMedia(DESKTOP).matches;
+  }
+
+  /* An element's top on the page, read from the layout, so a transform
+     still running on it or around it (an entrance, a drift) can't shift it. */
+  function pageTop(node) {
+    var top = 0;
+    for (; node; node = node.offsetParent) top += node.offsetTop;
+    return top;
   }
 
   /* Reads a length variable from tokens.css in pixels. */
@@ -308,15 +316,35 @@
     all(scope, "[data-parallax]").forEach(function (section) {
       if (!once(section, "Parallax")) return;
       var next = section.nextElementSibling;
+      /* A held section sits inside ScrollTrigger's pin spacer, so the section
+         after it is the spacer's next sibling. */
+      if (!next && section.parentElement && section.parentElement.classList.contains("pin-spacer")) {
+        next = section.parentElement.nextElementSibling;
+      }
       if (!next) return;
 
-      window.gsap.fromTo(section, { yPercent: 0 }, {
+      /* A held section is ScrollTrigger's to move once it lets go, so the
+         drift moves the layer inside it that the section names instead, and
+         it starts only as the hold lets go, though the section after it may
+         already be coming up the screen by then. */
+      var layer = section.querySelector(":scope > [data-parallax-layer]") || section;
+      var hold = window.ScrollTrigger.getAll().filter(function (trigger) { return trigger.pin === section; })[0];
+
+      window.gsap.fromTo(layer, { yPercent: 0 }, {
         yPercent: parseFloat(section.dataset.parallax) || 50,
         ease: EASE.linear,
         scrollTrigger: {
           trigger: next,
-          start: "top bottom",
-          end: "top top",
+          /* From the moment the next section shows, but never before the
+             page has scrolled, so a section already in view on arrival
+             doesn't open a gap above the head. */
+          start: hold ? function () {
+            var rising = next.getBoundingClientRect().top + window.scrollY - window.innerHeight;
+            return Math.max(rising, hold.end);
+          } : function () {
+            return Math.max(0, pageTop(next) - window.innerHeight);
+          },
+          end: hold ? "top top" : function () { return pageTop(next); },
           scrub: true,
           invalidateOnRefresh: true
         }
@@ -554,6 +582,45 @@
      ======================================================================== */
 
   /* ------------------------------------------------------------------------
+     Work cards — the pattern's return
+     Hovering a card wipes its pattern away to the right (style.css). Leaving
+     it doesn't play that back: the pattern takes is-returning and wipes in
+     again from the left, so the sweep only ever runs one way.
+     ------------------------------------------------------------------------ */
+
+  var HOVER = "(hover: hover) and (pointer: fine)";
+
+  function initWorkCards(scope) {
+    all(scope, "[data-work-card]").forEach(function (card) {
+      var pattern = card.querySelector("[data-work-pattern]");
+      if (!pattern || !once(card, "WorkCard")) return;
+      var open = false;
+
+      function enter() {
+        if (!window.matchMedia(HOVER).matches) return;
+        pattern.classList.remove("is-returning");
+        open = true;
+      }
+      function settle() {
+        if (!open || card.matches(":hover, :focus-within")) return;
+        open = false;
+        pattern.classList.remove("is-returning");
+        if (reduced()) return;
+        /* Read layout once so the keyframes start again from the left. */
+        void pattern.getBoundingClientRect();
+        pattern.classList.add("is-returning");
+      }
+
+      card.addEventListener("pointerenter", enter);
+      card.addEventListener("focusin", enter);
+      card.addEventListener("pointerleave", settle);
+      /* Focus has moved on only once the event is over. */
+      card.addEventListener("focusout", function () { window.requestAnimationFrame(settle); });
+      pattern.addEventListener("animationend", function () { pattern.classList.remove("is-returning"); });
+    });
+  }
+
+  /* ------------------------------------------------------------------------
      Dim groups — nav, footer and the collaboration rail
      Arriving on one item sends every other item in the group to half
      strength. Rest is reached only by leaving the group, so focus hands over
@@ -684,116 +751,181 @@
   }
 
   /* ------------------------------------------------------------------------
-     Private equity — project list preview
-     Hovering a row opens that project's picture in a window beside the list.
-     The window never moves sideways; its height closes on the pointer's line
-     by a fixed fraction of the remaining distance each frame, so it trails
-     while the pointer moves and settles when it stops, never overshooting.
-     Changing row only crosses one picture into the next, in place.
-     Desktop with a fine pointer only.
+     Case slider — the Expertise page's relevant work
+     After Osmo's parallax image slider, which runs on Smooothy; the same
+     behaviour on GSAP's ticker, so the site keeps one motion runtime. The
+     track follows a target that a drag, a swipe or a sideways trackpad
+     gesture moves, closes on it smoothly and never snaps. It loops: a slide
+     more than half the set away wraps round to the other end while it is out
+     of sight, and the set is copied as often as the screen needs. The
+     pictures travel with their cards. Each card is a link; a drag is not a
+     click. Positions are counted in slides; one slide is a card and its gap.
      ------------------------------------------------------------------------ */
 
-  function initProjectsPreview(scope) {
-    all(scope, "[data-projects]").forEach(function (list) {
-      if (!once(list, "Projects") || reduced()) return;
+  var CASE_SLIDER = {
+    drag: 0.005,     /* slides per pixel dragged, as Smooothy */
+    lerp: 0.3,       /* the catch-up's time constant, in seconds */
+    threshold: 6     /* pixels of travel before a press is a drag, not a click */
+  };
 
-      var preview = list.querySelector("[data-projects-preview]");
-      var frames = all(list, "[data-projects-frame]");
-      var rows = all(list, "[data-projects-row]");
-      if (!preview || !rows.length || frames.length !== rows.length) return;
+  /* A value folded into the band either side of zero, half the base wide. */
+  function wrapAround(value, base) {
+    var mod = value % base;
+    if (Math.abs(mod) > base / 2) mod = mod > 0 ? mod - base : mod + base;
+    return mod;
+  }
 
-      var actions = rows.map(function (row) { return row.querySelector("[data-projects-action]"); });
-      var texts = rows.map(function (row) { return all(row, "[data-projects-text]"); });
+  function initCaseSlider(scope) {
+    if (!hasGsap()) return;
 
-      var current = -1;
+    all(scope, "[data-case-slider]").forEach(function (root) {
+      var list = root.querySelector("[data-case-slider-list]");
+      var originals = list ? all(list, "[data-case-slider-item]") : [];
+      if (originals.length < 2 || !once(root, "CaseSlider")) return;
+
+      var slides = originals.slice();
+      var moves = [];
+      var size = 1;
       var target = 0;
-      var position = 0;
-      var height = preview.offsetHeight;
-      var running = false;
-      var primed = false;
-      var setY = hasGsap() ? window.gsap.quickSetter(preview, "y", "px") : null;
+      var current = 0;
+      var visible = true;
+      var press = null;
+      var travelled = 0;
+      var last = window.performance.now();
+      var watcher = null;
+      var resizer = null;
 
-      function canFollow() {
-        return window.matchMedia("(hover: hover) and (pointer: fine)").matches && isDesktop();
+      function bind() {
+        moves = slides.map(function (slide) { return window.gsap.quickSetter(slide, "x", "px"); });
       }
 
-      function paint() {
-        if (setY) setY(position);
-      }
-
-      function step() {
-        var delta = target - position;
-        if (Math.abs(delta) < 0.4) {
-          position = target;
-          running = false;
-        } else {
-          position += delta * 0.055;
-          window.requestAnimationFrame(step);
-        }
-        paint();
-      }
-
-      /* The pointer's line within the list, less half the window, so the
-         picture is centred on the pointer rather than hanging below it. */
-      function aim(event) {
-        target = event.clientY - list.getBoundingClientRect().top - (height / 2);
-        if (!primed) {
-          primed = true;
-          position = target;
-          paint();
-          return;
-        }
-        if (!running) {
-          running = true;
-          window.requestAnimationFrame(step);
-        }
-      }
-
-      function focus(index) {
-        if (current === index) return;
-        current = index;
-        rows.forEach(function (row, i) {
-          texts[i].forEach(function (text) { text.classList.toggle("is-recessed", i !== index); });
-          if (actions[i]) actions[i].classList.toggle("is-shown", i === index);
+      function render() {
+        var count = slides.length;
+        slides.forEach(function (slide, i) {
+          moves[i]((wrapAround(current + i, count) - i) * size);
         });
-        frames.forEach(function (frame, i) { frame.classList.toggle("is-current", i === index); });
-        preview.classList.add("is-open");
+      }
+
+      /* Enough copies of the set that, wherever the track stands, a slide
+         only wraps round while it is out of sight at either end. Copies are
+         hidden from assistive technology and left out of the tab order, but
+         still answer a click, since they come into view as the track moves. */
+      function fill() {
+        size = originals[0].offsetWidth || 1;
+        var start = originals[0].offsetLeft;
+        var span = root.clientWidth;
+        var need = Math.max((2 * (span - start)) / size, 2 + (2 * start) / size);
+        var sets = Math.max(1, Math.ceil(need / originals.length));
+        if (sets * originals.length !== slides.length) {
+          slides.slice(originals.length).forEach(function (copy) { copy.remove(); });
+          slides = originals.slice();
+          for (var set = 1; set < sets; set++) {
+            originals.forEach(function (slide) {
+              var copy = slide.cloneNode(true);
+              copy.setAttribute("aria-hidden", "true");
+              all(copy, "a, button").forEach(function (control) { control.setAttribute("tabindex", "-1"); });
+              list.appendChild(copy);
+              slides.push(copy);
+            });
+          }
+        }
+        if (moves.length !== slides.length) bind();
+        render();
       }
 
       function release() {
-        if (current === -1) return;
-        current = -1;
-        primed = false;
-        rows.forEach(function (row, i) {
-          texts[i].forEach(function (text) { text.classList.remove("is-recessed"); });
-          if (actions[i]) actions[i].classList.remove("is-shown");
-        });
-        frames.forEach(function (frame) { frame.classList.remove("is-current"); });
-        preview.classList.remove("is-open");
+        window.gsap.ticker.remove(tick);
+        window.removeEventListener("pointermove", move);
+        window.removeEventListener("pointerup", up);
+        window.removeEventListener("pointercancel", up);
+        if (watcher) watcher.disconnect();
+        if (resizer) resizer.disconnect();
       }
 
-      if (!canFollow() || !setY) return;
+      function tick() {
+        var now = window.performance.now();
+        var elapsed = Math.min((now - last) / 1000, 0.1);
+        last = now;
+        if (!root.isConnected) {
+          release();
+          return;
+        }
+        if (!visible || current === target) return;
+        var gap = target - current;
+        current = reduced() || Math.abs(gap) < 0.0001 ? target : current + gap * (1 - Math.exp(-elapsed / CASE_SLIDER.lerp));
+        render();
+      }
 
-      rows.forEach(function (row, index) {
-        row.addEventListener("pointerenter", function (event) {
-          if (event.pointerType === "touch") return;
-          height = preview.offsetHeight;
-          aim(event);
-          focus(index);
-        });
+      /* A drag moves the target from the first pixel; past a few pixels the
+         press no longer counts as a click on the card. */
+      function down(event) {
+        if (event.pointerType === "mouse" && event.button !== 0) return;
+        press = { id: event.pointerId, x: event.clientX, from: target };
+        travelled = 0;
+      }
+
+      function move(event) {
+        if (!press || event.pointerId !== press.id) return;
+        var delta = event.clientX - press.x;
+        travelled = Math.max(travelled, Math.abs(delta));
+        if (travelled > CASE_SLIDER.threshold) list.classList.add("is-dragging");
+        target = press.from + delta * CASE_SLIDER.drag;
+      }
+
+      function up(event) {
+        if (!press || (event && event.pointerId !== press.id)) return;
+        press = null;
+        list.classList.remove("is-dragging");
+      }
+
+      list.addEventListener("pointerdown", down);
+      window.addEventListener("pointermove", move);
+      window.addEventListener("pointerup", up);
+      window.addEventListener("pointercancel", up);
+      list.addEventListener("dragstart", function (event) { event.preventDefault(); });
+      list.addEventListener("click", function (event) {
+        if (travelled <= CASE_SLIDER.threshold) return;
+        event.preventDefault();
+        event.stopPropagation();
+      }, true);
+
+      /* A sideways trackpad gesture moves the track one to one; an upright
+         one is the page's. */
+      root.addEventListener("wheel", function (event) {
+        if (Math.abs(event.deltaX) <= Math.abs(event.deltaY)) return;
+        event.preventDefault();
+        var unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? root.clientWidth : 1;
+        target -= (event.deltaX * unit) / size;
+      }, { passive: false });
+
+      /* A keyboard landing on a card brings it to the first place, the
+         nearest way round. */
+      list.addEventListener("focusin", function (event) {
+        var index = slides.indexOf(event.target.closest("[data-case-slider-item]"));
+        if (index < 0) return;
+        var count = slides.length;
+        target = count * Math.round((target + index) / count) - index;
       });
 
-      list.addEventListener("pointermove", function (event) {
-        if (event.pointerType === "touch" || current === -1) return;
-        aim(event);
-      });
+      if ("IntersectionObserver" in window) {
+        watcher = new window.IntersectionObserver(function (entries) {
+          visible = entries[entries.length - 1].isIntersecting;
+          last = window.performance.now();
+        }, { rootMargin: "50px" });
+        watcher.observe(root);
+      }
 
-      list.addEventListener("pointerleave", release);
+      if ("ResizeObserver" in window) {
+        resizer = new window.ResizeObserver(debounce(fill, 60));
+        resizer.observe(root);
+      } else {
+        window.addEventListener("resize", debounce(fill, 120));
+      }
 
-      window.addEventListener("resize", debounce(function () {
-        if (!canFollow()) release();
-        height = preview.offsetHeight;
-      }, 250));
+      list.scrollLeft = 0;
+      list.classList.add("is-live");
+      fill();
+      window.gsap.ticker.add(tick);
     });
   }
 
@@ -829,6 +961,103 @@
           onUpdate: function () { window.scrollTo(0, proxy.y); }
         });
       });
+    });
+  }
+
+  /* ------------------------------------------------------------------------
+     Collaboration — the models' pictures close on their titles
+     On a desktop each model is held at its starting height, and from the
+     moment it reaches the top band its picture shrinks by exactly as much as
+     the page scrolls, down to the height of the number and title beside it.
+     The model's content sits on the foot of the held box, so the number and
+     title stay where they are while the picture shrinks and the rows rise
+     under them; then the model scrolls on. No model changes height, so
+     nothing below it moves. Without the script, below the desktop and with
+     reduced motion, the pictures keep their full size.
+     ------------------------------------------------------------------------ */
+
+  var modelsRelease = null;
+
+  function initModelPictures(scope) {
+    if (!hasScrollTrigger()) return;
+    var models = all(scope, "[data-collab-model]");
+    if (!models.length || !once(models[0], "ModelPictures")) return;
+
+    if (modelsRelease) modelsRelease();
+    var media = window.gsap.matchMedia();
+    modelsRelease = function () {
+      media.revert();
+      modelsRelease = null;
+    };
+
+    media.add(DESKTOP + " and (prefers-reduced-motion: no-preference)", function () {
+      var parts = models.map(function (model) {
+        return {
+          model: model,
+          head: model.querySelector("[data-model-head]"),
+          frame: model.querySelector("[data-model-frame]"),
+          from: 0,
+          to: 0,
+          ratio: 1
+        };
+      }).filter(function (part) { return part.head && part.frame; });
+      if (!parts.length) return;
+
+      /* Each refresh measures the models at rest first: the picture at its
+         full size and the model at its natural height, which it then holds. */
+      function measure() {
+        /* A page transition took the models away: let go of them. */
+        if (!parts[0].model.isConnected) {
+          if (modelsRelease) modelsRelease();
+          return;
+        }
+        parts.forEach(function (part) {
+          window.gsap.set([part.model, part.frame], { clearProps: "height,width" });
+        });
+        parts.forEach(function (part) {
+          part.from = part.frame.offsetHeight;
+          part.ratio = part.frame.offsetWidth / (part.from || 1);
+          part.to = Math.min(part.from, part.head.offsetHeight);
+          part.held = part.model.offsetHeight;
+        });
+        parts.forEach(function (part) {
+          window.gsap.set(part.model, { height: part.held });
+        });
+      }
+
+      function paint(part, progress) {
+        var height = part.from + (part.to - part.from) * progress;
+        window.gsap.set(part.frame, { height: height, width: height * part.ratio });
+      }
+
+      models.forEach(function (model) { model.classList.add("is-live"); });
+      measure();
+      window.ScrollTrigger.addEventListener("refreshInit", measure);
+
+      /* Where the model meets the top band, read from the layout rather than
+         the screen, so an entrance still moving the section can't shift it. */
+      function reach(part) {
+        return pageTop(part.model) - tokenPx("--_spacing---static--spacing-18", 72);
+      }
+
+      parts.forEach(function (part) {
+        window.ScrollTrigger.create({
+          trigger: part.model,
+          start: function () { return reach(part); },
+          end: function () { return reach(part) + Math.max(1, part.from - part.to); },
+          invalidateOnRefresh: true,
+          onUpdate: function (self) { paint(part, self.progress); },
+          onRefresh: function (self) { paint(part, self.progress); }
+        });
+      });
+
+      return function () {
+        window.ScrollTrigger.removeEventListener("refreshInit", measure);
+        parts.forEach(function (part) {
+          window.gsap.set([part.model, part.frame], { clearProps: "height,width" });
+        });
+        models.forEach(function (model) { model.classList.remove("is-live"); });
+      };
     });
   }
 
@@ -1150,123 +1379,276 @@
   }
 
   /* ------------------------------------------------------------------------
-     Home — galaxy stream
-     The scattered pictures are one slow continuous stream travelling upward.
-     A single velocity drives every tile: a base that never falls to zero,
-     plus a boost that scroll velocity adds and that decays once scrolling
-     stops. Position accumulates from speed and is never read from the scroll
-     offset. Once a tile has passed the clipped top edge it is returned,
-     unseen, below the foot. Everything is per second and scaled by the real
-     frame delta; the loop paints only while the section is near the screen.
+     Home — differentiator: two approaches become one, and the one is the
+     way in
+     The bar under the statement holds the tailored solution (traditional
+     consulting) in burgundy and proven approaches (established solutions) in
+     khaki. On a screen at least 992×540 the
+     sequence starts while the statement and the bar are a third of the way up
+     the screen, once both can be read, and the section holds from the moment
+     they are centred; one timeline, bound to the scroll, plays the sequence
+     over the lead-in and the hold. The section doesn't stop dead:
+     the statement and the bar glide on up and come to rest with the button's
+     place on the middle of the screen. The halves slide in to the middle
+     third, their outer ends together and their inner ends, where they
+     collide, each at its own pace, and they shrink on their own centre from
+     the moment they move. They comb through each other as four stripes that cover the
+     labels and land together; the block turns dark as they land, the
+     button's label comes in on it while it is still shrinking, and it
+     shrinks on into the dark button. The statement above stays in view
+     throughout.
+
+     The stripes are cloned from the section's hidden templates in two
+     layers: each half's own ground under the labels, and over them the
+     crossing, where the colours overlap. Over the crossing, a copy of the
+     button's label and arrow comes in; the button itself is the section's
+     own, and takes over once the block has its size.
+     Without the script, on a smaller screen and with reduced motion, the
+     bar rests in its two halves with the button under it.
      ------------------------------------------------------------------------ */
 
-  var STREAM = {
-    base: 20,
-    boostFromScroll: 0.0425,
-    boostMax: 41,
-    boostDecay: 0.02,
-    approach: 3.5,
-    margin: 24,
-    fade: 96
+  /* The screen the sequence needs, down to a 13-inch laptop's browser window;
+     on a smaller one the bar rests. */
+  var DIFFER_STAGE = "(min-width: 992px) and (min-height: 540px)";
+  /* The hold, in screen heights of scrolling, and the lead-in before it: the
+     sequence starts while the statement and the bar are a third of the way up
+     the screen, a sixth of a screen before they are centred and the section
+     holds. */
+  var DIFFER_HOLD = 0.75;
+  var DIFFER_LEAD = 1 / 6;
+  var DIFFER_STRIPES = 4;
+  /* Shares of the sequence: the halves slide in over the first, and the
+     block is the button at the second. */
+  var DIFFER_SLIDE = 0.55;
+  var DIFFER_BUTTON = 0.9;
+  /* How long each stripe's inner end waits before it slides, as a share of
+     the slide, so the stripes collide unevenly and still land together. The
+     two middle stripes carry the labels and wait least, so a label never
+     shows past its own colour before the crossing covers it. */
+  var DIFFER_WAIT = {
+    left: [0.3, 0, 0.1, 0.22],
+    right: [0.24, 0.08, 0, 0.3]
   };
+  var differRelease = null;
 
-  function initGalaxy(scope) {
-    if (reduced() || !hasGsap()) return;
+  function initDifferentiator(scope) {
+    var section = (scope || document).querySelector("[data-differ]");
+    if (!section || !once(section, "Differ") || !hasScrollTrigger()) return;
 
-    all(scope, "[data-galaxy]").forEach(function (field) {
-      if (!once(field, "Galaxy")) return;
+    var layer = section.querySelector("[data-differ-glide]");
+    var content = section.querySelector("[data-differ-content]");
+    var band = section.querySelector("[data-differ-band]");
+    var halves = all(section, "[data-differ-half]");
+    var cta = section.querySelector("[data-differ-cta]");
+    if (!layer || !content || !band || halves.length !== 2 || !cta) return;
 
-      var items = all(field, "[data-galaxy-tile]").map(function (tile) {
-        return {
-          el: tile,
-          setY: window.gsap.quickSetter(tile, "y", "px"),
-          setOpacity: window.gsap.quickSetter(tile, "opacity"),
-          multiplier: parseFloat(tile.dataset.galaxySpeed) || 1,
-          baseTop: 0,
-          height: 0,
-          y: 0,
-          opacity: 1
-        };
+    var control = cta.querySelector(".button_main_element");
+    var link = cta.querySelector(".clickable_link");
+    /* The button's label and the arrow after it. A copy of them comes in on
+       the forming block; the button's own are never touched, so its hover
+       motion stays theirs. */
+    var face = all(cta, ".button_main_text, .button_main_arrow.is-trail");
+    if (!control || !link || face.length !== 2) return;
+
+    function clone(name) {
+      var source = section.querySelector("[data-differ-template='" + name + "']");
+      if (!source) return null;
+      var node = source.cloneNode(false);
+      node.removeAttribute("data-differ-template");
+      node.setAttribute("aria-hidden", "true");
+      return node;
+    }
+
+    /* A new page brings a new section; the old sequence leaves with it. */
+    if (differRelease) differRelease();
+    var media = window.gsap.matchMedia();
+    differRelease = function () {
+      media.revert();
+      differRelease = null;
+    };
+
+    media.add(DIFFER_STAGE + " and (prefers-reduced-motion: no-preference)", function () {
+      if (!section.isConnected) return;
+
+      var ground = clone("rows");
+      var crossing = clone("rows");
+      var faceLayer = clone("face");
+      if (!ground || !crossing || !faceLayer) return;
+      crossing.classList.add("is-cross");
+      var faceCopies = face.map(function (node) { return faceLayer.appendChild(node.cloneNode(true)); });
+
+      /* Four stripes. In the ground each half has its own segment; in the
+         crossing each stripe has one, in the colour on top there — burgundy
+         on the first and third, khaki on the second and fourth — holding
+         the dark it turns. */
+      var lefts = [];
+      var rights = [];
+      var crosses = [];
+      var darks = [];
+      for (var r = 0; r < DIFFER_STRIPES; r++) {
+        var groundRow = clone("row");
+        var crossRow = clone("row");
+        var left = clone("seg-left");
+        var right = clone("seg-right");
+        var cross = clone(r % 2 === 0 ? "seg-left" : "seg-right");
+        var dark = clone("seg-dark");
+        if (!groundRow || !crossRow || !left || !right || !cross || !dark) return;
+        cross.classList.add("is-cross");
+        groundRow.appendChild(left);
+        groundRow.appendChild(right);
+        cross.appendChild(dark);
+        crossRow.appendChild(cross);
+        ground.appendChild(groundRow);
+        crossing.appendChild(crossRow);
+        lefts.push(left);
+        rights.push(right);
+        crosses.push(cross);
+        darks.push(dark);
+      }
+
+      band.appendChild(ground);
+      band.appendChild(crossing);
+      band.appendChild(faceLayer);
+      section.classList.add("is-live");
+      halves.forEach(function (half) { half.classList.add("is-live"); });
+      cta.classList.add("is-live");
+
+      /* Geometry, read again on every refresh. Places in the section come
+         from the layout, not the screen, so no transform ever shifts them. */
+      function offsetIn(node) {
+        var top = 0;
+        for (; node && node !== section; node = node.offsetParent) top += node.offsetTop;
+        return top;
+      }
+      /* The middle of the statement and the bar together. */
+      function groupCentre() { return (offsetIn(content) + offsetIn(band) + band.offsetHeight) / 2; }
+      function buttonCentre() { return offsetIn(control) + control.offsetHeight / 2; }
+      /* How far the statement and the bar glide on up once the hold begins:
+         to the button's place on the middle of the screen, or less if the
+         statement would otherwise come closer than a set space to the top. */
+      function glide() {
+        var toMiddle = buttonCentre() - groupCentre();
+        var room = window.innerHeight / 2 - (groupCentre() - offsetIn(content)) - tokenPx("--_spacing---static--spacing-10", 40);
+        return -Math.max(0, Math.min(toMiddle, room));
+      }
+      /* The label copy is unmasked as one sweep, from its first letter to the
+         tip of its arrow. */
+      function faceMask(edge) {
+        var from = faceLayer.getBoundingClientRect().left;
+        var reach = edge === "start" ? faceCopies[0].getBoundingClientRect().left : faceCopies[1].getBoundingClientRect().right;
+        return "inset(0px " + (faceLayer.offsetWidth - (reach - from)) + "px 0px 0px)";
+      }
+      function barHeight() { return band.offsetHeight; }
+      function buttonHeight() { return control.offsetHeight; }
+      function buttonInset() {
+        return ((band.offsetWidth - control.offsetWidth) / 2 / band.offsetWidth) * 100 + "%";
+      }
+
+      var hold = window.ScrollTrigger.create({
+        trigger: section,
+        pin: true,
+        start: function () { return "top+=" + groupCentre() + " center"; },
+        end: function () { return "+=" + Math.round(window.innerHeight * DIFFER_HOLD); },
+        refreshPriority: 1,
+        invalidateOnRefresh: true
       });
-      if (!items.length) return;
 
-      var fieldHeight = 0;
-      var speed = STREAM.base;
-      var boost = 0;
-      var lastScroll = window.scrollY;
-      var lastTime = 0;
-      var onScreen = true;
+      var sequence = window.gsap.timeline({
+        defaults: { ease: EASE.linear },
+        scrollTrigger: {
+          trigger: section,
+          start: function () { return "top+=" + groupCentre() + " " + (50 + DIFFER_LEAD * 100) + "%"; },
+          end: function () { return hold.end; },
+          /* A short catch-up, so a quick flick of the wheel plays out
+             rather than jumping. */
+          scrub: DUR.fast,
+          invalidateOnRefresh: true
+        }
+      });
+      /* Where in the sequence the hold begins. */
+      var holdAt = DIFFER_LEAD / (DIFFER_LEAD + DIFFER_HOLD);
 
-      function measure() {
-        fieldHeight = field.offsetHeight;
-        items.forEach(function (item) {
-          item.baseTop = item.el.offsetTop;
-          item.height = item.el.offsetHeight;
+      /* As the hold begins, the statement and the bar glide on up, easing to
+         rest, so the section never stops dead. The glide keeps to whole
+         pixels, so the stripes meet without a seam… */
+      sequence.fromTo(layer, { y: 0 }, { y: glide, ease: EASE.response, duration: 1 - holdAt, snap: "y" }, holdAt);
+
+      /* …while the halves' outer ends slide in to the middle third together,
+         and from the moment they move the halves shrink on their centre
+         towards the button's height. Until they move, the crossing stays
+         hidden: at nothing wide it could still leave a sliver where the
+         halves meet. */
+      sequence
+        .fromTo(crossing, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.001 }, 0)
+        .fromTo(lefts, { left: "0%" }, { left: "33.3333%", ease: EASE.secondary, duration: DIFFER_SLIDE }, 0)
+        .fromTo(rights, { right: "0%" }, { right: "33.3333%", ease: EASE.secondary, duration: DIFFER_SLIDE }, 0)
+        .fromTo([ground, crossing], { height: barHeight }, { height: buttonHeight, ease: EASE.secondary, duration: DIFFER_BUTTON }, 0);
+
+      /* …while their inner ends, where they collide, each wait their own time
+         and all land together. The crossing grows between them: its left edge
+         rides the khaki's inner end, its right edge the burgundy's. */
+      for (var s = 0; s < DIFFER_STRIPES; s++) {
+        var waitLeft = DIFFER_SLIDE * DIFFER_WAIT.left[s];
+        var waitRight = DIFFER_SLIDE * DIFFER_WAIT.right[s];
+        sequence
+          .fromTo([lefts[s], crosses[s]], { right: "50%" }, { right: "33.3333%", ease: EASE.secondary, duration: DIFFER_SLIDE - waitLeft }, waitLeft)
+          .fromTo([rights[s], crosses[s]], { left: "50%" }, { left: "33.3333%", ease: EASE.secondary, duration: DIFFER_SLIDE - waitRight }, waitRight);
+      }
+
+      /* The labels ride their halves, a quarter of the bar inwards, while the
+         outer ends come in a third, so on a narrower screen a label could
+         show past its colour. Each half is clipped to its ground: on its
+         outer side to the outer end, top and foot to the shrinking height. */
+      var slideEase = window.gsap.parseEase(EASE.secondary);
+      function clipHalves() {
+        var time = Math.min(sequence.time(), DIFFER_SLIDE);
+        var side = (100 / 6) * slideEase(time / DIFFER_SLIDE);
+        var rise = (barHeight() - buttonHeight()) * slideEase(time / DIFFER_BUTTON) / 2;
+        /* A pixel inside the edge, so no sliver shows where the two meet. */
+        var outer = side ? "calc(" + side + "% + 1px)" : "0%";
+        window.gsap.set(halves[0], { clipPath: "inset(" + rise + "px 0% " + rise + "px " + outer + ")" });
+        window.gsap.set(halves[1], { clipPath: "inset(" + rise + "px " + outer + " " + rise + "px 0%)" });
+      }
+      sequence.eventCallback("onUpdate", clipHalves);
+
+      sequence
+        /* The labels ride their halves until the crossing covers them. */
+        .fromTo(halves[0], { xPercent: 0 }, { xPercent: 50, ease: EASE.secondary, duration: DIFFER_SLIDE }, 0)
+        .fromTo(halves[1], { xPercent: 0 }, { xPercent: -50, ease: EASE.secondary, duration: DIFFER_SLIDE }, 0)
+        /* The crossing turns dark as the stripes come in to land… */
+        .fromTo(darks, { opacity: 0 }, { opacity: 1, ease: EASE.primary, duration: 0.22 }, DIFFER_SLIDE - 0.13)
+        /* …and once landed it is the whole block and hides the rest, and
+           narrows on to the button's width… */
+        .fromTo([ground, halves[0], halves[1]], { autoAlpha: 1 }, { autoAlpha: 0, duration: 0, immediateRender: false }, DIFFER_SLIDE)
+        .fromTo(crosses, { left: "33.3333%", right: "33.3333%" }, { left: buttonInset, right: buttonInset, ease: EASE.secondary, duration: DIFFER_BUTTON - DIFFER_SLIDE, immediateRender: false }, DIFFER_SLIDE)
+        /* …while the button's label and arrow come in on it, unmasked from
+           the left in one sweep, well before it stops shrinking. */
+        .fromTo(faceLayer, { clipPath: function () { return faceMask("start"); } }, { clipPath: function () { return faceMask("end"); }, ease: EASE.reveal, duration: 0.3 }, DIFFER_SLIDE + 0.01)
+        /* The block is the button now, and the button takes over. */
+        .fromTo([crossing, faceLayer], { autoAlpha: 1 }, { autoAlpha: 0, duration: 0, immediateRender: false }, DIFFER_BUTTON)
+        .to({}, { duration: 1 - DIFFER_BUTTON }, DIFFER_BUTTON);
+
+      /* Until then the button waits under the stripes, where a pointer can't
+         reach it; a keyboard can, and landing on it scrolls to the end of the
+         hold, where the button rests. */
+      function reachButton() {
+        window.requestAnimationFrame(function () {
+          if (sequence.progress() < 1) window.scrollTo(0, hold.end);
         });
       }
+      link.addEventListener("focus", reachButton);
 
-      function paint() {
-        items.forEach(function (item) {
-          item.setY(item.y);
-          item.setOpacity(item.opacity);
-        });
-      }
-
-      /* 0 at the canvas's top edge, 1 once the tile is a full band clear. */
-      function edgeFade(item) {
-        return Math.max(0, Math.min((item.baseTop + item.y + item.height) / STREAM.fade, 1));
-      }
-
-      function step(time) {
-        /* The page was swapped away: the stream ends with it. */
-        if (!field.isConnected) return;
-        window.requestAnimationFrame(step);
-
-        if (!lastTime) lastTime = time;
-        var delta = Math.min((time - lastTime) / 1000, 0.05);
-        lastTime = time;
-        if (!delta) return;
-
-        var scroll = window.scrollY;
-        var scrolled = Math.abs(scroll - lastScroll);
-        lastScroll = scroll;
-        if (scrolled) {
-          var candidate = Math.min((scrolled / delta) * STREAM.boostFromScroll, STREAM.boostMax);
-          if (candidate > boost) boost = candidate;
-        }
-        boost *= Math.pow(STREAM.boostDecay, delta);
-        if (boost < 0.5) boost = 0;
-
-        speed += ((STREAM.base + boost) - speed) * Math.min(STREAM.approach * delta, 1);
-        var travel = speed * delta;
-
-        for (var i = 0; i < items.length; i++) {
-          var item = items[i];
-          item.y -= travel * item.multiplier;
-          while (item.baseTop + item.y + item.height < -STREAM.margin) {
-            item.y += fieldHeight + item.height + (STREAM.margin * 2);
-          }
-          item.opacity = edgeFade(item);
-        }
-
-        if (onScreen) paint();
-      }
-
-      measure();
-      items.forEach(function (item) { item.opacity = edgeFade(item); });
-      paint();
-
-      if (typeof window.IntersectionObserver === "function") {
-        new window.IntersectionObserver(function (entries) {
-          onScreen = entries[0].isIntersecting;
-        }, { rootMargin: "20% 0px" }).observe(field);
-      }
-
-      window.addEventListener("resize", debounce(function () {
-        if (field.isConnected) measure();
-      }, 250));
-
-      window.requestAnimationFrame(step);
+      /* Off the stage the generated pieces go and the bar rests again. */
+      return function () {
+        link.removeEventListener("focus", reachButton);
+        ground.remove();
+        crossing.remove();
+        faceLayer.remove();
+        section.classList.remove("is-live");
+        window.gsap.set(halves, { clearProps: "clipPath" });
+        halves.forEach(function (half) { half.classList.remove("is-live"); });
+        cta.classList.remove("is-live");
+      };
     });
   }
 
@@ -1902,6 +2284,8 @@
 
     initHeroEntrance(scope);
     initDimGroups(document);
+    initWorkCards(scope);
+    initDifferentiator(scope);
     initStackedSlides();
     initDomino(scope);
     initSpecialize(scope);
@@ -1910,11 +2294,11 @@
     initChains(scope);
     initTipSlide(scope);
     initHeadingDrift(scope);
-    initGalaxy(scope);
-    initProjectsPreview(scope);
+    initCaseSlider(scope);
     initAboutOverlay(scope);
     initModelsRail(scope);
     initAccordions(scope);
+    initModelPictures(scope);
     initStudyBanner(scope);
     initWorkTrack();
     initContactForm(scope);
@@ -1944,3 +2328,4 @@
     boot();
   }
 })();
+
